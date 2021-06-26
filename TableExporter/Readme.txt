@@ -1,44 +1,44 @@
-¿ÜºÎ¸ðµâ:
+ì™¸ë¶€ëª¨ë“ˆ:
 	pip install pyinstaller
 	pip install xlrd
 
-±ÔÄ¢:
-	ROWTYPEÀº A¼¿¿¡ ÀÔ·Â. Çà ¼ø¼­³ª ¿©¹éÀº »ó°ü ¾øÀ½.
-	ROWTYPE:NAMEÀÌ ÀÖ´Â ÇÊµå¸¸ Ãâ·Â.
-	ROWTYPE:EXPORT¿¡ Æ÷ÇÔµÇ´Â ¼³Á¤°ªÀÇ ÇÊµå¸¸ Ãâ·Â.
+ê·œì¹™:
+	ROWTYPEì€ Aì…€ì— ìž…ë ¥. í–‰ ìˆœì„œë‚˜ ì—¬ë°±ì€ ìƒê´€ ì—†ìŒ.
+	ROWTYPE:NAMEì´ ìžˆëŠ” í•„ë“œë§Œ ì¶œë ¥.
+	ROWTYPE:EXPORTì— í¬í•¨ë˜ëŠ” ì„¤ì •ê°’ì˜ í•„ë“œë§Œ ì¶œë ¥.
 
-¹öÀü:
+ë²„ì „:
 	0.0.3
-		CS¿¡ Field(Tuple) List Ãß°¡
+		CSì— Field(Tuple) List ì¶”ê°€
 	0.0.2
-		CS ÀÛ¼º ¼öÁ¤ (\n ´©¶ô Ãß°¡) + make_enum_fields Ãß°¡
+		CS ìž‘ì„± ìˆ˜ì • (\n ëˆ„ë½ ì¶”ê°€) + make_enum_fields ì¶”ê°€
 	0.0.1
-		±âº»±â´É ÀÛ¼º
+		ê¸°ë³¸ê¸°ëŠ¥ ìž‘ì„±
 
-»ç¿ë¹ý:
-	tableexporter "<Àý´ë°æ·Î·Î µÈ XLSX À§Ä¡>" "<json Ãâ·Â °æ·Î>" "<CS Ãâ·Â °æ·Î>" "makeenumfield1;makeenumfield2;..."
+ì‚¬ìš©ë²•:
+	tableexporter "<ì ˆëŒ€ê²½ë¡œë¡œ ëœ XLSX ìœ„ì¹˜>" "<json ì¶œë ¥ ê²½ë¡œ>" "<CS ì¶œë ¥ ê²½ë¡œ>" "makeenumfield1;makeenumfield2;..."
 
-±âº»¼³¸í:
-	XLSX ³»ÀÇ SHEET(ÅÇ) ¸¶´Ù 1°³ÀÇ Å×ÀÌºí·Î Ãâ·Â.
-	ÁÂÃø A¿­ÀÇ °ªÀ» Á¾·ù·Î ±¸ºÐÇÏ¿© ÇØ¼®
-	NAME, COMMENT, TYPE, DATA ·Î ±¸ºÐµÊ
+ê¸°ë³¸ì„¤ëª…:
+	XLSX ë‚´ì˜ SHEET(íƒ­) ë§ˆë‹¤ 1ê°œì˜ í…Œì´ë¸”ë¡œ ì¶œë ¥.
+	ì¢Œì¸¡ Aì—´ì˜ ê°’ì„ ì¢…ë¥˜ë¡œ êµ¬ë¶„í•˜ì—¬ í•´ì„
+	NAME, COMMENT, TYPE, DATA ë¡œ êµ¬ë¶„ë¨
 
-±â´É:
-	# ±âº» ÀÍ½ºÆ÷Æ® ±â´É (XLSX ==> JSON+CS)
-	# ·ÎÄÃ¶óÀÌÂ¡¸Å´ÏÀú ¿¬µ¿ ±â´É (locale_id, locale_key) ==> StringTableÀ» »ç¿ëÇÏ´Â ÀüÁ¦ÇÏ¿¡ ÄÚµå·Î¸¸ ¿¬µ¿µÊ. ¿¢¼¿¹®¼­ÀÇ ±¸ºÐÀº ±âÈ¹ ¼Ò°ü.
-	# C#ÀÇ ¸ðµç ±âº» ÀÌ¹ÂÅÍºí Å¸ÀÔÀ» ´ÙÀ½ÀÇ 4°¡Áö Å¸ÀÔÀ¸·Î Ä¡È¯ÇÏ¿© Áö¿ø (number, text, bool, real)
-	# ºñ¾îÀÖ´Â ¼¿À» ±âº»°ªÀ¸·Î Ã³¸® (0 or 0.0 or false or "")
-	# c#¿¡¼­ »ç¿ëÇÏ´Â Å°¿öµå·Î ÇÊµå¸í °Ë»ç
-	# ÅØ½ºÆ®ÀÇ °³ÇàÀº ¼¿ÀÇ ½ÇÁ¦ °³Çà°ªÀ¸·Î Ã³¸®
-	# ¹è¿­ Áö¿ø (½ºÆ®¸µ Á¦¿Ü)
-	# ¿­°ÅÃ¼ Å¬·¡½º »ý¼º ±â´É : ÁöÁ¤ÇÑ ÇÊµåÀÇ ¸ðµç °ªÀ» enum Å¬·¡½º ÄÚµå·Î »ý¼º (enum TableName_FileName) ´Ü, ¸ðµç °ªÀº Áßº¹µÇ¾î¼± ¾ÈµÊ. (Áßº¹µÉ °æ¿ì ÄÚµå ¿¡·¯³²)
-	# ¿­°ÅÃ¼ ÀÚ·áÇü Áö¿ø (LocalizationID) ==> ¹®ÀÚ¿­Å¸ÀÔÀ¸·Î Á¦°ø.
+ê¸°ëŠ¥:
+	# ê¸°ë³¸ ìµìŠ¤í¬íŠ¸ ê¸°ëŠ¥ (XLSX ==> JSON+CS)
+	# ë¡œì»¬ë¼ì´ì§•ë§¤ë‹ˆì € ì—°ë™ ê¸°ëŠ¥ (LocalizationID) ==> StringTableì„ ì‚¬ìš©í•˜ëŠ” ì „ì œí•˜ì— ì½”ë“œë¡œë§Œ ì—°ë™ë¨. ì—‘ì…€ë¬¸ì„œì˜ êµ¬ë¶„ì€ ê¸°íš ì†Œê´€.
+	# C#ì˜ ëª¨ë“  ê¸°ë³¸ ì´ë®¤í„°ë¸” íƒ€ìž…ì„ ë‹¤ìŒì˜ 4ê°€ì§€ íƒ€ìž…ìœ¼ë¡œ ì¹˜í™˜í•˜ì—¬ ì§€ì› (number, text, bool, real)
+	# ë¹„ì–´ìžˆëŠ” ì…€ì„ ê¸°ë³¸ê°’ìœ¼ë¡œ ì²˜ë¦¬ (0 or 0.0 or false or "")
+	# c#ì—ì„œ ì‚¬ìš©í•˜ëŠ” í‚¤ì›Œë“œë¡œ í•„ë“œëª… ê²€ì‚¬
+	# í…ìŠ¤íŠ¸ì˜ ê°œí–‰ì€ ì…€ì˜ ì‹¤ì œ ê°œí–‰ê°’ìœ¼ë¡œ ì²˜ë¦¬
+	# ë°°ì—´ ì§€ì› (ìŠ¤íŠ¸ë§ ì œì™¸)
+	# ì—´ê±°ì²´ í´ëž˜ìŠ¤ ìƒì„± ê¸°ëŠ¥ : ì§€ì •í•œ í•„ë“œì˜ ëª¨ë“  ê°’ì„ enum í´ëž˜ìŠ¤ ì½”ë“œë¡œ ìƒì„± (enum TableName_FileName) ë‹¨, ëª¨ë“  ê°’ì€ ì¤‘ë³µë˜ì–´ì„  ì•ˆë¨. (ì¤‘ë³µë  ê²½ìš° ì½”ë“œ ì—ëŸ¬ë‚¨)
+	# ì—´ê±°ì²´ ìžë£Œí˜• ì§€ì› (LocalizationID) ==> ë¬¸ìžì—´íƒ€ìž…ìœ¼ë¡œ ì œê³µ.
 
-È®ÀåÀÚ·áÇü:
+í™•ìž¥ìžë£Œí˜•:
 	LocalizationID
-		ÇØ´ç ÀÚ·áÇüÀ» ÀÔ·ÂÇÏ¸é ½ºÆ®¸µÅ×ÀÌºíÀÇ ID ·Î ÄÚµå¸¦ ÀÚµ¿ ¿¬°áÇÏ¿© ToString() È£Ãâ½Ã ÇØ´çÇÏ´Â ·ÎÄÃ¶óÀÌÂ¡ ½Ã½ºÅÛÀÇ ¹®ÀÚ¿­°ªÀ» ¹ÝÈ¯.
+		í•´ë‹¹ ìžë£Œí˜•ì„ ìž…ë ¥í•˜ë©´ ìŠ¤íŠ¸ë§í…Œì´ë¸”ì˜ ID ë¡œ ì½”ë“œë¥¼ ìžë™ ì—°ê²°í•˜ì—¬ ToString() í˜¸ì¶œì‹œ í•´ë‹¹í•˜ëŠ” ë¡œì»¬ë¼ì´ì§• ì‹œìŠ¤í…œì˜ ë¬¸ìžì—´ê°’ì„ ë°˜í™˜.
 
-Ã³¸®¼ø¼­:
+ì²˜ë¦¬ìˆœì„œ:
 	load .xlsx
 	create t_sheet_info[]
 	create t_table_info[]
@@ -49,67 +49,3 @@
 	write .cs
 	write .csv
 	write .json
-
-
-±â´É:
-	ÀÏ¹ÝÅ×ÀÌºí (#) 1Â÷¿ø ±¸Á¶Ã¼ Çü½ÄÀ¸·Î TableName.cs, TableName.json À¸·Î »ÌÇô ³ª¿Â´Ù.
-	¿­°ÅÅ×ÀÌºí (@) NAME, VALUE ¸¦ ÅëÇØ ±¸ºÐµÇ¸ç export ½Ã eTableName.cs ·Î »ÌÇô³ª¿Â´Ù.
-	º´ÇÕÅ×ÀÌºí (&) µ¿ÀÏÇÑ ÀÚ·á±¸Á¶¸¦ Áö´Ñ ¸ðµç ½ÃÆ®°¡ ÇÏ³ªÀÇ Å×ÀÌºí·Î º´ÇÕµÇ¾î »ÌÇô³ª¿Â´Ù.
-
-Å×ÀÌºí ±ÔÄ¢:
-	ROWTYPE:
-		ÇØ´ç ½ÃÆ®ÀÇ Ã¹¹øÂ° ÄÃ·³(A)¸¦ ÀÇ¹ÌÇÑ´Ù.
-		ÇØ´ç ÇàÀÌ Å×ÀÌºí ±¸Á¶¿¡ À¯ÀÇ¹ÌÇÑ ´ë»óÀÓÀ» Á¤ÀÇÇÏ°í ÇØ´ç ÀÌ¸§¿¡ µû¶ó Ã³¸®ÇÑ´Ù.
-		´ë¼Ò¹®ÀÚ´Â ±¸ºÐÇÏÁö ¾ÊÀ¸¸ç Á¤ÇØÁø ÀÌ¸§¸¸À» »ç¿ëÇÑ´Ù.
-		°ø¹éÀÌ¸é À¯ÀÇ¹ÌÇÑ ÇàÀ¸·Î ÀÎ½ÄµÇÁö ¾Ê´Â´Ù.
-		NAME, TYPE, EXPORTÀº ¹Ýµå½Ã Á¸ÀçÇØ¾ßÇÑ´Ù.
-		KEY, COMMENT, LOCALIZE, REF´Â ¾ø¾îµµ ¹«¹æÇÏ´Ù.
-
-	NAME:
-		½ÇÁ¦ ÄÚµå»ó¿¡¼­ Á¤ÀÇµÇ´Â ÇÊµåÀÇ ÀÌ¸§.
-		´ë¼Ò¹®ÀÚ ±¸ºÐÇÏ°í ¼ýÀÚ°¡ ¹®ÀÚº¸´Ù ¸ÕÀú ¿Í¼­´Â ¾ÈµÇ¸ç ¾ð´õ¹Ù Á¦¿Ü ¶ç¾î¾²±â, ÅÇ, °³Çà, Æ¯¼ö¹®ÀÚ ¾ÈµÊ.
-		NAMEÀÌ Á¸ÀçÇÏ´Â ÄÃ·³À» ÇÊµå·Î ±ÔÁ¤ÇÑ´Ù. (Áï, NAMEÀÌ °ø¹éÀÌ¸é ÇÊµå·Î ÀÎ½ÄµÇÁö ¾Ê´Â´Ù.)
-
-	TYPE:
-		½ÇÁ¦ ÄÚµå»ó¿¡¼­ Á¤ÀÇµÇ´Â ÇÊµåÀÇ Å¸ÀÔ.
-		ÀÍ½ºÆ÷Æ®µÇ´Â ÄÚµå¿¡¼­ Á¦°øµÇ´Â ÀÌ¸§°ú µ¿ÀÏÇØ¾ß ÇÑ´Ù.
-		¹è¿­, ¿­°ÅÃ¼, ±¸Á¶Ã¼, Å¬·¡½º µî immutable ÇÏÁö ¾Ê°Å³ª, ÀÚ·á±¸Á¶ÀÎ °ÍÀº ÀÎÁ¤µÇÁö ¾Ê´Â´Ù.
-		
-		³í¸®Çü : b8
-		¹®ÀÚÇü : text
-		Á¤¼öÇü : s8, s16, s32, s64, u8, u16, u32, u64
-		½Ç¼öÇü : f32, f64
-		
-		°³¼±¾È)
-			immutable:text ·Î ±¸ºÐÁþ´Â´Ù.
-				enum:eGroupType : ÀÌ³ÑÀÓÀ» ±¸ºÐ (--exportecs À» ÅëÇØ ÇØ´ç Å×ÀÌºí¿¡¼­ »ç¿ëÇÏ´Â ¸ðµç enumÀ» cs·Î ÀúÀå)
-				object:Vector2 : ½°Ç¥¿Í °ýÈ£·Î ³»ºÎ ¸â¹ö¸¦ ±¸ºÐ
-				array:s32 : ½°Ç¥·Î ±¸ºÐ
-
-
-
-	EXPORT:
-		»óÈ²º°·Î ¼ÂÆÃÇÏ´Âµ¥ ÁÖ·Î C (Å¬¶óÀÌ¾ðÆ®) ¿Í S (¼­¹ö), CS(Å¬¶óÀÌ¾ðÆ®/¼­¹ö) ·Î ±¸ºÐÇÑ´Ù.
-		½ÇÁ¦ xtable2 À» »ç¿ëÇÒ ¶§ ÁöÁ¤ÇÑ export_targetÀÌ ¹Ù·Î C, S, CSÀÇ ¹®ÀÚ¿­ÀÌ µÈ´Ù.
-		¸¸ÀÏ ½ÃÆ®¿¡ EXPORT ÀÚÃ¼°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é ¾Æ¹«°Íµµ ÀúÀåÇÏÁö ¾Ê´Â´Ù.
-
-	COMMENT:
-		ÇØ´ç ÇÊµå¿¡ ´ëÇÑ ¼³¸í.
-		ÀÌ´Â C# ÄÚµå¿¡µµ ÀÎÅÚ¸®¼¾½º·Î µ¿ÀÛÇÏ±â À§ÇØ ÀÛ¼ºµÈ´Ù.
-		¾ø¾îµµ ¹«¹æÇÏ´Ù.
-
-	KEY:
-		ÀÔ·Â°ª¿¹½Ã) true
-
-		ÀÔ·Â°ª¿¹½Ã) SampleTable, SampleTable:Value, °ø¹é(»ç¿ëÇÏÁö¾ÊÀ½)
-		ÇØ´ç ½ÃÆ®¸¦ ·ÎµåÇÒ¶§ Å°°ªÀ¸·Î ¾²ÀÏ ÇÊµå·Î ¸í¸íÇÑ´Ù.
-		Å°´Â ¾î¶°ÇÑ Å¸ÀÔÀÌ¾îµµ »ó°ü¾øÁö¸¸ immutable ÇØ¾ß ÇÏ¸ç, °íÀ¯½Äº°ÀÚÀÌ¹Ç·Î Áßº¹µÇ¸é ¾ÈµÈ´Ù.
-		¾ø¾îµµ ¹«¹æÇÏ´Ù.
-
-	LOCALIZE:
-		ÀÔ·Â°ª¿¹½Ã) true, false, °ø¹é(=false)
-
-		REF ±â´ÉÀ» È°¿ëÇÔ¿¡ ÀÖ¾î ·ÎÄÃ¶óÀÌÂ¡À» À§ÇÔÀ» Ç¥ÇöÇÑ´Ù.
-		REF ¼ÂÆÃÀÌ ¾ø´Ù¸é(°ø¹éÀÌ°Å³ª ¾øÀ½) ÄÚµå¿¡¼­ Á¤ÀÇÇÑ LocalizeTableÀÇ ID¿Í ¿¬°áµÈ´Ù. TableManager.DefualtLocalizeTable = TargetTable
-		Áï, DefaultLocalizeTable.ID °¡ µÈ´Ù.
-		Àû¿ëµÈ Å×ÀÌºíÀº public string Localize_{FieldName}() { ... } ½ÄÀÇ º°µµ ÇÔ¼ö°¡ Á¤ÀÇ µÈ´Ù.

@@ -203,7 +203,7 @@ def CreateTable(native_table : NativeTable):
 						field.type_ = value
 
 						# local_id는 int로.
-						if field.type_ in ["char", "sbyte", "short", "int", "long", "byte", "ushort", "uint", "ulong", "locale_id"]:
+						if field.type_ in ["char", "sbyte", "short", "int", "long", "byte", "ushort", "uint", "ulong"]:
 							field.kind_ = DataKind.NUMBER
 						elif field.type_ in ["float", "double"]:
 							field.kind_ = DataKind.REAL
