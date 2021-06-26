@@ -52,27 +52,30 @@ namespace DagraacSystems.Table
 
 			var tableDataArray = m_TableLoader.LoadFromFile<TTableData>(path);
 
-			var table = default(TableContainer);
+			var tableContainer = default(TableContainer);
 			if (m_Tables.ContainsKey(tableID))
 			{
-				table = m_Tables[tableID];
+				tableContainer = m_Tables[tableID];
 			}
 			else
 			{
 				isMerge = false;
-				table = new TableContainer();
-				m_Tables.Add(tableID, table);
+				tableContainer = new TableContainer();
+				m_Tables.Add(tableID, tableContainer);
 			}
 
 			var tableDataList = new ITableData[tableDataArray.Length];
-			for (int index = 0; index < tableDataArray.Length; ++index)
+			for (var index = 0; index < tableDataArray.Length; ++index)
 				tableDataList[index] = (ITableData)tableDataArray[index];
 			if (isMerge)
-				table.AddContainer(tableDataList);
+				tableContainer.AddContainer(tableDataList);
 			else
-				table.SetContainer(tableDataList, generateKeyCallback);
+				tableContainer.SetContainer(tableDataList, generateKeyCallback);
 
-			m_TableLoader.OnLoaded(tableID);
+			if (m_TableLoader.OnCheckIntegrity(tableID, tableContainer))
+			{
+				m_TableLoader.OnLoaded(tableID);
+			}
 		}
 
 		public void LoadAll()

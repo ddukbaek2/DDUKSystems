@@ -7,6 +7,7 @@ namespace DagraacSystems.Table
 	{
 		void OnLoadAll();
 		void OnLoaded(TTableID tableID);
+		bool OnCheckIntegrity(TTableID tableID, TableContainer tableContainer);
 		TTableData[] LoadFromFile<TTableData>(string path) where TTableData : ITableData;
 	}
 }

@@ -16,7 +16,7 @@
 		기본기능 작성
 
 사용법:
-	tableexporter "<절대경로로 된 XLSX 위치>" "<json 출력 경로>" "<CS 출력 경로>" "makeenumfield1;makeenumfield2;..."
+	tableexporter "<불러들일 XLSX 파일의 경로>" "<JSON 출력 경로>" "<CS 출력 경로>" "makeenumfield1;makeenumfield2;..."
 
 기본설명:
 	XLSX 내의 SHEET(탭) 마다 1개의 테이블로 출력.
@@ -32,7 +32,7 @@
 	# 텍스트의 개행은 셀의 실제 개행값으로 처리
 	# 배열 지원 (스트링 제외)
 	# 열거체 클래스 생성 기능 : 지정한 필드의 모든 값을 enum 클래스 코드로 생성 (enum TableName_FileName) 단, 모든 값은 중복되어선 안됨. (중복될 경우 코드 에러남)
-	# 열거체 자료형 지원 (LocalizationID) ==> 문자열타입으로 제공.
+	# 열거체 자료형 지원 (EnumValue) ==> 문자열타입으로 제공.
 
 확장자료형:
 	LocalizationID
