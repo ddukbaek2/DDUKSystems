@@ -1,0 +1,128 @@
+﻿using System;
+using System.Collections.Generic;
+
+
+namespace DagraacSystems.Table
+{
+	/// <summary>
+	/// 테이블 컨테이너.
+	/// </summary>
+	public class TableContainer
+	{
+		/// <summary>
+		/// 실제적인 자료구조.
+		/// </summary>
+		protected SortedDictionary<string, ITableData> m_Data = new SortedDictionary<string, ITableData>();
+
+		/// <summary>
+		/// 키를 생성할 콜백.
+		/// </summary>
+		protected Func<int, ITableData, string> m_GenerateKeyCallback;
+
+		/// <summary>
+		/// 갯수.
+		/// </summary>
+		public int Count => m_Data.Count;
+
+		/// <summary>
+		/// 초기화.
+		/// </summary>
+		public void Clear()
+		{
+			m_Data.Clear();
+			m_GenerateKeyCallback = null;
+		}
+
+		/// <summary>
+		/// 컨테이너 셋팅.
+		/// </summary>
+		public void SetContainer(ITableData[] tableDataList, Func<int, ITableData, string> generateKeyCallback)
+		{
+			Clear();
+			m_GenerateKeyCallback = generateKeyCallback;
+			AddContainer(tableDataList);
+		}
+
+		/// <summary>
+		/// 기존 것에 추가.
+		/// </summary>
+		public void AddContainer(ITableData[] tableDataList)
+		{
+			if (m_GenerateKeyCallback == null)
+				return;
+
+			for (var index = 0; index < tableDataList.Length; ++index)
+			{
+				ITableData tableData = tableDataList[index];
+				m_Data.Add(m_GenerateKeyCallback(index, tableData), tableData);
+			}
+		}
+
+		public TTableData Get<TTableData>(string key) where TTableData : ITableData
+		{
+			return (TTableData)m_Data[key];
+		}
+
+		public TTableData Get<TKey, TTableData>(TKey key) where TTableData : ITableData
+		{
+			return Get<TTableData>(key.ToString());
+		}
+
+		/// <summary>
+		/// 반복문 처리.
+		/// 조건에 일치되는 대상을 반환.
+		/// </summary>
+		public TTableData ForEach<TTableData>(Predicate<TTableData> predicate) where TTableData : ITableData
+		{
+			if (predicate == null)
+				return default(TTableData);
+			foreach (KeyValuePair<string, ITableData> keyValuePair in m_Data)
+			{
+				if (predicate((TTableData)keyValuePair.Value))
+					return (TTableData)keyValuePair.Value;
+			}
+			return default(TTableData);
+		}
+
+		/// <summary>
+		/// 검색하여 요소 1건 반환.
+		/// </summary>
+		public TTableData Find<TTableData>(Predicate<TTableData> predicate) where TTableData : ITableData
+		{
+			return ForEach<TTableData>(predicate);
+		}
+
+		/// <summary>
+		/// 검색된 모든 요소 반환.
+		/// </summary>
+		public List<TTableData> FindAll<TTableData>(Predicate<TTableData> predicate) where TTableData : ITableData
+		{
+			var list = new List<TTableData>();
+			if (predicate == null)
+				return list;
+
+			ForEach<TTableData>(tableData =>
+			{
+				if (predicate(tableData))
+					list.Add(tableData);
+				return false;
+			});
+
+			return list;
+		}
+
+		/// <summary>
+		/// 전체 요소 반환.
+		/// </summary>
+		public List<TTableData> All<TTableData>() where TTableData : ITableData
+		{
+			var list = new List<TTableData>();
+			ForEach<TTableData>(tableData =>
+			{
+				list.Add(tableData);
+				return false;
+			});
+			return list;
+		}
+	}
+}
