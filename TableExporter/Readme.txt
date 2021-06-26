@@ -8,6 +8,8 @@
 	ROWTYPE:EXPORT에 포함되는 설정값의 필드만 출력.
 
 버전:
+	0.0.4
+		xlrd 라이브러리가 더이상 xlsx를 지원하지 않게되어 openpyxl 라이브러리로 교체
 	0.0.3
 		CS에 Field(Tuple) List 추가
 	0.0.2

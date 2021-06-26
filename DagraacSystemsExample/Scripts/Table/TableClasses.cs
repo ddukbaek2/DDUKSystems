@@ -4,7 +4,10 @@ using System.Collections.Generic;
 
 namespace DagraacSystemsExample
 {
-	public class CommonTable : SharedTableTemplete<CommonTable, string, ITableData>
+	/// <summary>
+	/// 샘플 테이블.
+	/// </summary>
+	public class ExampleTable : SharedTableTemplete<ExampleTable, int, ExampleTableData>
 	{
 		protected override void OnSetContainer()
 		{

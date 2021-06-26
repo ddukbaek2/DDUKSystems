@@ -7,10 +7,14 @@
     <StartupFile>TableExporter.py</StartupFile>
     <SearchPath>
     </SearchPath>
-    <WorkingDirectory>.</WorkingDirectory>
+    <WorkingDirectory>Example</WorkingDirectory>
     <OutputPath>.</OutputPath>
     <Name>TableExporter</Name>
     <RootNamespace>TableExporter</RootNamespace>
+    <IsWindowsApplication>False</IsWindowsApplication>
+    <LaunchProvider>Standard Python launcher</LaunchProvider>
+    <EnableNativeCodeDebugging>False</EnableNativeCodeDebugging>
+    <CommandLineArguments>"ExampleTable.xlsx" "..\..\DagraacSystemsExample\Bin\Tables" "..\..\DagraacSystemsExample\Scripts\Table\Data"</CommandLineArguments>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>

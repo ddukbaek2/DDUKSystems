@@ -14,8 +14,11 @@ namespace DagraacSystemsExample
 	{
 		Invalid,
 
-		[FilePath("CommonTable.json")]
-		CommonTable,
+		[FilePath("Tables/ExampleTable.json")]
+		ExampleTable,
+
+		[FilePath("Tables/StringTable.json")]
+		StringTable,
 	}
 
 
@@ -24,12 +27,20 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class TableManager : TableManagerTemplete<TableManager, eTableID>
 	{
-		public const string PrefixJsonPath = "Data/Tables/";
-
 		protected override TTableData[] LoadFromFile<TTableData>(string path)
 		{
 			var json = File.ReadAllText(path);
-			return JsonSerializer.Deserialize<TTableData[]>(json);
+			var options = new JsonSerializerOptions { IncludeFields = true };
+
+			try
+			{
+				return JsonSerializer.Deserialize<TTableData[]>(json, options);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return null;
+			}
 		}
 
 		protected override bool OnCheckIntegrity(eTableID tableID, TableContainer tableContainer)
@@ -39,15 +50,22 @@ namespace DagraacSystemsExample
 
 		protected override void OnLoadAll()
 		{
-			Load<CommonTableData>(eTableID.CommonTable, PrefixJsonPath + FilePathAttributeHelper.GetFilePath(eTableID.CommonTable), "ID");
+			Console.WriteLine(Directory.GetCurrentDirectory());
+
+			Load<ExampleTableData>(eTableID.ExampleTable, FilePathAttributeHelper.GetFilePath(eTableID.ExampleTable), "ID");
+			Load<StringTableData>(eTableID.StringTable, FilePathAttributeHelper.GetFilePath(eTableID.StringTable), "ID");
 		}
 
 		protected override void OnLoaded(eTableID tableID, TableContainer tableContainer)
 		{
 			switch (tableID)
 			{
-				case eTableID.CommonTable:
-					CommonTable.Instance.SetContainer(tableContainer);
+				case eTableID.ExampleTable:
+					ExampleTable.Instance.SetContainer(tableContainer);
+					break;
+
+				case eTableID.StringTable:
+					// used to LocalizationManager.
 					break;
 			}
 		}

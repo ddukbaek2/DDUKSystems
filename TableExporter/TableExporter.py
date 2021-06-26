@@ -1,7 +1,10 @@
 #pip install pyinstaller
-#pip install xlrd
+#pip install xlrd ## xlrd는 정책변경으로 xls 만 읽을 수 있어서 openpyxl 로 교체.
+#pip install openpyxl
 
-import xlrd
+#import xlrd
+import openpyxl
+
 import sys
 import os
 import timeit
@@ -34,6 +37,8 @@ def PrintTimer(data : (str, float)):
 
 #------------------------------------------------------------------------
 # C# 에서 사용중인 키워드 (전체).
+# 팁 : 최소한의 검사용으로 작성 해놓았지만 C#의 버전업시 어떻게 바뀔지는 모르기 때문에...
+# 가급적이면 필드명 등에서 대소문자를 적절히 혼용해서 키워드와의 중복을 피할 것.
 #------------------------------------------------------------------------
 csharp_strong_keyword_list_ = [ "abstract", "as", "base", "bool", "break", "byte", "case", "catch", "char", "checked", "class", "const", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "lock", "long", "namespace", "new", "null", "object", "function", "declare", "define", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while" ]
 
@@ -132,21 +137,41 @@ class Table:
 
 
 def CreateNativeTableListFromXlsxFile(file_name : str, startswith = "#") -> list:
-	native_table_list = list()
-	book = xlrd.open_workbook(file_name)
-	for sheet in book.sheets():
-		if sheet.name.startswith(startswith):
-			native_table = NativeTable()
-			native_table.name_ = sheet.name.replace(startswith, "")
-			for row_index in range(sheet.nrows):
-				cell_list = sheet.row_values(row_index)
-				cols = list()
-				for cell in cell_list:
-					cols.append(str(cell))
-				native_table.row_list_.append(cols)
-			native_table_list.append(native_table)
-	return native_table_list
-
+	nativetable_list = list()
+	#xlrd은 더이상 사용하지 않음.
+	#book = xlrd.open_workbook(file_name)
+	#for sheet in book.sheets():
+	#	if sheet.name.startswith(startswith):
+	#		native_table = NativeTable()
+	#		native_table.name_ = sheet.name.replace(startswith, "")
+	#		for row_index in range(sheet.nrows):
+	#			cell_list = sheet.row_values(row_index)
+	#			cols = list()
+	#			for cell in cell_list:
+	#				cols.append(str(cell))
+	#			native_table.row_list_.append(cols)
+	#		native_table_list.append(native_table)
+	#return native_table_list
+	book = openpyxl.load_workbook(file_name)
+	for sheetname in book.sheetnames:
+		if not sheetname.startswith(startswith):
+			continue;
+		sheet = book[sheetname]
+		if not sheet:
+			continue;
+		nativetable = NativeTable()
+		nativetable.name_ = sheetname.replace(startswith, "")
+		for row_index in range(1, sheet.max_row + 1):
+			cols = list()
+			for col_index in range(1, sheet.max_column + 1):
+				cell = sheet.cell(row = row_index, column = col_index)
+				if cell.value:
+					cols.append(str(cell.value))
+				else:
+					cols.append("")
+			nativetable.row_list_.append(cols)
+		nativetable_list.append(nativetable)
+	return nativetable_list
 
 def CreateTable(native_table : NativeTable):
 	table = Table()
@@ -314,7 +339,7 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 		if field_comment:
 			result += f"\t/// <summary>{field_comment}</summary>\n"
 		result += f"\tpublic {field_type} {field_name};\n\n"
-	result += "\n"
+	#result += "\n"
 
 	#int ToFields();
 	result += "\tpublic System.Collections.Generic.List<System.Tuple<string, System.Type, object>> ToFields()\n"
@@ -400,14 +425,14 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	field_count = len(table.field_dict_)
 	result += f"\t\treturn {field_count};\n"
 	result += "\t}\n"
-	result += "\n"
+	#result += "\n"
 	result += "}"
 
 	with open(file_name, "w+", encoding = "utf8") as file:
 		file.write(result)
 
 def OnMain(args):
-	print("TableExporter 0.0.3")
+	print("TableExporter 0.0.4")
 	print("made by dagraac")
 	print()
 

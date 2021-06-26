@@ -1,5 +1,4 @@
 ﻿using System;
-using DagraacSystems.Table;
 
 
 namespace DagraacSystemsExample
@@ -11,6 +10,7 @@ namespace DagraacSystemsExample
 			TableManager.Instance.LoadAll();
 
 			Console.WriteLine("DagraacSystems Example!");
+			Console.WriteLine($"{ExampleTable.Instance.Find(1).Desc}");
 		}
 	}
 }
