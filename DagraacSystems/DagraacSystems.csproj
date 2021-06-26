@@ -4,4 +4,10 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Scripts\Network\" />
+    <Folder Include="Scripts\Notification\" />
+    <Folder Include="Scripts\Table\" />
+  </ItemGroup>
+
 </Project>
