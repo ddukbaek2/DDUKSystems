@@ -284,9 +284,10 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	table_name = table.name_
 	result = str()
 
-	result += "using DagraacSystems;\n"
-	result += "using DagraacSystems.Table;\n"
+	#result += "using DagraacSystems;\n"
+	#result += "using DagraacSystems.Table;\n"
 	result += "using DagraacSystems.Table.Extension;\n"
+	#result += "using System.Collections.Generic;\n"
 	result += "\n"
 	result += "\n"
 
@@ -304,7 +305,7 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 			result += "\n"
 
 	# 클래스.
-	result += f"public class {table_name}Data : ITableData\n"
+	result += f"public class {table_name}Data : DagraacSystems.Table.ITableData\n"
 	result += "{\n"
 	for field in table.field_dict_.values():
 		field_name = field.name_

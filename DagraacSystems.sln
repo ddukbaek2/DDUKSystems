@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems", "DagraacSy
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TableExporter", "TableExporter\TableExporter.pyproj", "{61DC53FB-9443-409F-96CE-12E0281FDF3A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystemsExample", "DagraacSystemsExample\DagraacSystemsExample.csproj", "{EFD15F49-CA59-40A2-A55D-58D149EC883D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{7DBED8AA-D099-4063-B315-E12AEF69C5C7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{61DC53FB-9443-409F-96CE-12E0281FDF3A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{61DC53FB-9443-409F-96CE-12E0281FDF3A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

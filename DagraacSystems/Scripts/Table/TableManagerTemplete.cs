@@ -4,12 +4,13 @@ using System.Collections.Generic;
 
 namespace DagraacSystems.Table
 {
-	public class TableManager<TTableID> : Manager<TableManager<TTableID>> where TTableID : Enum, new()
+	public abstract class TableManagerTemplete<TTableManager, TTableID> : Manager<TTableManager>
+		where TTableManager : TableManagerTemplete<TTableManager, TTableID>, new()
+		where TTableID : Enum, new()
 	{
 		private Dictionary<TTableID, TableContainer> m_Tables;
-		private ITableLoader<TTableID> m_TableLoader;
 
-		public TableManager() : base()
+		public TableManagerTemplete() : base()
 		{
 			m_Tables = new Dictionary<TTableID, TableContainer>();
 		}
@@ -19,38 +20,45 @@ namespace DagraacSystems.Table
 			UnloadAll();
 		}
 
-		public void SetLoader(ITableLoader<TTableID> tableLoader)
+		protected virtual void OnLoaded(TTableID tableID, TableContainer tableContainer)
 		{
-			m_TableLoader = tableLoader;
 		}
+
+		protected virtual bool OnCheckIntegrity(TTableID tableID, TableContainer tableContainer)
+		{
+			return true;
+		}
+
+		protected virtual void OnLoadAll()
+		{
+		}
+
+		protected abstract TTableData[] LoadFromFile<TTableData>(string path) where TTableData : ITableData;
 
 		/// <summary>
 		/// 해당 아이디를 식별자로 삼는 테이블 컨테이너에 해당 경로의 json에서 테이블 데이터를 불러와 적재한다.
 		/// 동일 아이디로 셋팅할 경우 머지옵션을 통해 각 경로의 여러개의 테이블을 하나로 만들 수 있다.
 		/// 현재 함수는 불러온 인덱스 (0~(Count-1))를 고유식별자로 삼는다.
 		/// </summary>
-		public void Load<TTableData>(TTableID tableID, string path, bool isMerge = false) where TTableData : ITableData
+		public bool Load<TTableData>(TTableID tableID, string path, bool isMerge = false) where TTableData : ITableData
 		{
-			Load<TTableData>(tableID, path, (Func<int, ITableData, string>)((index, tableData) => index.ToString()), isMerge);
+			return Load<TTableData>(tableID, path, (Func<int, ITableData, string>)((index, tableData) => index.ToString()), isMerge);
 		}
 
 		/// <summary>
 		/// 키로 삼을 필드의 값을 고유식별자로 삼는다.(보통 'ID')
 		/// </summary>
-		public void Load<TTableData>(TTableID tableID, string path, string keyName = "ID", bool isMerge = false) where TTableData : ITableData
+		public bool Load<TTableData>(TTableID tableID, string path, string keyName, bool isMerge = false) where TTableData : ITableData
 		{
-			Load<TTableData>(tableID, path, (index, tableData) => tableData.GetFieldValue(tableData.GetFieldIndex(keyName)).ToString(), isMerge);
+			return Load<TTableData>(tableID, path, (index, tableData) => tableData.GetFieldValue(tableData.GetFieldIndex(keyName)).ToString(), isMerge);
 		}
 
 		/// <summary>
 		/// 키로 삼을 필드의 값을 콜백함수를 통해 직접 임의의 고유식별자를 설정하여 반환한다.
 		/// </summary>
-		public void Load<TTableData>(TTableID tableID, string path, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
+		public bool Load<TTableData>(TTableID tableID, string path, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
 		{
-			if (m_TableLoader == null)
-				return;
-
-			var tableDataArray = m_TableLoader.LoadFromFile<TTableData>(path);
+			var tableDataArray = LoadFromFile<TTableData>(path);
 
 			var tableContainer = default(TableContainer);
 			if (m_Tables.ContainsKey(tableID))
@@ -67,20 +75,24 @@ namespace DagraacSystems.Table
 			var tableDataList = new ITableData[tableDataArray.Length];
 			for (var index = 0; index < tableDataArray.Length; ++index)
 				tableDataList[index] = (ITableData)tableDataArray[index];
+
 			if (isMerge)
 				tableContainer.AddContainer(tableDataList);
 			else
 				tableContainer.SetContainer(tableDataList, generateKeyCallback);
 
-			if (m_TableLoader.OnCheckIntegrity(tableID, tableContainer))
+			if (OnCheckIntegrity(tableID, tableContainer))
 			{
-				m_TableLoader.OnLoaded(tableID);
+				OnLoaded(tableID, tableContainer);
+				return true;
 			}
+
+			return false;
 		}
 
 		public void LoadAll()
 		{
-			m_TableLoader.OnLoadAll();
+			OnLoadAll();
 			//foreach (TTableID tableID in Enum.GetValues(typeof(TTableID)))
 			//{
 			//	Load(tableID, );
