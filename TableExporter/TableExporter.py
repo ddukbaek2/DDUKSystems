@@ -227,15 +227,12 @@ def CreateTable(native_table : NativeTable):
 
 						field.type_ = value
 
-						# local_id는 int로.
 						if field.type_ in ["char", "sbyte", "short", "int", "long", "byte", "ushort", "uint", "ulong"]:
 							field.kind_ = DataKind.NUMBER
 						elif field.type_ in ["float", "double"]:
 							field.kind_ = DataKind.REAL
 						elif field.type_ in ["bool"]:
 							field.kind_ = DataKind.BOOLEAN
-						# local_key는 string으로.
-						#elif field.type_ in ["string", "locale_key"]:
 						else:
 							field.kind_ = DataKind.TEXT
 							field.is_array_ = False # 문자열타입은 배열일 수 없음.
@@ -474,9 +471,9 @@ if __name__ == "__main__":
 # 파일 xlsx json cs
 
 # TableExporter^
-#  "D:\Projects\AgileRogue\LineClash\Design\Tables\ExampleTable.xlsx"^
-#  "D:\Projects\AgileRogue\LineClash\Client\Assets\Resources\Tables"^
-#  "D:\Projects\AgileRogue\LineClash\Client\Assets\Scripts\Tables\Data"
+#  "D:\Projects\Example\Design\Tables\ExampleTable.xlsx"^
+#  "D:\Projects\Example\Client\Assets\Resources\Tables"^
+#  "D:\Projects\Example\Client\Assets\Scripts\Tables\Data"
 
 # TableExporter^
 #  ".\ExampleTable.xlsx"^

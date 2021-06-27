@@ -35,6 +35,8 @@ namespace DagraacSystems.Table
 
 		protected abstract TTableData[] LoadFromFile<TTableData>(string path) where TTableData : ITableData;
 
+		protected abstract void LoadFromFileAsync<TTableData>(string path, Action<TTableData[]> onLoadComplete) where TTableData : ITableData;
+
 		/// <summary>
 		/// 해당 아이디를 식별자로 삼는 테이블 컨테이너에 해당 경로의 json에서 테이블 데이터를 불러와 적재한다.
 		/// 동일 아이디로 셋팅할 경우 머지옵션을 통해 각 경로의 여러개의 테이블을 하나로 만들 수 있다.
@@ -59,7 +61,45 @@ namespace DagraacSystems.Table
 		public bool Load<TTableData>(TTableID tableID, string path, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
 		{
 			var tableDataArray = LoadFromFile<TTableData>(path);
+			if (tableDataArray == null)
+				return false;
 
+			Load(tableID, tableDataArray, generateKeyCallback, isMerge);
+			return true;
+		}
+
+		/// <summary>
+		/// 비동기버전으로 결과 타이밍은 OnLoaded로 날아가서 따로 콜백이 없음.
+		/// </summary>
+		public void LoadAsync<TTableData>(TTableID tableID, string path, bool isMerge = false) where TTableData : ITableData
+		{
+			LoadAsync<TTableData>(tableID, path, (Func<int, ITableData, string>)((index, tableData) => index.ToString()), isMerge);
+		}
+
+		/// <summary>
+		/// 비동기버전으로 결과 타이밍은 OnLoaded로 날아가서 따로 콜백이 없음.
+		/// </summary>
+		public void LoadAsync<TTableData>(TTableID tableID, string path, string keyName, bool isMerge = false) where TTableData : ITableData
+		{
+			LoadAsync<TTableData>(tableID, path, (index, tableData) => tableData.GetFieldValue(tableData.GetFieldIndex(keyName)).ToString(), isMerge);
+		}
+
+		/// <summary>
+		/// 비동기버전으로 결과 타이밍은 OnLoaded로 날아가서 따로 콜백이 없음.
+		/// </summary>
+		public void LoadAsync<TTableData>(TTableID tableID, string path, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
+		{
+			LoadFromFileAsync<TTableData>(path, tableDataArray =>
+			{
+				Load(tableID, tableDataArray, generateKeyCallback, isMerge);
+			});
+		}
+
+		/// <summary>
+		/// 실제 컨테이너에 적재.
+		/// </summary>
+		private void Load<TTableData>(TTableID tableID, TTableData[] tableDataArray, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
+		{
 			var tableContainer = default(TableContainer);
 			if (m_Tables.ContainsKey(tableID))
 			{
@@ -81,13 +121,12 @@ namespace DagraacSystems.Table
 			else
 				tableContainer.SetContainer(tableDataList, generateKeyCallback);
 
-			if (OnCheckIntegrity(tableID, tableContainer))
-			{
-				OnLoaded(tableID, tableContainer);
-				return true;
-			}
+			OnLoaded(tableID, tableContainer);
+		}
 
-			return false;
+		public bool CheckIntegrity(TTableID tableID)
+		{
+			return OnCheckIntegrity(tableID, GetTable(tableID));
 		}
 
 		public void LoadAll()
@@ -109,9 +148,14 @@ namespace DagraacSystems.Table
 			m_Tables.Clear();
 		}
 
-		public T GetTable<T>(TTableID tableID) where T : TableContainer
+		public TableContainer GetTable(TTableID tableID)
 		{
-			return (T)m_Tables[tableID];
+			return m_Tables[tableID];
+		}
+
+		public TTableContainer GetTable<TTableContainer>(TTableID tableID) where TTableContainer : TableContainer
+		{
+			return (TTableContainer)m_Tables[tableID];
 		}
 
 		public bool Cotains(TTableID tableID)
