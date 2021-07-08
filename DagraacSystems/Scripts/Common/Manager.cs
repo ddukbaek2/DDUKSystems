@@ -23,6 +23,7 @@ namespace DagraacSystems
 		//}
 
 		//protected abstract void OnCreate();
+
 		protected abstract void OnDispose(bool disposing);
 
 		public void Dispose()

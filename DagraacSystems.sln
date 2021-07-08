@@ -9,6 +9,8 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TableExporter", "TableExpor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystemsExample", "DagraacSystemsExample\DagraacSystemsExample.csproj", "{EFD15F49-CA59-40A2-A55D-58D149EC883D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystemsUnity", "DagraacSystemsUnity\DagraacSystemsUnity.csproj", "{E2760AC7-9968-4FBB-99A2-19F94A1A2E3F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EFD15F49-CA59-40A2-A55D-58D149EC883D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2760AC7-9968-4FBB-99A2-19F94A1A2E3F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2760AC7-9968-4FBB-99A2-19F94A1A2E3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2760AC7-9968-4FBB-99A2-19F94A1A2E3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2760AC7-9968-4FBB-99A2-19F94A1A2E3F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

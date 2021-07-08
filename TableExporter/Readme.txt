@@ -1,6 +1,6 @@
 외부모듈:
 	pip install pyinstaller
-	pip install xlrd
+	pip install openpyxl
 
 규칙:
 	ROWTYPE은 A셀에 입력. 행 순서나 여백은 상관 없음.
@@ -8,6 +8,11 @@
 	ROWTYPE:EXPORT에 포함되는 설정값의 필드만 출력.
 
 버전:
+	0.0.5 (예정)
+		바이너리 익스포트 기능 추가
+		참조 테이블 기능 추가
+		툴 단계에서 테이블 머지 기능 추가
+		시각화
 	0.0.4
 		xlrd 라이브러리가 더이상 xlsx를 지원하지 않게되어 openpyxl 라이브러리로 교체
 	0.0.3

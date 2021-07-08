@@ -8,7 +8,7 @@ using System.Text.Json;
 namespace DagraacSystemsExample
 {
 	/// <summary>
-	/// 테이블 식별자.
+	/// 테이블 식별자 (직접추가).
 	/// </summary>
 	public enum eTableID
 	{
@@ -58,6 +58,7 @@ namespace DagraacSystemsExample
 
 		/// <summary>
 		/// 전체 로드하라는 함수가 호출되었을 때.
+		/// 로드할 테이블들 옵션 맞춰서 직접 추가.
 		/// </summary>
 		protected override void OnLoadAll()
 		{
@@ -68,7 +69,7 @@ namespace DagraacSystemsExample
 		}
 
 		/// <summary>
-		/// 로드가 성공한 뒤 (관리가 필요한 테이블만 추가).
+		/// 로드가 성공한 뒤 (싱글톤 접근 및 별도 공간이 필요한 테이블만 직접 추가).
 		/// </summary>
 		protected override void OnLoaded(eTableID tableID, TableContainer tableContainer)
 		{
@@ -87,7 +88,7 @@ namespace DagraacSystemsExample
 		}
 
 		/// <summary>
-		/// 정합성 검사 (필요한 테이블만 추가).
+		/// 정합성 검사 (검사가 필요한 테이블만 직접 추가).
 		/// </summary>
 		protected override bool OnCheckIntegrity(eTableID tableID, TableContainer tableContainer)
 		{
