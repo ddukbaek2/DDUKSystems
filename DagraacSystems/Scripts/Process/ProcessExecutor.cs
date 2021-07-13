@@ -11,12 +11,16 @@ namespace DagraacSystems.Process
 	public class ProcessExecutor : IDisposable
 	{
 		private bool m_IsDisposed;
-		protected List<Process> m_RunningProcesses;
+		private long m_IncreaseID;
+		protected Dictionary<long, Process> m_RunningProcesses;
+		protected List<long> m_DeleteReservedProcessIDList;
 
 		public ProcessExecutor()
 		{
 			m_IsDisposed = false;
-			m_RunningProcesses = new List<Process>();
+			m_IncreaseID = 0;
+			m_RunningProcesses = new Dictionary<long, Process>();
+			m_DeleteReservedProcessIDList = new List<long>();
 		}
 
 		~ProcessExecutor()
@@ -34,19 +38,50 @@ namespace DagraacSystems.Process
 
 		public virtual void Update(float deltaTime)
 		{
-			for (var i = 0; i < m_RunningProcesses.Count; ++i)
+			foreach (var process in m_RunningProcesses)
 			{
-				var process = m_RunningProcesses[i];
-				if (process.IsFinished())
-				{
-					Stop(process);
-					--i;
-				}
-				else
-				{
-					process.Update(deltaTime);
-				}
+				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+					continue;
+				if (process.Value.IsFinished())
+					continue;
+
+				process.Value.Update(deltaTime);
 			}
+
+			ApplyAllDeleteReservedProcesses();
+		}
+
+		/// <summary>
+		/// 삭제 예정된 프로세스를 모두 수집해서 삭제.
+		/// </summary>
+		private void ApplyAllDeleteReservedProcesses()
+		{
+			// 삭제예정 수집.
+			foreach (var process in m_RunningProcesses)
+			{
+				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+					continue;
+
+				if (!process.Value.IsFinished())
+					continue;
+
+				m_DeleteReservedProcessIDList.Add(process.Key);
+			}
+
+			// 수집된 내용 삭제.
+			foreach (var processID in m_DeleteReservedProcessIDList)
+			{
+				var process = GetRunningProcess(processID);
+				if (process == null)
+					continue;
+
+				if (!process.IsFinished())
+					process.Finish();
+
+				m_RunningProcesses.Remove(processID);
+			}
+
+			m_DeleteReservedProcessIDList.Clear();
 		}
 
 		public void Dispose()
@@ -63,38 +98,56 @@ namespace DagraacSystems.Process
 
 		public void Start(Process process)
 		{
-			if (m_RunningProcesses.Contains(process))
+			if (m_RunningProcesses.ContainsValue(process))
 				return;
 
-			m_RunningProcesses.Add(process);
+			m_RunningProcesses.Add(++m_IncreaseID, process);
 			process.Reset();
-			process.Execute();
+			process.Execute(this);
 		}
 
-		public void StopAll()
+		public void StopAll(bool immeditate = false)
 		{
-			for (var i = 0; i < m_RunningProcesses.Count; ++i)
+			foreach (var process in m_RunningProcesses)
 			{
-				var process = m_RunningProcesses[i];
-				Stop(process);
-				--i;
+				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+					continue;
+
+				Stop(process.Key, false);
 			}
+
+			if (immeditate)
+				ApplyAllDeleteReservedProcesses();
 		}
 
-		public void Stop(Process process)
+		public void Stop(long processID, bool immeditate = false)
 		{
-			if (!m_RunningProcesses.Contains(process))
+			var process = GetRunningProcess(processID);
+			if (process == null)
 				return;
 
 			if (!process.IsFinished())
 				process.Finish();
 
-			m_RunningProcesses.Remove(process);
+			if (immeditate)
+				ApplyAllDeleteReservedProcesses();
+		}
+		
+		public Process GetRunningProcess(long processID)
+		{
+			if (m_RunningProcesses.TryGetValue(processID, out Process process))
+				return process;
+			return null;
+		}
+
+		public bool IsRunning(long processID)
+		{
+			return m_RunningProcesses.ContainsKey(processID);
 		}
 
 		public bool IsRunning(Process process)
 		{
-			return m_RunningProcesses.Contains(process);
+			return m_RunningProcesses.ContainsValue(process);
 		}
 	}
 }

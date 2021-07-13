@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 
 namespace DagraacSystems.Process
@@ -7,44 +8,42 @@ namespace DagraacSystems.Process
 	/// 처리기계를 상속받은 처리.
 	/// 처리가 처리를 실행한다.
 	/// </summary>
-	public class Process : ProcessExecutor
+	public class Process
 	{
 		private bool m_IsFinished;
+		private ProcessExecutor m_Executor;
+		private long m_ID;
 
 		public Process()
 		{
 			m_IsFinished = false;
+			m_Executor = null;
+			m_ID = 0;
 		}
 
 		public virtual void Reset()
 		{
-			for (var i = 0; i < m_RunningProcesses.Count; ++i)
-			{
-				var process = m_RunningProcesses[i];
-				process.Reset();
-			}
+			m_IsFinished = false;
+			m_Executor = null;
+			m_ID = 0;
 		}
 
-		public virtual void Execute()
+		public virtual void Execute(ProcessExecutor processExecutor)
 		{
-			for (var i = 0; i < m_RunningProcesses.Count; ++i)
-			{
-				var process = m_RunningProcesses[i];
-				process.Execute();
-			}
+			m_Executor = processExecutor;
 		}
 
-		public override void Update(float deltaTime)
+		public virtual void Update(float deltaTime)
 		{
-			base.Update(deltaTime);
 		}
 
 		public virtual void Finish()
 		{
 			m_IsFinished = true;
-			StopAll();
 		}
 
-		public bool IsFinished() => m_IsFinished;
+		public virtual bool IsFinished() => m_IsFinished;
+
+		public ProcessExecutor GetExecutor() => m_Executor;
 	}
 }
