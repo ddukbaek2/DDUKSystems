@@ -36,7 +36,6 @@ namespace DagraacSystems.Notification
 				return;
 
 			var key = typeof(T);
-
 			if (m_Callbacks.ContainsKey(key))
 			{
 				m_Callbacks[key] = Delegate.Combine(m_Callbacks[key], callback);
@@ -87,7 +86,8 @@ namespace DagraacSystems.Notification
 		/// </summary>
 		public void Notify<T>(params object[] args) where T : Delegate
 		{
-			if (m_Callbacks.TryGetValue(typeof(T), out var callback))
+			var key = typeof(T);
+			if (m_Callbacks.TryGetValue(key, out var callback))
 			{
 				callback?.DynamicInvoke(args);
 			}
