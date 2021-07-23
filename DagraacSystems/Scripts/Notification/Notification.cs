@@ -7,10 +7,10 @@ namespace DagraacSystems.Notification
 	/// <summary>
 	/// 통지 처리기.
 	/// </summary>
-	public sealed class Notification
+	public class Notification
 	{
-		private static readonly Lazy<Notification> s_Instance = new Lazy<Notification>(() => new Notification(), true); // thread-safe.
-		public static Notification Instance => s_Instance.Value;
+		//private static readonly Lazy<Notification> s_Instance = new Lazy<Notification>(() => new Notification(), true); // thread-safe.
+		//public static Notification Instance => s_Instance.Value;
 
 		private Dictionary<Type, Delegate> m_Callbacks;
 
@@ -36,7 +36,6 @@ namespace DagraacSystems.Notification
 				return;
 
 			var key = typeof(T);
-
 			if (m_Callbacks.ContainsKey(key))
 			{
 				m_Callbacks[key] = Delegate.Combine(m_Callbacks[key], callback);
@@ -58,18 +57,11 @@ namespace DagraacSystems.Notification
 			var key = typeof(T);
 			if (m_Callbacks.ContainsKey(key))
 			{
-				var removedCallback = Delegate.Remove(m_Callbacks[key], callback);
-				if (removedCallback != null)
-				{
-					var invocationList = removedCallback.GetInvocationList();
-					if (invocationList.Length > 0)
-					{
-						m_Callbacks[key] = removedCallback;
-						return;
-					}
-				}
-
-				Unregister<T>();
+				var del = m_Callbacks[key];
+				if (RemoveDelegate(true, ref del, d => d.Equals(callback)) > 0)
+					m_Callbacks[key] = del;
+				else
+					Unregister<T>();
 			}
 		}
 
@@ -83,14 +75,80 @@ namespace DagraacSystems.Notification
 		}
 
 		/// <summary>
-		/// 타입 통지.
+		/// 타입별 등록한 모든 함수에 통지.
+		/// Invalid 검사를 생략했기에 이미 파괴된 객체에도 통지될 수 있음.
+		/// </summary>
+		public void NotifyFast<T>(params object[] args) where T : Delegate
+		{
+			var key = typeof(T);
+			if (m_Callbacks.TryGetValue(key, out var del))
+				del?.DynamicInvoke(args);
+		}
+
+		/// <summary>
+		/// 타입별 등록한 모든 함수에 통지.
 		/// </summary>
 		public void Notify<T>(params object[] args) where T : Delegate
 		{
-			if (m_Callbacks.TryGetValue(typeof(T), out var callback))
+			var key = typeof(T);
+			if (m_Callbacks.TryGetValue(key, out var del))
 			{
-				callback?.DynamicInvoke(args);
+				if (RemoveDelegate(false, ref del, IsInvaildDelegate) > 0)
+				{
+					m_Callbacks[key] = del;
+					del?.DynamicInvoke(args);
+				}
+				else
+				{
+					Unregister<T>();
+				}
 			}
+		}
+
+		/// <summary>
+		/// 유효하지 않은 델리게이트 여부.
+		/// </summary>
+		private static bool IsInvaildDelegate(Delegate d)
+		{
+			if (d.Equals(null))
+				return true;
+
+			if (d.Method.Equals(null))
+				return true;
+
+			if (d.Target.Equals(null))
+			{
+				if (!d.Method.IsStatic)
+					return true;
+			}
+
+			return false;
+		}
+
+		/// <summary>
+		/// 조건에 맞는 델리게이트를 삭제.
+		/// </summary>
+		private static int RemoveDelegate(bool removeOnce, ref Delegate del, Predicate<Delegate> match)
+		{
+			if (del == null)
+				return 0;
+
+			var invocationList = del.GetInvocationList();
+			if (match == null)
+				return invocationList.Length;
+
+			foreach (var d in invocationList)
+			{
+				if (match.Invoke(d))
+				{
+					del = Delegate.Remove(del, d);
+					if (removeOnce)
+						break;
+				}
+			}
+
+			invocationList = del.GetInvocationList();
+			return invocationList.Length;
 		}
 	}
 }
