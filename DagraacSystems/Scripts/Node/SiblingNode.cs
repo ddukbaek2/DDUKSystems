@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems
+namespace DagraacSystems.Node
 {
 	public class SiblingNode<T>
 	{

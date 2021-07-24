@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Notification
+namespace DagraacSystems.Obsolete
 {
 	public class NotificationManagerTemplete<TNotificationManager, TEventID, TTargetID> : Manager<TNotificationManager> 
 		where TNotificationManager : NotificationManagerTemplete<TNotificationManager, TEventID, TTargetID>, new()

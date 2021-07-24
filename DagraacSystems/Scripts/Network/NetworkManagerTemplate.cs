@@ -4,9 +4,9 @@ using System.Text;
 
 namespace DagraacSystems.Network
 {
-	public class PacketManagerTemplate<T> : Manager<T> where T : PacketManagerTemplate<T>, new()
+	public class NetworkManagerTemplate<T> : Manager<T> where T : NetworkManagerTemplate<T>, new()
 	{
-		public PacketManagerTemplate() : base()
+		public NetworkManagerTemplate() : base()
 		{
 		}
 

@@ -20,7 +20,6 @@ namespace DagraacSystems.FSM
 
 		public virtual void Enter()
 		{
-			m_OwnerMachine.To()
 		}
 
 		public virtual void FrameMove(float deltaTime)

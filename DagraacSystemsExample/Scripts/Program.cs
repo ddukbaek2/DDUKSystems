@@ -27,6 +27,37 @@ namespace DagraacSystemsExample
 			thread.Join();
 		}
 
+
+		private static int[] Convert(string hexColor)
+		{
+			var rgb = new int[3];
+
+			var prevHexNumber = 0;
+			var index = 0;
+			foreach (var hexChar in hexColor)
+			{
+				if (hexChar == 35) // #
+					continue;
+
+				var hexNumber = 0;
+				if (hexChar > 47 && hexChar < 58) // 숫자 0~9
+					hexNumber = hexChar - 48;
+				else if (hexChar > 64 && hexChar < 71) // 대문자 A~F.
+					hexNumber = (hexChar - 65) + 10;
+				else if (hexChar > 96 && hexChar < 103) // 소문자 a~f.
+					hexNumber = (hexChar - 97) + 10;
+
+				if (index % 2 != 0)
+					rgb[index / 2] = hexNumber + (prevHexNumber * 16);
+				else
+					prevHexNumber = hexNumber;
+	
+				++index;
+			}
+
+			return rgb;
+		}
+
 		private static void Logic()
 		{
 			TableManager.Instance.LoadAll();
@@ -36,6 +67,8 @@ namespace DagraacSystemsExample
 
 			var processExecutor = new ProcessExecutor();
 			processExecutor.Start(new ExampleProcess());
+
+			var result = Convert("#FF9900");
 
 			while (!s_IsQuitApplication)
 			{

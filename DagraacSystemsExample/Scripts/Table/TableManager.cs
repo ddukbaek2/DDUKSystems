@@ -76,7 +76,7 @@ namespace DagraacSystemsExample
 			switch (tableID)
 			{
 				case eTableID.ExampleTable:
-					ExampleTable.Instance.SetContainer(tableContainer);
+					ExampleTable.Instance.SetTableContainer(tableContainer);
 					break;
 
 				case eTableID.StringTable:

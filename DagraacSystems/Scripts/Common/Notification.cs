@@ -2,18 +2,21 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Notification
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 통지 처리기.
 	/// </summary>
 	public class Notification
 	{
-		//private static readonly Lazy<Notification> s_Instance = new Lazy<Notification>(() => new Notification(), true); // thread-safe.
-		//public static Notification Instance => s_Instance.Value;
-
+		/// <summary>
+		/// 타입별 콜백 목록.
+		/// </summary>
 		private Dictionary<Type, Delegate> m_Callbacks;
 
+		/// <summary>
+		/// 생성.
+		/// </summary>
 		public Notification()
 		{
 			m_Callbacks = new Dictionary<Type, Delegate>();
@@ -78,7 +81,7 @@ namespace DagraacSystems.Notification
 		/// 타입별 등록한 모든 함수에 통지.
 		/// Invalid 검사를 생략했기에 이미 파괴된 객체에도 통지될 수 있음.
 		/// </summary>
-		public void NotifyFast<T>(params object[] args) where T : Delegate
+		public void FastNotify<T>(params object[] args) where T : Delegate
 		{
 			var key = typeof(T);
 			if (m_Callbacks.TryGetValue(key, out var del))

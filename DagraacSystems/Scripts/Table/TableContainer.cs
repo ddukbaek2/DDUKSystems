@@ -6,6 +6,7 @@ namespace DagraacSystems.Table
 {
 	/// <summary>
 	/// 테이블 컨테이너.
+	/// 실제 테이블 데이터가 저장되는 객체이며 내부적으로 string을 key로 사용한다.
 	/// </summary>
 	public class TableContainer
 	{
@@ -17,7 +18,7 @@ namespace DagraacSystems.Table
 		/// <summary>
 		/// 키를 생성할 콜백.
 		/// </summary>
-		protected Func<int, ITableData, string> m_GenerateKeyCallback;
+		protected Func<int, ITableData, string> m_MakeKeyCallback;
 
 		/// <summary>
 		/// 갯수.
@@ -30,31 +31,31 @@ namespace DagraacSystems.Table
 		public void Clear()
 		{
 			m_Data.Clear();
-			m_GenerateKeyCallback = null;
+			m_MakeKeyCallback = null;
 		}
 
 		/// <summary>
 		/// 컨테이너 셋팅.
 		/// </summary>
-		public void SetContainer(ITableData[] tableDataList, Func<int, ITableData, string> generateKeyCallback)
+		public void SetTableData(ITableData[] tableDataList, Func<int, ITableData, string> makeKeyCallback)
 		{
 			Clear();
-			m_GenerateKeyCallback = generateKeyCallback;
-			AddContainer(tableDataList);
+			m_MakeKeyCallback = makeKeyCallback;
+			AddTableData(tableDataList);
 		}
 
 		/// <summary>
 		/// 기존 것에 추가.
 		/// </summary>
-		public void AddContainer(ITableData[] tableDataList)
+		public void AddTableData(ITableData[] tableDataList)
 		{
-			if (m_GenerateKeyCallback == null)
+			if (m_MakeKeyCallback == null)
 				return;
 
 			for (var index = 0; index < tableDataList.Length; ++index)
 			{
 				ITableData tableData = tableDataList[index];
-				m_Data.Add(m_GenerateKeyCallback(index, tableData), tableData);
+				m_Data.Add(m_MakeKeyCallback(index, tableData), tableData);
 			}
 		}
 

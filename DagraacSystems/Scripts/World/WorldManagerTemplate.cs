@@ -13,6 +13,11 @@ namespace DagraacSystems.World
 
 		public float DeltaTime = 0f;
 
+		protected override void OnCreate()
+		{
+			base.OnCreate();
+		}
+
 		protected override void OnDispose(bool disposing)
 		{
 		}

@@ -3,6 +3,9 @@
 
 namespace DagraacSystems
 {
+	/// <summary>
+	/// 매니저.
+	/// </summary>
 	public abstract class Manager<T> : Singleton<T>, IDisposable where T : Manager<T>, new()
 	{
 		private bool m_IsDisposed;
@@ -24,7 +27,14 @@ namespace DagraacSystems
 
 		//protected abstract void OnCreate();
 
-		protected abstract void OnDispose(bool disposing);
+		protected override void OnCreate()
+		{
+			base.OnCreate();
+		}
+
+		protected virtual void OnDispose(bool disposing)
+		{
+		}
 
 		public void Dispose()
 		{

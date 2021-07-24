@@ -5,8 +5,7 @@ using System.Collections.Generic;
 namespace DagraacSystems.Process
 {
 	/// <summary>
-	/// 처리기계를 상속받은 처리.
-	/// 처리가 처리를 실행한다.
+	/// 
 	/// </summary>
 	public class Process
 	{

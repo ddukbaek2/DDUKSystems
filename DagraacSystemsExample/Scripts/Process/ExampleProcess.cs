@@ -24,9 +24,9 @@ namespace DagraacSystemsExample
 			m_AccTime = 0f;
 		}
 
-		public override void Execute()
+		public override void Execute(ProcessExecutor processExecutor)
 		{
-			base.Execute();
+			base.Execute(processExecutor);
 
 			Console.WriteLine("Execute()");
 		}

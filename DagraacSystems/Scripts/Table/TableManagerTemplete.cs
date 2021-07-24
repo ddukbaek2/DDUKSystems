@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 namespace DagraacSystems.Table
 {
+	/// <summary>
+	/// 테이블 매니저 베이스.
+	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
+	/// </summary>
 	public abstract class TableManagerTemplete<TTableManager, TTableID> : Manager<TTableManager>
 		where TTableManager : TableManagerTemplete<TTableManager, TTableID>, new()
 		where TTableID : Enum, new()
@@ -13,6 +17,11 @@ namespace DagraacSystems.Table
 		public TableManagerTemplete() : base()
 		{
 			m_Tables = new Dictionary<TTableID, TableContainer>();
+		}
+
+		protected override void OnCreate()
+		{
+			base.OnCreate();
 		}
 
 		protected override void OnDispose(bool disposing)
@@ -117,9 +126,9 @@ namespace DagraacSystems.Table
 				tableDataList[index] = (ITableData)tableDataArray[index];
 
 			if (isMerge)
-				tableContainer.AddContainer(tableDataList);
+				tableContainer.AddTableData(tableDataList);
 			else
-				tableContainer.SetContainer(tableDataList, generateKeyCallback);
+				tableContainer.SetTableData(tableDataList, generateKeyCallback);
 
 			OnLoaded(tableID, tableContainer);
 		}

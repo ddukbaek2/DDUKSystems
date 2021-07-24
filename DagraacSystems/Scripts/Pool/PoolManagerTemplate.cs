@@ -52,7 +52,7 @@ namespace DagraacSystems.Pool
 
 		public IPooledObject Pop()
 		{
-
+			return null;
 		}
 	}
 }
