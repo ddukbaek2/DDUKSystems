@@ -1,14 +1,34 @@
 ﻿using System;
 using System.Threading;
 using DagraacSystems.Process;
+using DagraacSystems.Notification;
 
 
 namespace DagraacSystemsExample
 {
+	public class Callback
+	{
+		public delegate void OnCreate();
+	}
+
+	public class ExampleObject
+	{
+		public ExampleObject()
+		{
+			Notification.Instance.Register<Callback.OnCreate>(OnCreate);
+		}
+
+		private void OnCreate()
+		{
+			Console.WriteLine("OnCreate()");
+		}
+	}
+
 	public class Program
 	{
 		private static bool s_IsQuitApplication = false;
 		private static long s_PrevTick = 0;
+
 		public static void Main(string[] args)
 		{
 			var thread = new Thread(Logic);
@@ -62,9 +82,11 @@ namespace DagraacSystemsExample
 		{
 			TableManager.Instance.LoadAll();
 
+			var exampleObject = new ExampleObject();
+
 			Console.WriteLine("DagraacSystems Example!");
 			Console.WriteLine($"{ExampleTable.Instance.Find(1).Desc}");
-
+			
 			var processExecutor = new ProcessExecutor();
 			processExecutor.Start(new ExampleProcess());
 
@@ -85,6 +107,13 @@ namespace DagraacSystemsExample
 			}
 
 			processExecutor.StopAll();
+			GC.SuppressFinalize(exampleObject);
+			exampleObject = null;
+
+
+			Notification.Instance.Notify<Callback.OnCreate>();
+
+			Console.ReadKey();
 		}
 	}
 }
