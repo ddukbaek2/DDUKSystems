@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.FSM
+﻿namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 상태 인터페이스.

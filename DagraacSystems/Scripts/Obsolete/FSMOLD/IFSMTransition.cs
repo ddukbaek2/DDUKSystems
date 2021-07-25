@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	public interface IFSMTransition
 	{

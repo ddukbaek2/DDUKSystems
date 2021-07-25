@@ -4,7 +4,7 @@ using System.Text;
 
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 특정 상태를 시작하게 되는 트리거.

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 상태처리기의 실제 기능 구현.

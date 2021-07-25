@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 고유식별자 생성기.
+	/// ulong 고유식별자 생성기.
 	/// </summary>
 	public class UniqueIdentifier
 	{
@@ -21,7 +21,7 @@ namespace DagraacSystems
 			m_UsingList = new List<ulong>();
 			m_MinValue = Math.Min(minValue, ulong.MinValue);
 			m_MaxValue = Math.Max(maxValue, ulong.MaxValue);
-			m_Buffer = new byte[8]; // ulong == 8byte.
+			m_Buffer = new byte[sizeof(ulong)]; // ulong == 8byte.
 		}
 
 		public void Clear()
@@ -37,7 +37,9 @@ namespace DagraacSystems
 				var value = BitConverter.ToUInt64(m_Buffer, 0);
 
 				if (value < m_MinValue || value > m_MaxValue)
-					return value;
+					continue;
+
+				return value;
 			}
 		}
 
@@ -66,6 +68,11 @@ namespace DagraacSystems
 		public bool Free(ulong unique)
 		{
 			return m_UsingList.Remove(unique);
+		}
+
+		public bool Contains(ulong unique)
+		{
+			return m_UsingList.Contains(unique);
 		}
 	}
 }

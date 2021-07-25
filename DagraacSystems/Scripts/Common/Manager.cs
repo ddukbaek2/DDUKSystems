@@ -13,19 +13,16 @@ namespace DagraacSystems
 		public Manager()
 		{
 			m_IsDisposed = false;
-			//OnCreate();
 		}
 
-		//~Manager()
-		//{
-		//	if (!m_IsDisposed)
-		//	{
-		//		m_IsDisposed = true;
-		//		OnDispose(false);
-		//	}
-		//}
-
-		//protected abstract void OnCreate();
+		~Manager()
+		{
+			if (!m_IsDisposed)
+			{
+				m_IsDisposed = true;
+				OnDispose(false);
+			}
+		}
 
 		protected override void OnCreate()
 		{

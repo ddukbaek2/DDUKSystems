@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.FSM
+﻿namespace DagraacSystems.Obsolete
 {
 	public interface IFSMDecide
 	{

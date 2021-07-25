@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 상태 처리기.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 상태기계 인터페이스.

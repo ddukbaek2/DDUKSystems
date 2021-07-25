@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems.Obsolete
 {
 	/// <summary>
 	/// 행위가 결정된 상태.

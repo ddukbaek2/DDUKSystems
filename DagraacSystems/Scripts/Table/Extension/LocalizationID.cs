@@ -1,7 +1,4 @@
-﻿using DagraacSystems.Localization;
-
-
-namespace DagraacSystems.Table.Extension
+﻿namespace DagraacSystems.Table.Extension
 {
 	public class LocalizationID
 	{

@@ -9,31 +9,31 @@ using DagraacSystems.Process;
 namespace DagraacSystemsExample
 {
 	/// <summary>
-	/// 10초를 세는 프로세스.
+	/// 5초를 세는 프로세스.
 	/// </summary>
 	public class ExampleProcess : Process
 	{
 		private int m_Count;
 		private float m_AccTime;
 
-		public override void Reset()
+		protected override void OnReset()
 		{
-			base.Reset();
+			base.OnReset();
 
 			m_Count = 0;
 			m_AccTime = 0f;
+			Console.WriteLine("OnReset()");
 		}
 
-		public override void Execute(ProcessExecutor processExecutor)
+		protected override void OnExecute()
 		{
-			base.Execute(processExecutor);
-
-			Console.WriteLine("Execute()");
+			base.OnExecute();
+			Console.WriteLine("OnExecute()");
 		}
 
-		public override void Update(float deltaTime)
+		protected override void OnUpdate(float deltaTime)
 		{
-			base.Update(deltaTime);
+			base.OnUpdate(deltaTime);
 
 			m_AccTime += deltaTime;
 			if (m_AccTime >= 1.0f)
@@ -43,16 +43,16 @@ namespace DagraacSystemsExample
 				Console.WriteLine(m_Count);
 			}
 
-			if (m_Count >= 10)
+			if (m_Count >= 5)
 			{
 				Finish();
 			}
 		}
 
-		public override void Finish()
+		protected override void OnFinish()
 		{
-			base.Finish();
-			Console.WriteLine("Finish()");
+			base.OnFinish();
+			Console.WriteLine("OnFinish()");
 		}
 	}
 }

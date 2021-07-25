@@ -10,39 +10,65 @@ namespace DagraacSystems.Process
 	public class Process
 	{
 		private bool m_IsFinished;
-		private ProcessExecutor m_Executor;
-		private long m_ID;
+		private ProcessExecutor m_ProcessExecutor;
+		private ulong m_ProcessID;
 
 		public Process()
 		{
 			m_IsFinished = false;
-			m_Executor = null;
-			m_ID = 0;
+			m_ProcessExecutor = null;
+			m_ProcessID = 0;
 		}
 
-		public virtual void Reset()
+		internal void Reset()
 		{
 			m_IsFinished = false;
-			m_Executor = null;
-			m_ID = 0;
+			m_ProcessExecutor = null;
+			m_ProcessID = 0;
+			OnReset();
 		}
 
-		public virtual void Execute(ProcessExecutor processExecutor)
+		internal void Execute(ProcessExecutor processExecutor, ulong processID)
 		{
-			m_Executor = processExecutor;
+			m_ProcessExecutor = processExecutor;
+			m_ProcessID = processID;
+			OnExecute();
 		}
 
-		public virtual void Update(float deltaTime)
+		internal void Update(float deltaTime)
 		{
+			OnUpdate(deltaTime);
 		}
 
-		public virtual void Finish()
+		public void Finish()
 		{
+			if (m_IsFinished)
+				return;
+
 			m_IsFinished = true;
+			OnFinish();
+		}
+
+		protected virtual void OnReset()
+		{
+		}
+
+		protected virtual void OnExecute()
+		{
+		}
+
+		protected virtual void OnUpdate(float deltaTime)
+		{
+		}
+
+		protected virtual void OnFinish()
+		{
 		}
 
 		public virtual bool IsFinished() => m_IsFinished;
 
-		public ProcessExecutor GetExecutor() => m_Executor;
+		public ProcessExecutor GetProcessExecutor() => m_ProcessExecutor;
+
+		public ulong GetProcessID() => m_ProcessID;
 	}
 }

@@ -5,22 +5,29 @@ using System.Collections.Generic;
 namespace DagraacSystems.Process
 {
 	/// <summary>
-	/// 처리기계.
-	/// 처리기계는 처리를 실행한다.
+	/// 프로세스 실행기.
 	/// </summary>
 	public class ProcessExecutor : IDisposable
 	{
 		private bool m_IsDisposed;
-		private long m_IncreaseID;
-		protected Dictionary<long, Process> m_RunningProcesses;
-		protected List<long> m_DeleteReservedProcessIDList;
+		private UniqueIdentifier m_UniqueIdentifier;
+		protected Dictionary<ulong, Process> m_RunningProcesses;
+		protected List<ulong> m_DeleteReservedProcessIDList;
 
 		public ProcessExecutor()
 		{
 			m_IsDisposed = false;
-			m_IncreaseID = 0;
-			m_RunningProcesses = new Dictionary<long, Process>();
-			m_DeleteReservedProcessIDList = new List<long>();
+			m_UniqueIdentifier = new UniqueIdentifier();
+			m_RunningProcesses = new Dictionary<ulong, Process>();
+			m_DeleteReservedProcessIDList = new List<ulong>();
+		}
+
+		public ProcessExecutor(UniqueIdentifier uniqueIdentifier)
+		{
+			m_IsDisposed = false;
+			m_UniqueIdentifier = uniqueIdentifier;
+			m_RunningProcesses = new Dictionary<ulong, Process>();
+			m_DeleteReservedProcessIDList = new List<ulong>();
 		}
 
 		~ProcessExecutor()
@@ -34,7 +41,22 @@ namespace DagraacSystems.Process
 
 		protected virtual void OnDispose(bool disposing)
 		{
+			StopAll(true);
 		}
+
+
+		public void Dispose()
+		{
+			if (!m_IsDisposed)
+			{
+				m_IsDisposed = true;
+				OnDispose(true);
+			}
+
+			// 소멸자 호출 안함.
+			GC.SuppressFinalize(this);
+		}
+
 
 		public virtual void Update(float deltaTime)
 		{
@@ -79,21 +101,10 @@ namespace DagraacSystems.Process
 					process.Finish();
 
 				m_RunningProcesses.Remove(processID);
+				m_UniqueIdentifier.Free(processID);
 			}
 
 			m_DeleteReservedProcessIDList.Clear();
-		}
-
-		public void Dispose()
-		{
-			if (!m_IsDisposed)
-			{
-				m_IsDisposed = true;
-				OnDispose(true);
-			}
-
-			// 소멸자 호출 안함.
-			GC.SuppressFinalize(this);
 		}
 
 		public void Start(Process process)
@@ -101,9 +112,10 @@ namespace DagraacSystems.Process
 			if (m_RunningProcesses.ContainsValue(process))
 				return;
 
-			m_RunningProcesses.Add(++m_IncreaseID, process);
+			var processID = m_UniqueIdentifier.Generate();
+			m_RunningProcesses.Add(processID, process);
 			process.Reset();
-			process.Execute(this);
+			process.Execute(this, processID);
 		}
 
 		public void StopAll(bool immeditate = false)
@@ -120,7 +132,7 @@ namespace DagraacSystems.Process
 				ApplyAllDeleteReservedProcesses();
 		}
 
-		public void Stop(long processID, bool immeditate = false)
+		public void Stop(ulong processID, bool immeditate = false)
 		{
 			var process = GetRunningProcess(processID);
 			if (process == null)
@@ -133,14 +145,14 @@ namespace DagraacSystems.Process
 				ApplyAllDeleteReservedProcesses();
 		}
 		
-		public Process GetRunningProcess(long processID)
+		public Process GetRunningProcess(ulong processID)
 		{
 			if (m_RunningProcesses.TryGetValue(processID, out Process process))
 				return process;
 			return null;
 		}
 
-		public bool IsRunning(long processID)
+		public bool IsRunning(ulong processID)
 		{
 			return m_RunningProcesses.ContainsKey(processID);
 		}
