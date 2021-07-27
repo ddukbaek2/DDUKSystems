@@ -14,6 +14,8 @@ namespace DagraacSystemsExample
 
 		public void Start(string[] args)
 		{
+			OnStart();
+
 			var thread = new Thread(Update);
 			thread.Start();
 
@@ -28,12 +30,12 @@ namespace DagraacSystemsExample
 
 			m_IsQuitApplication = true;
 			thread.Join();
+
+			OnFinish();
 		}
 
 		private void Update()
 		{
-			OnStart();
-
 			while (!m_IsQuitApplication)
 			{
 				var currentTick = DateTime.Now.Ticks;
@@ -47,8 +49,6 @@ namespace DagraacSystemsExample
 
 				Thread.Sleep(1);
 			}
-
-			OnFinish();
 		}
 
 		protected virtual void OnStart()

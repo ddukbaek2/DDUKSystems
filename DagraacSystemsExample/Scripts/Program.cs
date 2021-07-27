@@ -45,9 +45,7 @@ namespace DagraacSystemsExample
 			GC.SuppressFinalize(m_ExampleObject);
 			m_ExampleObject = null;
 
-			NotificationManager.Instance.Notify<DefinedDelegate.OnCreate>();
-
-			Console.ReadKey();
+			NotificationManager.Instance.Notify<DefinedDelegate.OnTest>();
 		}
 	}
 

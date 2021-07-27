@@ -8,13 +8,13 @@ namespace DagraacSystems.FSM
 		private List<FSMAction> m_Actions;
 		private List<FSMTransition> m_Transitions;
 
-		private int m_Position;
+		private int m_ActionCursor;
 
 		public FSMState()
 		{
 			m_Actions = new List<FSMAction>();
 			m_Transitions = new List<FSMTransition>();
-			m_Position = 0;
+			m_ActionCursor = 0;
 		}
 
 		protected override void OnCreate()
@@ -31,16 +31,16 @@ namespace DagraacSystems.FSM
 		{
 			base.OnReset();
 
-			m_Position = 0;
+			m_ActionCursor = 0;
 		}
 
-		protected override void OnExecute()
+		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute();
+			base.OnExecute(args);
 
-			if (m_Position < m_Actions.Count)
+			if (m_ActionCursor < m_Actions.Count)
 			{
-				var action = m_Actions[m_Position];
+				var action = m_Actions[m_ActionCursor];
 
 				var processExecutor = GetProcessExecutor();
 				processExecutor.Start(action);
@@ -51,15 +51,15 @@ namespace DagraacSystems.FSM
 		{
 			base.OnUpdate(deltaTime);
 
-			if (m_Position < m_Actions.Count)
+			if (m_ActionCursor < m_Actions.Count)
 			{
-				var action = m_Actions[m_Position];
-				if (action.IsFinished())
+				var action = m_Actions[m_ActionCursor];
+				if (action.IsFinished() || action.Async)
 				{
-					++m_Position;
-					if (m_Position < m_Actions.Count)
+					++m_ActionCursor;
+					if (m_ActionCursor < m_Actions.Count)
 					{
-						action = m_Actions[m_Position];
+						action = m_Actions[m_ActionCursor];
 						var processExecutor = GetProcessExecutor();
 						processExecutor.Start(action);
 					}
@@ -67,19 +67,24 @@ namespace DagraacSystems.FSM
 			}
 			else
 			{
-				var isAllFinished = true;
-				foreach (var action in m_Actions)
+				// 비동기 상태라면 액션이 다 끝나기를 기다리지 않는다.
+				if (Async)
 				{
-					if (!action.IsFinished())
-					{
-						isAllFinished = false;
-						break;
-					}
-				}
-
-				if (isAllFinished)
 					Finish();
+				}
+				else
+				{
+					// 전체 액션이 전부 종료되었는지 확인한다.
+					var processing = m_Actions.Exists(it => !it.IsFinished());
+					if (!processing)
+						Finish();
+				}
 			}
+		}
+
+		public void AddAction<TFSMAction>() where TFSMAction : FSMAction
+		{
+
 		}
 	}
 }

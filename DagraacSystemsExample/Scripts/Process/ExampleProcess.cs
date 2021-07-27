@@ -25,9 +25,9 @@ namespace DagraacSystemsExample
 			Console.WriteLine("OnReset()");
 		}
 
-		protected override void OnExecute()
+		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute();
+			base.OnExecute(args);
 			Console.WriteLine("OnExecute()");
 		}
 

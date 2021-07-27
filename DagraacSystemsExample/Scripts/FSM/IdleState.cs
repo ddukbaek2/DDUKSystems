@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DagraacSystemsExample
+﻿namespace DagraacSystemsExample
 {
 	public class IdleState : DagraacSystems.FSM.FSMState
 	{
-		protected override void OnExecute()
+		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute();
+			base.OnExecute(args);
 		}
 
 		protected override void OnUpdate(float deltaTime)

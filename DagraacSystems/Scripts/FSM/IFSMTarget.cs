@@ -2,9 +2,6 @@
 {
 	public interface IFSMTarget
 	{
-		FSMMachine Machine { set; get; }
-
-		void OnChangeState(FSMState state);
-		void ExecuteTrigger(string eventName);
+		void OnChangeState(FSMMachine machine, FSMState state);
 	}
 }

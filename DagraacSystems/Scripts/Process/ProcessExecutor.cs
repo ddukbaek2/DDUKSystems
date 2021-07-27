@@ -107,7 +107,7 @@ namespace DagraacSystems.Process
 			m_DeleteReservedProcessIDList.Clear();
 		}
 
-		public void Start(Process process)
+		public void Start(Process process, params object[] args)
 		{
 			if (m_RunningProcesses.ContainsValue(process))
 				return;
@@ -115,7 +115,7 @@ namespace DagraacSystems.Process
 			var processID = m_UniqueIdentifier.Generate();
 			m_RunningProcesses.Add(processID, process);
 			process.Reset();
-			process.Execute(this, processID);
+			process.Execute(this, processID, args);
 		}
 
 		public void StopAll(bool immeditate = false)
@@ -134,6 +134,9 @@ namespace DagraacSystems.Process
 
 		public void Stop(ulong processID, bool immeditate = false)
 		{
+			if (processID == 0)
+				return;
+
 			var process = GetRunningProcess(processID);
 			if (process == null)
 				return;

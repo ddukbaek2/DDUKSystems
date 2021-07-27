@@ -2,15 +2,21 @@
 
 namespace DagraacSystems.FSM
 {
+	/// <summary>
+	/// FSM 오브젝트.
+	/// FSM 매니저쪽에서 고유식별자를 할당받아 사용됨.
+	/// ProcessID : 실행중에만 유효한 고유식별자.
+	/// InstanceID : 영구적으로 부여받은 별도 고유식별자.
+	/// </summary>
 	public class FSMInstance : DagraacSystems.Process.Process
 	{
-		private ulong m_InstanceID;
-		private bool m_Async;
+		private ulong m_InstanceID; // 인스턴스의 아이디.
+
+		public bool Async { set; get; } = false; // 끝나기를 기다리지 않는 옵션.
 
 		public FSMInstance()
 		{
 			m_InstanceID = 0;
-			m_Async = false;
 		}
 
 		protected virtual void OnCreate()
@@ -29,9 +35,9 @@ namespace DagraacSystems.FSM
 			base.OnReset();
 		}
 
-		protected override void OnExecute()
+		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute();
+			base.OnExecute(args);
 		}
 
 		protected override void OnUpdate(float deltaTime)
@@ -63,6 +69,10 @@ namespace DagraacSystems.FSM
 
 			if (!FSMManager.Instance.m_UniqueIdentifier.Contains(instance.GetInstanceID()))
 				return;
+
+			var processExecutor = instance.GetProcessExecutor();
+			if (processExecutor != null)
+				processExecutor.Stop(instance.GetProcessID(), true);
 
 			instance.OnDestroy();
 		}

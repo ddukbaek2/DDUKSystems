@@ -9,12 +9,14 @@ namespace DagraacSystems.Process
 	/// </summary>
 	public class Process
 	{
+		private bool m_IsStarted;
 		private bool m_IsFinished;
 		private ProcessExecutor m_ProcessExecutor;
 		private ulong m_ProcessID;
 
 		public Process()
 		{
+			m_IsStarted = false;
 			m_IsFinished = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
@@ -22,17 +24,22 @@ namespace DagraacSystems.Process
 
 		internal void Reset()
 		{
+			m_IsStarted = false;
 			m_IsFinished = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
+
 			OnReset();
 		}
 
-		internal void Execute(ProcessExecutor processExecutor, ulong processID)
+		internal void Execute(ProcessExecutor processExecutor, ulong processID, params object[] args)
 		{
+			m_IsStarted = true;
+			m_IsFinished = false;
 			m_ProcessExecutor = processExecutor;
 			m_ProcessID = processID;
-			OnExecute();
+
+			OnExecute(args);
 		}
 
 		internal void Update(float deltaTime)
@@ -42,10 +49,12 @@ namespace DagraacSystems.Process
 
 		public void Finish()
 		{
-			if (m_IsFinished)
+			if (!m_IsStarted || m_IsFinished)
 				return;
 
+			m_IsStarted = false;
 			m_IsFinished = true;
+
 			OnFinish();
 		}
 
@@ -53,7 +62,7 @@ namespace DagraacSystems.Process
 		{
 		}
 
-		protected virtual void OnExecute()
+		protected virtual void OnExecute(params object[] args)
 		{
 		}
 
@@ -65,10 +74,24 @@ namespace DagraacSystems.Process
 		{
 		}
 
-		public virtual bool IsFinished() => m_IsFinished;
+		public bool IsStarted()
+		{
+			return m_IsStarted;
+		}
+		
+		public bool IsFinished()
+		{
+			return m_IsFinished;
+		}
 
-		public ProcessExecutor GetProcessExecutor() => m_ProcessExecutor;
+		public ProcessExecutor GetProcessExecutor()
+		{
+			return m_ProcessExecutor;
+		}
 
-		public ulong GetProcessID() => m_ProcessID;
+		public ulong GetProcessID()
+		{
+			return m_ProcessID;
+		}
 	}
 }

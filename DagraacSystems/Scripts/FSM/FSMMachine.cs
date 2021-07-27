@@ -5,34 +5,36 @@ using System.Linq;
 
 namespace DagraacSystems.FSM
 {
+	/// <summary>
+	/// FSM 처리기.
+	/// FSM에서 사용되는 STATE는 상태의 고유성을 가져야함. 예를들어 IDLESTATE가 있다면 동일한 클래스 2개를 등록할 수 없음.
+	/// </summary>
 	public class FSMMachine : Process.Process
 	{
-		public IFSMTarget m_Target;
+		private List<FSMTrigger> m_Triggers;
+		private List<FSMState> m_States;
 
-		internal List<FSMTrigger> m_Triggers;
-		internal List<FSMState> m_States;
-		internal List<FSMState> m_RunningStates;
+		public IFSMTarget Target { set; get; }
 
-		public FSMMachine(IFSMTarget target)
+		public FSMMachine()
 		{
-			m_Target = target;
-
 			m_Triggers = new List<FSMTrigger>();
 			m_States = new List<FSMState>();
-			m_RunningStates = new List<FSMState>();
 		}
 
-		protected override void OnExecute()
+		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute();
+			base.OnExecute(args);
 		}
 
 		protected override void OnUpdate(float deltaTime)
 		{
 			base.OnUpdate(deltaTime);
 
-			foreach (var state in m_RunningStates)
-				state.Update(deltaTime);
+			foreach (var trigger in m_Triggers)
+			{
+				//if ()
+			}
 		}
 
 		protected override void OnFinish()
@@ -46,29 +48,24 @@ namespace DagraacSystems.FSM
 			m_Triggers.Clear();
 		}
 
+		public void RunState(ulong instanceID)
+		{
+			var state = GetState<FSMState>(instanceID);
+			RunState(state);
+		}
+
 		public void RunState(FSMState state)
 		{
 			if (state == null)
 				return;
 
-			if (FSMManager.Instance.m_ProcessExecutor.IsRunning(state))
+			if (IsRunningState(state))
 				return;
 
-			m_RunningStates.Add(state);
 			FSMManager.Instance.m_ProcessExecutor.Start(state);
 		}
 
-		public void RunState(ulong instanceID)
-		{
-			RunState(GetStateFromInstanceID<FSMState>(instanceID));
-		}
-
-		public void RunState<TFSMState>() where TFSMState : FSMState
-		{
-			RunState(GetState<TFSMState>());
-		}
-
-		public TFSMState CreateState<TFSMState>() where TFSMState : FSMState, new()
+		public TFSMState AddState<TFSMState>() where TFSMState : FSMState, new()
 		{
 			if (m_States.Count(item => item is TFSMState) > 0)
 				return null;
@@ -79,13 +76,20 @@ namespace DagraacSystems.FSM
 			return state;
 		}
 
-		public void DestroyState<TFSMState>() where TFSMState : FSMState
+		public void RemoveState(ulong instanceID)
 		{
-			var state = m_States.Find(it => it is TFSMState);
+			var state = GetState<FSMState>(instanceID);
+			RemoveState(state);
+		}
+
+		public void RemoveState(FSMState state)
+		{
 			if (state == null)
 				return;
 
-			state.Finish();
+			if (!state.IsFinished())
+				state.Finish();
+
 			FSMInstance.DestroyInstance(state);
 			m_States.Remove(state);
 		}
@@ -102,15 +106,10 @@ namespace DagraacSystems.FSM
 
 		public bool IsRunningState(FSMState state)
 		{
-			return m_RunningStates.Contains(state);
+			return state.IsStarted() && !state.IsFinished();
 		}
 
-		public TFSMState GetState<TFSMState>() where TFSMState : FSMState
-		{
-			return m_States.Find(it => it is TFSMState) as TFSMState;
-		}
-
-		public TFSMState GetStateFromInstanceID<TFSMState>(ulong instanceID) where TFSMState : FSMState
+		public TFSMState GetState<TFSMState>(ulong instanceID) where TFSMState : FSMState
 		{
 			return m_States.Find(it => it.GetInstanceID() == instanceID) as TFSMState;
 		}
