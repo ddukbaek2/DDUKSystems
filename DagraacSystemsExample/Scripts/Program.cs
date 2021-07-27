@@ -8,7 +8,7 @@ namespace DagraacSystemsExample
 	/// <summary>
 	/// 샘플 프로그램.
 	/// </summary>
-	public class ExampleApplication : ConsoleApplication
+	public class ExampleApplication : ConsoleApplication<ExampleApplication>
 	{
 		private ProcessExecutor m_ProcessExecutor;
 		private ExampleObject m_ExampleObject;
@@ -59,8 +59,7 @@ namespace DagraacSystemsExample
 	{
 		public static void Main(string[] args)
 		{
-			var application = new ExampleApplication();
-			application.Start(args);
+			ExampleApplication.Instance.Start(args);
 		}
 	}
 }
