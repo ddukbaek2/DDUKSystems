@@ -28,8 +28,11 @@ namespace DagraacSystems.FSM
 		{
 			base.OnDispose(disposing);
 
-			m_ProcessExecutor.Dispose();
-			m_ProcessExecutor = null;
+			if (disposing)
+			{
+				m_ProcessExecutor.Dispose();
+				m_ProcessExecutor = null;
+			}
 		}
 
 		public TFSMMachine AddMachine<TFSMMachine>(IFSMTarget target) where TFSMMachine : FSMMachine, new()

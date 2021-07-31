@@ -15,6 +15,7 @@ namespace DagraacSystems.FSM
 		private List<FSMAction> m_Actions; // 실행 목록.
 
 		private int m_ActionCursor;
+		private FSMTransition m_SelectedTransition;
 
 		public FSMMachine Target => m_Target;
 
@@ -23,6 +24,7 @@ namespace DagraacSystems.FSM
 			m_Target = null;
 			m_Actions = new List<FSMAction>();
 			m_Transitions = new List<FSMTransition>();
+			m_SelectedTransition = null;
 			m_ActionCursor = 0;
 		}
 
@@ -42,6 +44,7 @@ namespace DagraacSystems.FSM
 		{
 			base.OnReset();
 
+			m_SelectedTransition = null;
 			m_ActionCursor = 0;
 		}
 
@@ -49,7 +52,7 @@ namespace DagraacSystems.FSM
 		{
 			base.OnExecute(args);
 
-			if (CheckAndExecuteTransition())
+			if (CheckTransition())
 			{
 				Finish();
 				return;
@@ -68,7 +71,7 @@ namespace DagraacSystems.FSM
 		{
 			base.OnUpdate(deltaTime);
 
-			if (CheckAndExecuteTransition())
+			if (CheckTransition())
 			{
 				Finish();
 				return;
@@ -108,19 +111,25 @@ namespace DagraacSystems.FSM
 		protected override void OnFinish()
 		{
 			base.OnFinish();
-			CheckAndExecuteTransition();
+
+			if (CheckTransition())
+			{
+				var processExecutor = GetProcessExecutor();
+				processExecutor.Stop(this);
+				processExecutor.Start(m_SelectedTransition);
+			}
 		}
 
-		public bool CheckAndExecuteTransition()
+		public bool CheckTransition()
 		{
+			if (m_SelectedTransition != null)
+				return true;
+
 			foreach (var transition in m_Transitions)
 			{
 				if (transition.IsContidition())
 				{
-					var processExecutor = GetProcessExecutor();
-					processExecutor.Stop(this);						
-					processExecutor.Start(transition);
-
+					m_SelectedTransition = transition;
 					return true;
 				}
 			}

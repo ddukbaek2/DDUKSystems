@@ -9,6 +9,12 @@ namespace DagraacSystems.Process
 	/// </summary>
 	public class ProcessExecutor : IDisposable
 	{
+		public enum FinishReason
+		{
+			Finish,
+			Suspend,
+		}
+
 		private bool m_IsDisposed;
 		private UniqueIdentifier m_UniqueIdentifier;
 		protected Dictionary<ulong, Process> m_RunningProcesses;
@@ -41,9 +47,11 @@ namespace DagraacSystems.Process
 
 		protected virtual void OnDispose(bool disposing)
 		{
-			StopAll(true);
+			if (disposing)
+			{
+				StopAll(true);
+			}
 		}
-
 
 		public void Dispose()
 		{
@@ -93,7 +101,7 @@ namespace DagraacSystems.Process
 			// 수집된 내용 삭제.
 			foreach (var processID in m_DeleteReservedProcessIDList)
 			{
-				var process = GetRunningProcess(processID);
+				var process = GetProcess(processID);
 				if (process == null)
 					continue;
 
@@ -137,7 +145,7 @@ namespace DagraacSystems.Process
 			if (processID == 0)
 				return;
 
-			var process = GetRunningProcess(processID);
+			var process = GetProcess(processID);
 			Stop(process, immeditate);
 		}
 
@@ -153,7 +161,7 @@ namespace DagraacSystems.Process
 				ApplyAllDeleteReservedProcesses();
 		}
 
-		public Process GetRunningProcess(ulong processID)
+		public Process GetProcess(ulong processID)
 		{
 			if (m_RunningProcesses.TryGetValue(processID, out Process process))
 				return process;
