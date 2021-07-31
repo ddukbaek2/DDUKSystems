@@ -10,7 +10,7 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMInstance : DagraacSystems.Process.Process
 	{
-		private ulong m_InstanceID; // 인스턴스의 아이디.
+		private ulong m_InstanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
 
 		public bool Async { set; get; } = false; // 끝나기를 기다리지 않는 옵션.
 
@@ -19,7 +19,7 @@ namespace DagraacSystems.FSM
 			m_InstanceID = 0;
 		}
 
-		protected virtual void OnCreate()
+		protected virtual void OnCreate(params object[] args)
 		{
 			m_InstanceID = FSMManager.Instance.m_UniqueIdentifier.Generate();
 		}
@@ -55,14 +55,14 @@ namespace DagraacSystems.FSM
 			return m_InstanceID;
 		}
 
-		public static TFSMInstance CreateInstance<TFSMInstance>() where TFSMInstance : FSMInstance, new()
+		internal static TFSMInstance CreateInstance<TFSMInstance>(params object[] args) where TFSMInstance : FSMInstance, new()
 		{
 			var instance = new TFSMInstance();
-			instance.OnCreate();
+			instance.OnCreate(args);
 			return instance;
 		}
 
-		public static void DestroyInstance(FSMInstance instance)
+		internal static void DestroyInstance(FSMInstance instance)
 		{
 			if (instance == null)
 				return;

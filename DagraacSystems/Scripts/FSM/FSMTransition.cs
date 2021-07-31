@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace DagraacSystems.FSM
 {
@@ -9,18 +8,52 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMTransition : FSMInstance
 	{
-		public FSMTransition()
+		private FSMState m_Source;
+		private FSMState m_Destination;
+		private Func<bool> m_Predicate;
+
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		protected override void OnCreate(params object[] args)
 		{
+			base.OnCreate(args);
+
+			m_Source = args[0] as FSMState;
+			m_Destination = args[1] as FSMState;
+			m_Predicate = args[2] as Func<bool>;
 		}
 
+		protected override void OnExecute(params object[] args)
+		{
+			base.OnExecute(args);
+
+			m_Source.Target.RunState(m_Destination);
+			Finish();
+		}
+
+		/// <summary>
+		/// 조건 체크.
+		/// </summary>
 		public virtual bool IsContidition()
 		{
-			return false;
+			return m_Predicate?.Invoke() ?? false;
 		}
 
-		public virtual FSMState GetDestinationState()
+		/// <summary>
+		/// 실행된 상태.
+		/// </summary>
+		public FSMState GetSourceState()
 		{
-			return null;
+			return m_Source;
+		}
+
+		/// <summary>
+		/// 전이할 상태.
+		/// </summary>
+		public FSMState GetDestinationState()
+		{
+			return m_Destination;
 		}
 	}
 }

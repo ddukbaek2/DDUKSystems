@@ -12,7 +12,7 @@ namespace DagraacSystems.Process
 		private bool m_IsStarted;
 		private bool m_IsFinished;
 		private ProcessExecutor m_ProcessExecutor;
-		private ulong m_ProcessID;
+		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
 		public Process()
 		{

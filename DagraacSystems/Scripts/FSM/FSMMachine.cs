@@ -9,17 +9,23 @@ namespace DagraacSystems.FSM
 	/// FSM 처리기.
 	/// FSM에서 사용되는 STATE는 상태의 고유성을 가져야함. 예를들어 IDLESTATE가 있다면 동일한 클래스 2개를 등록할 수 없음.
 	/// </summary>
-	public class FSMMachine : Process.Process
+	public class FSMMachine : FSMInstance
 	{
+		private IFSMTarget m_Target;
 		private List<FSMTrigger> m_Triggers;
 		private List<FSMState> m_States;
 
-		public IFSMTarget Target { set; get; }
-
 		public FSMMachine()
 		{
+			m_Target = null;
 			m_Triggers = new List<FSMTrigger>();
 			m_States = new List<FSMState>();
+		}
+
+		protected override void OnCreate(params object[] args)
+		{
+			base.OnCreate(args);
+			m_Target = args[0] as IFSMTarget;
 		}
 
 		protected override void OnExecute(params object[] args)
@@ -42,12 +48,6 @@ namespace DagraacSystems.FSM
 			base.OnFinish();
 		}
 
-		public void Clear()
-		{
-			m_States.Clear();
-			m_Triggers.Clear();
-		}
-
 		public void RunState(ulong instanceID)
 		{
 			var state = GetState<FSMState>(instanceID);
@@ -60,17 +60,28 @@ namespace DagraacSystems.FSM
 				return;
 
 			if (IsRunningState(state))
+			{
+				FSMManager.Instance.m_ProcessExecutor.Stop(state, true);
 				return;
+			}
 
 			FSMManager.Instance.m_ProcessExecutor.Start(state);
 		}
 
+		public void SuspendState(FSMState state)
+		{
+			if (state == null)
+				return;
+
+			if (!IsRunningState(state))
+				return;
+
+			FSMManager.Instance.m_ProcessExecutor.Stop(state);
+		}
+
 		public TFSMState AddState<TFSMState>() where TFSMState : FSMState, new()
 		{
-			if (m_States.Count(item => item is TFSMState) > 0)
-				return null;
-
-			var state = FSMInstance.CreateInstance<TFSMState>();
+			var state = FSMInstance.CreateInstance<TFSMState>(this);
 			m_States.Add(state);
 
 			return state;
@@ -94,6 +105,14 @@ namespace DagraacSystems.FSM
 			m_States.Remove(state);
 		}
 
+		public void RemoveAllStates()
+		{
+			while (m_States.Count > 0)
+			{
+				RemoveState(m_States[0]);
+			}
+		}
+
 		public void AddTrigger(FSMTrigger trigger)
 		{
 			m_Triggers.Add(trigger);
@@ -102,6 +121,12 @@ namespace DagraacSystems.FSM
 		public void RemoveTrigger(FSMTrigger trigger)
 		{
 			m_Triggers.Remove(trigger);
+		}
+
+		public void RemoveAllTriggers()
+		{
+			while (m_Triggers.Count > 0)
+				RemoveTrigger(m_Triggers[0]);
 		}
 
 		public bool IsRunningState(FSMState state)

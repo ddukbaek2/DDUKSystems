@@ -22,7 +22,7 @@ namespace DagraacSystemsExample
 		public ExampleObject()
 		{
 			NotificationManager.Instance.Register<DefinedDelegate.OnTest>(OnTest);
-			m_FSMMachine = FSMManager.Instance.CreateMachine<FSMMachine>(this);
+			m_FSMMachine = FSMManager.Instance.AddMachine<FSMMachine>(this);
 			var idleState = m_FSMMachine.AddState<IdleState>();
 			m_FSMMachine.RunState(idleState);
 		}

@@ -138,6 +138,11 @@ namespace DagraacSystems.Process
 				return;
 
 			var process = GetRunningProcess(processID);
+			Stop(process, immeditate);
+		}
+
+		public void Stop(Process process, bool immeditate = false)
+		{
 			if (process == null)
 				return;
 
@@ -147,7 +152,7 @@ namespace DagraacSystems.Process
 			if (immeditate)
 				ApplyAllDeleteReservedProcesses();
 		}
-		
+
 		public Process GetRunningProcess(ulong processID)
 		{
 			if (m_RunningProcesses.TryGetValue(processID, out Process process))
