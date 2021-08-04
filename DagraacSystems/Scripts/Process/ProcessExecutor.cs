@@ -9,12 +9,6 @@ namespace DagraacSystems.Process
 	/// </summary>
 	public class ProcessExecutor : IDisposable
 	{
-		public enum FinishReason
-		{
-			Finish,
-			Suspend,
-		}
-
 		private bool m_IsDisposed;
 		private UniqueIdentifier m_UniqueIdentifier;
 		protected Dictionary<ulong, Process> m_RunningProcesses;

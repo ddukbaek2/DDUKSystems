@@ -148,6 +148,11 @@ namespace DagraacSystems
 			return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(Get<T1>(0), Get<T2>(1), Get<T3>(2), Get<T4>(3), Get<T5>(4), Get<T6>(5), Get<T7>(6), Get<T8>(7));
 		}
 
+		public object[] ToArguments()
+		{
+			return m_Args.ToArray();
+		}
+
 		public static Parameters Create(params object[] args)
 		{
 			var combinedParameters = new Parameters(args);

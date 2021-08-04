@@ -35,9 +35,15 @@ namespace DagraacSystems.FSM
 			}
 		}
 
-		public TFSMMachine AddMachine<TFSMMachine>(IFSMTarget target) where TFSMMachine : FSMMachine, new()
+		public void Update(float deltaTime)
 		{
-			var machine = FSMInstance.CreateInstance<TFSMMachine>(target);
+			m_ProcessExecutor.Update(deltaTime);
+		}
+
+		public TFSMMachine AddMachine<TFSMMachine>(string name, IFSMTarget target) where TFSMMachine : FSMMachine, new()
+		{
+			var machine = FSMInstance.CreateInstance<TFSMMachine>(name);
+			machine.Target = target;
 			m_ProcessExecutor.Start(machine);
 			return machine;
 		}

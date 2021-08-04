@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using DagraacSystems.Log;
 using DagraacSystems.Process;
+using System;
 
 
 namespace DagraacSystemsExample
@@ -22,13 +19,13 @@ namespace DagraacSystemsExample
 
 			m_Count = 0;
 			m_AccTime = 0f;
-			Console.WriteLine("OnReset()");
+			LogManager.Instance.Print("OnReset()");
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
 			base.OnExecute(args);
-			Console.WriteLine("OnExecute()");
+			LogManager.Instance.Print("OnExecute()");
 		}
 
 		protected override void OnUpdate(float deltaTime)
@@ -40,7 +37,7 @@ namespace DagraacSystemsExample
 			{
 				m_AccTime = 0f;
 				++m_Count;
-				Console.WriteLine(m_Count);
+				LogManager.Instance.Print(m_Count);
 			}
 
 			if (m_Count >= 5)
@@ -52,7 +49,7 @@ namespace DagraacSystemsExample
 		protected override void OnFinish()
 		{
 			base.OnFinish();
-			Console.WriteLine("OnFinish()");
+			LogManager.Instance.Print("OnFinish()");
 		}
 	}
 }

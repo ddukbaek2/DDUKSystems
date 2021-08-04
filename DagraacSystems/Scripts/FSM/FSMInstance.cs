@@ -1,4 +1,6 @@
 ﻿using DagraacSystems.Process;
+using System;
+
 
 namespace DagraacSystems.FSM
 {
@@ -12,6 +14,7 @@ namespace DagraacSystems.FSM
 	{
 		private ulong m_InstanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
 
+		public string Name { private set; get; } = string.Empty;
 		public bool Async { set; get; } = false; // 끝나기를 기다리지 않는 옵션.
 
 		public FSMInstance()
@@ -55,9 +58,10 @@ namespace DagraacSystems.FSM
 			return m_InstanceID;
 		}
 
-		internal static TFSMInstance CreateInstance<TFSMInstance>(params object[] args) where TFSMInstance : FSMInstance, new()
+		internal static TFSMInstance CreateInstance<TFSMInstance>(string name, params object[] args) where TFSMInstance : FSMInstance, new()
 		{
 			var instance = new TFSMInstance();
+			instance.Name = name;
 			instance.OnCreate(args);
 			return instance;
 		}

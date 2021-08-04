@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace DagraacSystems.Process
 {
 	/// <summary>
-	/// 
+	/// 프로세스.
 	/// </summary>
 	public class Process
 	{

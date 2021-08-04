@@ -10,18 +10,16 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMState : FSMInstance
 	{
-		private FSMMachine m_Target;
 		private List<FSMTransition> m_Transitions; // 이동 조건 목록.
 		private List<FSMAction> m_Actions; // 실행 목록.
 
 		private int m_ActionCursor;
 		private FSMTransition m_SelectedTransition;
 
-		public FSMMachine Target => m_Target;
+		public FSMMachine Target { internal set; get; }
 
 		public FSMState()
 		{
-			m_Target = null;
 			m_Actions = new List<FSMAction>();
 			m_Transitions = new List<FSMTransition>();
 			m_SelectedTransition = null;
@@ -31,8 +29,6 @@ namespace DagraacSystems.FSM
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
-
-			m_Target = args[0] as FSMMachine;
 		}
 
 		protected override void OnDestroy()
@@ -137,9 +133,10 @@ namespace DagraacSystems.FSM
 			return false;
 		}
 
-		public TFSMAction AddAction<TFSMAction>() where TFSMAction : FSMAction, new()
+		public TFSMAction AddAction<TFSMAction>(params object[] args) where TFSMAction : FSMAction, new()
 		{
-			var action = FSMInstance.CreateInstance<TFSMAction>(this);
+			var action = FSMInstance.CreateInstance<TFSMAction>(typeof(TFSMAction).Name, args);
+			action.Target = this;
 			m_Actions.Add(action);
 
 			return action;
@@ -163,9 +160,9 @@ namespace DagraacSystems.FSM
 				RemoveAction(m_Actions[0]);
 		}
 
-		public TFSMTransition AddTransition<TFSMTransition>(FSMState destinationState, Func<bool> predicate) where TFSMTransition : FSMTransition, new()
+		public TFSMTransition AddTransition<TFSMTransition>(string name, FSMState destinationState, Func<bool> predicate) where TFSMTransition : FSMTransition, new()
 		{
-			var transition = FSMInstance.CreateInstance<TFSMTransition>(this, destinationState, predicate);
+			var transition = FSMInstance.CreateInstance<TFSMTransition>(name, this, destinationState, predicate);
 			m_Transitions.Add(transition);
 
 			return transition;

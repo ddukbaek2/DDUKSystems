@@ -1,20 +1,25 @@
-﻿namespace DagraacSystems.FSM
+﻿using System;
+
+
+namespace DagraacSystems.FSM
 {
 	/// <summary>
 	/// FSM 액션.
 	/// </summary>
-	public class FSMAction : FSMInstance
+	public class FSMSimpleAction : FSMAction
 	{
-		public FSMState Target { internal set; get; }
+		private Action m_Action;
 
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
+			m_Action = args[0] as Action;
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
-			base.OnExecute(args);
+			//base.OnExecute(args);
+			m_Action?.Invoke();
 			Finish();
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using DagraacSystems.Process;
+using DagraacSystems.Log;
 
 
 namespace DagraacSystemsExample
@@ -11,7 +12,7 @@ namespace DagraacSystemsExample
 	public class ExampleApplication : ConsoleApplication<ExampleApplication>
 	{
 		private ProcessExecutor m_ProcessExecutor;
-		private ExampleObject m_ExampleObject;
+		private MyObject m_ExampleObject;
 
 		protected override void OnStart()
 		{
@@ -19,15 +20,19 @@ namespace DagraacSystemsExample
 
 			Console.WriteLine("DagraacSystems Example!");
 
+			// 로그.
+			LogManager.Instance.AddLogger(new ConsoleLogger());
+
+			// 테이블 로드.
 			TableManager.Instance.LoadAll();
 			var exampleTableData = ExampleTable.Instance.Find(1);
 
-			Console.WriteLine($"{exampleTableData.Desc}");
+			LogManager.Instance.Print($"{exampleTableData.Desc}");
 
 			m_ProcessExecutor = new ProcessExecutor();
 			m_ProcessExecutor.Start(new ExampleProcess());
 
-			m_ExampleObject = new ExampleObject();
+			m_ExampleObject = new MyObject();
 		}
 
 		protected override void OnUpdate(float deltaTime)
@@ -35,6 +40,7 @@ namespace DagraacSystemsExample
 			base.OnUpdate(deltaTime);
 
 			m_ProcessExecutor.Update(deltaTime);
+			DagraacSystems.FSM.FSMManager.Instance.Update(deltaTime);
 		}
 
 		protected override void OnFinish()
@@ -45,7 +51,7 @@ namespace DagraacSystemsExample
 			GC.SuppressFinalize(m_ExampleObject);
 			m_ExampleObject = null;
 
-			NotificationManager.Instance.Notify<DefinedDelegate.OnTest>();
+			NotificationManager.Instance.Notify<NotificationType.OnTest>();
 		}
 	}
 

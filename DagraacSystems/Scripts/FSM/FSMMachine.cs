@@ -11,13 +11,13 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMMachine : FSMInstance
 	{
-		private IFSMTarget m_Target;
 		private List<FSMTrigger> m_Triggers;
 		private List<FSMState> m_States;
 
+		public IFSMTarget Target { internal set; get; }
+
 		public FSMMachine()
 		{
-			m_Target = null;
 			m_Triggers = new List<FSMTrigger>();
 			m_States = new List<FSMState>();
 		}
@@ -25,7 +25,6 @@ namespace DagraacSystems.FSM
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
-			m_Target = args[0] as IFSMTarget;
 		}
 
 		protected override void OnExecute(params object[] args)
@@ -46,6 +45,12 @@ namespace DagraacSystems.FSM
 		protected override void OnFinish()
 		{
 			base.OnFinish();
+		}
+
+		public void RunState(string name)
+		{
+			var state = GetState<FSMState>(name);
+			RunState(state);
 		}
 
 		public void RunState(ulong instanceID)
@@ -79,11 +84,11 @@ namespace DagraacSystems.FSM
 			FSMManager.Instance.m_ProcessExecutor.Stop(state);
 		}
 
-		public TFSMState AddState<TFSMState>() where TFSMState : FSMState, new()
+		public TFSMState AddState<TFSMState>(string name) where TFSMState : FSMState, new()
 		{
-			var state = FSMInstance.CreateInstance<TFSMState>(this);
+			var state = FSMInstance.CreateInstance<TFSMState>(name);
+			state.Target = this;
 			m_States.Add(state);
-
 			return state;
 		}
 
@@ -113,7 +118,7 @@ namespace DagraacSystems.FSM
 			}
 		}
 
-		public void AddTrigger(FSMTrigger trigger)
+		public void AddTrigger(string name, FSMTrigger trigger)
 		{
 			m_Triggers.Add(trigger);
 		}
@@ -137,6 +142,11 @@ namespace DagraacSystems.FSM
 		public TFSMState GetState<TFSMState>(ulong instanceID) where TFSMState : FSMState
 		{
 			return m_States.Find(it => it.GetInstanceID() == instanceID) as TFSMState;
+		}
+
+		public TFSMState GetState<TFSMState>(string name) where TFSMState : FSMState
+		{
+			return m_States.Find(it => it.Name == name) as TFSMState;
 		}
 	}
 }
