@@ -31,6 +31,10 @@ namespace DagraacSystems
 
 		protected virtual void OnDispose(bool disposing)
 		{
+			if (disposing)
+			{
+				m_Instance = null;
+			}
 		}
 
 		public void Dispose()
