@@ -11,6 +11,8 @@ namespace DagraacSystems.Process
 	{
 		private bool m_IsStarted;
 		private bool m_IsFinished;
+		private bool m_IsPaused;
+
 		private ProcessExecutor m_ProcessExecutor;
 		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
@@ -18,6 +20,7 @@ namespace DagraacSystems.Process
 		{
 			m_IsStarted = false;
 			m_IsFinished = false;
+			m_IsPaused = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
 		}
@@ -26,6 +29,7 @@ namespace DagraacSystems.Process
 		{
 			m_IsStarted = false;
 			m_IsFinished = false;
+			m_IsPaused = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
 
@@ -47,7 +51,7 @@ namespace DagraacSystems.Process
 			OnUpdate(deltaTime);
 		}
 
-		public void Finish()
+		internal void Finish()
 		{
 			if (!m_IsStarted || m_IsFinished)
 				return;
@@ -56,6 +60,24 @@ namespace DagraacSystems.Process
 			m_IsFinished = true;
 
 			OnFinish();
+		}
+
+		internal void Resume()
+		{
+			if (m_IsPaused)
+			{
+				m_IsPaused = false;
+				OnResume();
+			}
+		}
+
+		internal void Pause()
+		{
+			if (!m_IsPaused)
+			{
+				m_IsPaused = true;
+				OnPause();
+			}
 		}
 
 		protected virtual void OnReset()
@@ -70,6 +92,14 @@ namespace DagraacSystems.Process
 		{
 		}
 
+		protected virtual void OnPause()
+		{
+		}
+
+		protected virtual void OnResume()
+		{
+		}
+
 		protected virtual void OnFinish()
 		{
 		}
@@ -78,10 +108,15 @@ namespace DagraacSystems.Process
 		{
 			return m_IsStarted;
 		}
-		
+
 		public bool IsFinished()
 		{
 			return m_IsFinished;
+		}
+
+		public bool IsPaused()
+		{
+			return m_IsPaused;
 		}
 
 		public ProcessExecutor GetProcessExecutor()

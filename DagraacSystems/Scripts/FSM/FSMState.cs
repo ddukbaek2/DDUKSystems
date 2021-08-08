@@ -173,8 +173,8 @@ namespace DagraacSystems.FSM
 			if (transition == null)
 				return;
 
-			if (!transition.IsFinished())
-				transition.Finish();
+			//if (!transition.IsFinished())
+			//	transition.Finish();
 
 			FSMInstance.DestroyInstance(transition);
 			m_Transitions.Remove(transition);

@@ -66,6 +66,8 @@ namespace DagraacSystems.Process
 			{
 				if (m_DeleteReservedProcessIDList.Contains(process.Key))
 					continue;
+				if (process.Value.IsPaused())
+					continue;
 				if (process.Value.IsFinished())
 					continue;
 
@@ -111,13 +113,60 @@ namespace DagraacSystems.Process
 
 		public void Start(Process process, params object[] args)
 		{
-			if (m_RunningProcesses.ContainsValue(process))
+			// 할당되지 않은 개체.
+			if (process == null)
 				return;
 
+			// 다른 프로세스 실행기에 의해 실행중인 개체.
+			var processExecutor = process.GetProcessExecutor();
+			if (processExecutor != null && processExecutor != this)
+				return;
+
+			// 현재 프로세스에 의해 실행중인 개체.
+			if (IsRunning(process))
+				return;
+
+			// 실행.
 			var processID = m_UniqueIdentifier.Generate();
 			m_RunningProcesses.Add(processID, process);
 			process.Reset();
 			process.Execute(this, processID, args);
+		}
+
+		public void Pause(Process process)
+		{
+			// 할당되지 않은 개체.
+			if (process == null)
+				return;
+
+			// 다른 프로세스 실행기에 의해 실행중인 개체.
+			var processExecutor = process.GetProcessExecutor();
+			if (processExecutor != null && processExecutor != this)
+				return;
+
+			// 현재 프로세스에 의해 실행중이지 않은 개체.
+			if (!IsRunning(process))
+				return;
+
+			process.Pause();
+		}
+
+		public void Resume(Process process)
+		{
+			// 할당되지 않은 개체.
+			if (process == null)
+				return;
+
+			// 다른 프로세스 실행기에 의해 실행중인 개체.
+			var processExecutor = process.GetProcessExecutor();
+			if (processExecutor != null && processExecutor != this)
+				return;
+
+			// 현재 프로세스에 의해 실행중이지 않은 개체.
+			if (!IsRunning(process))
+				return;
+
+			process.Resume();
 		}
 
 		public void StopAll(bool immeditate = false)
@@ -136,16 +185,22 @@ namespace DagraacSystems.Process
 
 		public void Stop(ulong processID, bool immeditate = false)
 		{
-			if (processID == 0)
-				return;
-
-			var process = GetProcess(processID);
-			Stop(process, immeditate);
+			Stop(GetProcess(processID), immeditate);
 		}
 
 		public void Stop(Process process, bool immeditate = false)
 		{
+			// 할당되지 않은 개체.
 			if (process == null)
+				return;
+
+			// 다른 프로세스 실행기에 의해 실행중인 개체.
+			var processExecutor = process.GetProcessExecutor();
+			if (processExecutor != null && processExecutor != this)
+				return;
+
+			// 현재 프로세스에 의해 실행중이지 않은 개체.
+			if (!IsRunning(process))
 				return;
 
 			if (!process.IsFinished())

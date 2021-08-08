@@ -103,8 +103,8 @@ namespace DagraacSystems.FSM
 			if (state == null)
 				return;
 
-			if (!state.IsFinished())
-				state.Finish();
+			//if (!state.IsFinished())
+			//	state.Finish();
 
 			FSMInstance.DestroyInstance(state);
 			m_States.Remove(state);
@@ -136,7 +136,11 @@ namespace DagraacSystems.FSM
 
 		public bool IsRunningState(FSMState state)
 		{
-			return state.IsStarted() && !state.IsFinished();
+			var processExecutor = GetProcessExecutor();
+			if (processExecutor != null)
+				return processExecutor.IsRunning(state.GetProcessID());
+
+			return false;
 		}
 
 		public TFSMState GetState<TFSMState>(ulong instanceID) where TFSMState : FSMState
