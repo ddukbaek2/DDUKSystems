@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Repository
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 인스턴스.

@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Repository
+namespace DagraacSystems
 {
-
-
 	/// <summary>
 	/// 인스턴스 저장소.
 	/// 종류마다 하나의 인스턴스만 보관하는 객체이다.
