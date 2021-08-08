@@ -59,7 +59,6 @@ namespace DagraacSystems.Process
 			GC.SuppressFinalize(this);
 		}
 
-
 		public virtual void Update(float deltaTime)
 		{
 			foreach (var process in m_RunningProcesses)
@@ -111,29 +110,41 @@ namespace DagraacSystems.Process
 			m_DeleteReservedProcessIDList.Clear();
 		}
 
-		public void Start(Process process, params object[] args)
+		public TProcess Start<TProcess>(params object[] args) where TProcess : Process, new()
+		{
+			return (TProcess)Start(new TProcess());
+		}
+
+		public Process Start(Process process, params object[] args)
 		{
 			// 할당되지 않은 개체.
 			if (process == null)
-				return;
+				return null;
 
 			// 다른 프로세스 실행기에 의해 실행중인 개체.
 			var processExecutor = process.GetProcessExecutor();
 			if (processExecutor != null && processExecutor != this)
-				return;
+				return null;
 
 			// 현재 프로세스에 의해 실행중인 개체.
 			if (IsRunning(process))
-				return;
+				return null;
 
 			// 실행.
 			var processID = m_UniqueIdentifier.Generate();
 			m_RunningProcesses.Add(processID, process);
 			process.Reset();
 			process.Execute(this, processID, args);
+
+			return process;
 		}
 
-		public void Pause(Process process)
+		public void Pause(ulong processID)
+		{
+			Pause(GetProcess(processID));
+		}
+
+		internal void Pause(Process process)
 		{
 			// 할당되지 않은 개체.
 			if (process == null)
@@ -151,7 +162,12 @@ namespace DagraacSystems.Process
 			process.Pause();
 		}
 
-		public void Resume(Process process)
+		public void Resume(ulong processID)
+		{
+			Resume(GetProcess(processID));
+		}
+
+		internal void Resume(Process process)
 		{
 			// 할당되지 않은 개체.
 			if (process == null)
@@ -188,7 +204,7 @@ namespace DagraacSystems.Process
 			Stop(GetProcess(processID), immeditate);
 		}
 
-		public void Stop(Process process, bool immeditate = false)
+		internal void Stop(Process process, bool immeditate = false)
 		{
 			// 할당되지 않은 개체.
 			if (process == null)
@@ -210,7 +226,7 @@ namespace DagraacSystems.Process
 				ApplyAllDeleteReservedProcesses();
 		}
 
-		public Process GetProcess(ulong processID)
+		internal Process GetProcess(ulong processID)
 		{
 			if (m_RunningProcesses.TryGetValue(processID, out Process process))
 				return process;
@@ -222,7 +238,7 @@ namespace DagraacSystems.Process
 			return m_RunningProcesses.ContainsKey(processID);
 		}
 
-		public bool IsRunning(Process process)
+		internal bool IsRunning(Process process)
 		{
 			return m_RunningProcesses.ContainsValue(process);
 		}

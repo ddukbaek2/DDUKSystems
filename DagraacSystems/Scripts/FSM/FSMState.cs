@@ -67,8 +67,10 @@ namespace DagraacSystems.FSM
 		{
 			base.OnUpdate(deltaTime);
 
+			// 조건에 맞으면.
 			if (CheckTransition())
 			{
+				// 강제 중단.
 				Finish();
 				return;
 			}
@@ -111,8 +113,8 @@ namespace DagraacSystems.FSM
 			if (CheckTransition())
 			{
 				var processExecutor = GetProcessExecutor();
-				processExecutor.Stop(this);
-				processExecutor.Start(m_SelectedTransition);
+				if (processExecutor != null)
+					processExecutor.Start(m_SelectedTransition)
 			}
 		}
 
