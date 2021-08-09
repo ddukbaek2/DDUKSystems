@@ -52,7 +52,7 @@ namespace DagraacSystems.Node
 
 		public SiblingNode<T> Parent { private set; get; } = null;
 		public List<SiblingNode<T>> Children { private set; get; } = new List<SiblingNode<T>>();
-		public T Value { private set; get; } = default;
+		public T Value { set; get; } = default;
 
 		public SiblingNode<T> Root
 		{
