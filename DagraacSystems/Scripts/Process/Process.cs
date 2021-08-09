@@ -51,7 +51,7 @@ namespace DagraacSystems.Process
 			OnUpdate(deltaTime);
 		}
 
-		internal void Finish()
+		public void Finish()
 		{
 			if (!m_IsStarted || m_IsFinished)
 				return;

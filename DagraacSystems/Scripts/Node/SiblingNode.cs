@@ -54,6 +54,7 @@ namespace DagraacSystems.Node
 		public List<SiblingNode<T>> Children { private set; get; } = new List<SiblingNode<T>>();
 		public T Value { set; get; } = default;
 
+		public int ChildCount => Children.Count;
 		public SiblingNode<T> Root
 		{
 			get
@@ -83,6 +84,26 @@ namespace DagraacSystems.Node
 			}
 		}
 
+		public void AddChild(SiblingNode<T> child)
+		{
+			if (child == null)
+				return;
+
+			child.SetParent(this);
+		}
+
+		public SiblingNode<T> RemoveChild(int index)
+		{
+			return RemoveChild(GetChild(index));
+		}
+
+		public SiblingNode<T> RemoveChild(SiblingNode<T> child)
+		{
+			if (child != null)
+				child.SetParent(null);
+			return child;
+		}
+
 		public void SetAsFirstSibling()
 		{
 			if (Parent == null)
@@ -97,6 +118,25 @@ namespace DagraacSystems.Node
 				return;
 
 			SetSiblingIndex(Parent.Children.Count);
+		}
+
+		public int IndexOf()
+		{
+			if (Parent == null)
+				return -1;
+			
+			return Parent.Children.IndexOf(this);
+		}
+
+		public SiblingNode<T> GetChild(int index)
+		{
+			if (Parent == null)
+				return null;
+
+			if (index < 0 || index >= Children.Count)
+				return null;
+
+			return Children[index];
 		}
 
 		public void SetSiblingIndex(int index)

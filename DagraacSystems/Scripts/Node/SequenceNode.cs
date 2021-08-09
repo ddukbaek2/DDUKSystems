@@ -1,66 +1,108 @@
 ﻿namespace DagraacSystems.Node
 {
+	/// <summary>
+	/// 시퀀스에 포함되는 데이터.
+	/// </summary>
+	public interface ISequenceData
+	{
+
+	}
+
+
+	/// <summary>
+	/// 시퀀스 처리기.
+	/// </summary>
 	public class Sequence
 	{
-		public class Action
+		public class SequenceNode : SiblingNode<ISequenceData>
 		{
 		}
 
 
-		public SiblingNode<Action> Root { private set; get; }
+		public SequenceNode Root { private set; get; }
 
 		public Sequence()
 		{
-			Root = new SiblingNode<Action>();
+			Root = new SequenceNode();
 		}
 
-		public SiblingNode<Action> AddAction<TAction>(int layerIndex) where TAction : Action, new()
+		public SequenceNode AddData<TSequenceData>(int layerIndex) where TSequenceData : ISequenceData, new()
 		{
-			var action = new TAction();
-			var node = new SiblingNode<Action>();
+			var action = new TSequenceData();
+			var node = new SequenceNode();
 			node.SetParent(GetLayer(layerIndex));
 			node.Value = action;
 			return node;
 		}
 
-		public void RemoveAction(int layerIndex, int actionIndex)
+		public SequenceNode SetData<TSequenceData>(int layerIndex, int actionIndex, TSequenceData data) where TSequenceData : ISequenceData, new()
 		{
-			GetLayer(layerIndex)?.Children[actionIndex].SetParent(null);
+			var layer = GetLayer(layerIndex);
+			if (layer == null)
+				return null;
+
+			if (actionIndex < 0)
+			{
+				var node = AddData<TSequenceData>(layerIndex);
+				node.SetAsFirstSibling();
+				node.Value = data;
+				return node;
+			}
+			else if (actionIndex >= layer.ChildCount)
+			{
+				var node = AddData<TSequenceData>(layerIndex);
+				node.SetAsLastSibling();
+				node.Value = data;
+				return node;
+			}
+			else
+			{
+				var node = (SequenceNode)layer.GetChild(actionIndex);
+				node.Value = data;
+				return node;
+			}
+		}
+
+		public SequenceNode RemoveData(int layerIndex, int dataIndex)
+		{
+			var layer = GetLayer(layerIndex);
+			if (layer == null)
+				return null;
+
+			return (SequenceNode)layer.RemoveChild(dataIndex);
 		}
 
 		public void RemoveAllActions(int layerIndex)
 		{
+			var layer = GetLayer(layerIndex);
+			if (layer == null)
+				return;
 
+			while (layer.ChildCount > 0)
+				layer.RemoveChild(0);
 		}
 
-		public SiblingNode<Action> GetLayer(int layerIndex)
+		public SequenceNode GetLayer(int layerIndex)
 		{
-			return Root.Children[layerIndex];
+			return (SequenceNode)Root.GetChild(layerIndex);
 		}
 
-		public SiblingNode<Action> AddLayer()
+		public SequenceNode AddLayer<T>()
 		{
-			var node = new SiblingNode<Action>();
+			var node = new SequenceNode();
 			node.SetParent(Root);
 			return node;
 		}
 
-		public SiblingNode<Action> RemoveLayer(int layerIndex)
+		public SequenceNode RemoveLayer(int layerIndex)
 		{
-			var node = Root.Children[layerIndex];
-			node.SetParent(null);
-			return node;
+			return (SequenceNode)Root.RemoveChild(layerIndex);
 		}
 
 		public void RemoveAllLayers()
 		{
-			while (Root.Children.Count > 0)
-				Root.Children[0].SetParent(null);
+			while (Root.ChildCount > 0)
+				Root.RemoveChild(0);
 		}
 	}
-
-	//public class TimeSequence<T> : Sequence
-	//{
-		
-	//}
 }

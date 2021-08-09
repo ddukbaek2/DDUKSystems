@@ -37,7 +37,7 @@ namespace DagraacSystemsExample
 			{
 				m_AccTime = 0f;
 				++m_Count;
-				LogManager.Instance.Print(m_Count);
+				LogManager.Instance.Print($"{m_Count}");
 			}
 
 			if (m_Count >= 5)

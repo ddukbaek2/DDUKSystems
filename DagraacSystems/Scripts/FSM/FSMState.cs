@@ -114,7 +114,7 @@ namespace DagraacSystems.FSM
 			{
 				var processExecutor = GetProcessExecutor();
 				if (processExecutor != null)
-					processExecutor.Start(m_SelectedTransition)
+					processExecutor.Start(m_SelectedTransition);
 			}
 		}
 
