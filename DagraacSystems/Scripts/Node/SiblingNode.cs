@@ -4,23 +4,31 @@ using System.Collections.Generic;
 
 namespace DagraacSystems.Node
 {
+	public interface ISiblingNode
+	{
+		ISiblingNode Root { get; }
+		void SetParent(ISiblingNode parent);
+		void AddChild(ISiblingNode child);
+		int IndexOf();
+	}
+
 	/// <summary>
 	/// 트리형 계층구조에 자료를 보관하는 용도.
 	/// </summary>
-	public class SiblingNode<T>
+	public class SiblingNode<TValue> : ISiblingNode
 	{
 		/// <summary>
 		/// 반복자 구현.
 		/// </summary>
-		internal class Enumerator : IEnumerator<T>
+		internal class Enumerator : IEnumerator<TValue>
 		{
-			private SiblingNode<T> m_Target;
+			private SiblingNode<TValue> m_Target;
 			private int m_Index;
 
-			object IEnumerator.Current => m_Target != null ? m_Target.Children[m_Index].Value : default;
-			T IEnumerator<T>.Current => m_Target != null ? m_Target.Children[m_Index].Value : default;
+			object IEnumerator.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
+			TValue IEnumerator<TValue>.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
 
-			public Enumerator(SiblingNode<T> target)
+			public Enumerator(SiblingNode<TValue> target)
 			{
 				m_Target = target;
 				m_Index = 0;
@@ -49,13 +57,15 @@ namespace DagraacSystems.Node
 			}
 		}
 
+		public SiblingNode<TValue> Parent { private set; get; } = null;
 
-		public SiblingNode<T> Parent { private set; get; } = null;
-		public List<SiblingNode<T>> Children { private set; get; } = new List<SiblingNode<T>>();
-		public T Value { set; get; } = default;
+		public List<ISiblingNode> Children { private set; get; } = new List<ISiblingNode>();
+
+		public TValue Value { set; get; } = default;
 
 		public int ChildCount => Children.Count;
-		public SiblingNode<T> Root
+
+		public ISiblingNode Root
 		{
 			get
 			{
@@ -66,7 +76,11 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		public void SetParent(SiblingNode<T> parent)
+		protected virtual void OnChangeParent(SiblingNode<TValue> parent)
+		{
+		}
+
+		public void SetParent(ISiblingNode parent)
 		{
 			if (Parent == parent)
 				return;
@@ -76,7 +90,7 @@ namespace DagraacSystems.Node
 				Parent.Children.Remove(this);
 			}
 
-			Parent = parent;
+			Parent = (SiblingNode<TValue>)parent;
 
 			if (parent != null)
 			{
@@ -84,7 +98,7 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		public void AddChild(SiblingNode<T> child)
+		public void AddChild(ISiblingNode child)
 		{
 			if (child == null)
 				return;
@@ -92,12 +106,12 @@ namespace DagraacSystems.Node
 			child.SetParent(this);
 		}
 
-		public SiblingNode<T> RemoveChild(int index)
+		public TSiblingNode RemoveChild<TSiblingNode>(int index) where TSiblingNode : SiblingNode<TValue>
 		{
-			return RemoveChild(GetChild(index));
+			return RemoveChild(GetChild<TSiblingNode>(index));
 		}
 
-		public SiblingNode<T> RemoveChild(SiblingNode<T> child)
+		public TSiblingNode RemoveChild<TSiblingNode>(TSiblingNode child) where TSiblingNode : SiblingNode<TValue>
 		{
 			if (child != null)
 				child.SetParent(null);
@@ -128,7 +142,7 @@ namespace DagraacSystems.Node
 			return Parent.Children.IndexOf(this);
 		}
 
-		public SiblingNode<T> GetChild(int index)
+		public TSiblingNode GetChild<TSiblingNode>(int index) where TSiblingNode : SiblingNode<TValue>
 		{
 			if (Parent == null)
 				return null;
@@ -136,7 +150,7 @@ namespace DagraacSystems.Node
 			if (index < 0 || index >= Children.Count)
 				return null;
 
-			return Children[index];
+			return (TSiblingNode)Children[index];
 		}
 
 		public void SetSiblingIndex(int index)
@@ -156,31 +170,23 @@ namespace DagraacSystems.Node
 			return Parent.Children.IndexOf(this);
 		}
 
-		public int GetChildCount()
-		{
-			if (Parent == null)
-				return 0;
-
-			return Parent.Children.Count;
-		}
-
-		public T[] ToSiblingArray()
+		public TValue[] ToSiblingArray()
 		{
 			if (Parent != null)
 			{
-				var array = new T[Parent.Children.Count];
+				var array = new TValue[Parent.Children.Count];
 				for (var i = 0; i < array.Length; ++i)
-					array[i] = Parent.Children[i].Value;
+					array[i] = ((SiblingNode<TValue>)Parent.Children[i]).Value;
 				return array;
 			}
 
-			return new T[0];
+			return new TValue[0];
 		}
 
 		/// <summary>
 		/// 자신의 자식들에 대한 반복자 반환.
 		/// </summary>
-		public IEnumerator<T> GetChildEnumerator()
+		public IEnumerator<TValue> GetChildEnumerator()
 		{
 			return new Enumerator(this);
 		}
@@ -188,23 +194,23 @@ namespace DagraacSystems.Node
 		/// <summary>
 		/// 자신의 부모의 자식(자신과 형제들)에 대한 반복자 반환.
 		/// </summary>
-		public IEnumerator<T> GetSiblingEnumerator()
+		public IEnumerator<TValue> GetSiblingEnumerator()
 		{
 			return new Enumerator(Parent);
 		}
 
-		public static SiblingNode<T> Convert(IEnumerable array)
+		public static SiblingNode<TValue> Convert(IEnumerable array)
 		{
 			return Convert(array.GetEnumerator());
 		}
 
-		public static SiblingNode<T> Convert(IEnumerator enumerator)
+		public static SiblingNode<TValue> Convert(IEnumerator enumerator)
 		{
-			var root = new SiblingNode<T>();
+			var root = new SiblingNode<TValue>();
 			while (enumerator.MoveNext())
 			{
-				var node = new SiblingNode<T>();
-				node.Value = (T)enumerator.Current;
+				var node = new SiblingNode<TValue>();
+				node.Value = (TValue)enumerator.Current;
 				node.SetParent(root);
 			}
 

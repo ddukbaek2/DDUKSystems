@@ -5,7 +5,6 @@
 	/// </summary>
 	public interface ISequenceData
 	{
-
 	}
 
 
@@ -57,7 +56,7 @@
 			}
 			else
 			{
-				var node = (SequenceNode)layer.GetChild(actionIndex);
+				var node = layer.GetChild<SequenceNode>(actionIndex);
 				node.Value = data;
 				return node;
 			}
@@ -69,7 +68,7 @@
 			if (layer == null)
 				return null;
 
-			return (SequenceNode)layer.RemoveChild(dataIndex);
+			return layer.RemoveChild<SequenceNode>(dataIndex);
 		}
 
 		public void RemoveAllActions(int layerIndex)
@@ -79,12 +78,12 @@
 				return;
 
 			while (layer.ChildCount > 0)
-				layer.RemoveChild(0);
+				layer.RemoveChild<SequenceNode>(0);
 		}
 
 		public SequenceNode GetLayer(int layerIndex)
 		{
-			return (SequenceNode)Root.GetChild(layerIndex);
+			return Root.GetChild<SequenceNode>(layerIndex);
 		}
 
 		public SequenceNode AddLayer<T>()
@@ -96,13 +95,13 @@
 
 		public SequenceNode RemoveLayer(int layerIndex)
 		{
-			return (SequenceNode)Root.RemoveChild(layerIndex);
+			return Root.RemoveChild<SequenceNode>(layerIndex);
 		}
 
 		public void RemoveAllLayers()
 		{
 			while (Root.ChildCount > 0)
-				Root.RemoveChild(0);
+				Root.RemoveChild<SequenceNode>(0);
 		}
 	}
 }
