@@ -5,106 +5,96 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 통지 처리기.
+	/// 메시지 구독/배포 처리기.
 	/// </summary>
-	public class Notification
+	public class MessageBroker
 	{
 		/// <summary>
 		/// 타입별 콜백 목록.
 		/// </summary>
-		private Dictionary<Type, Delegate> m_Callbacks;
+		private Dictionary<Type, Delegate> m_Subscribes;
 
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public Notification()
+		public MessageBroker()
 		{
-			m_Callbacks = new Dictionary<Type, Delegate>();
+			m_Subscribes = new Dictionary<Type, Delegate>();
 		}
 
 		/// <summary>
-		/// 전체삭제.
+		/// 전체 제거.
 		/// </summary>
 		public void Clear()
 		{
-			m_Callbacks.Clear();
+			m_Subscribes.Clear();
 		}
 
 		/// <summary>
-		/// 타입별 콜백 등록.
+		/// 구독.
 		/// </summary>
-		public void Register<T>(T callback) where T : Delegate
+		public void Subscribe<T>(T callback) where T : Delegate
 		{
 			if (callback == null)
 				return;
 
 			var key = typeof(T);
-			if (m_Callbacks.ContainsKey(key))
+			if (m_Subscribes.ContainsKey(key))
 			{
-				m_Callbacks[key] = Delegate.Combine(m_Callbacks[key], callback);
+				m_Subscribes[key] = Delegate.Combine(m_Subscribes[key], callback);
 			}
 			else
 			{
-				m_Callbacks.Add(key, callback);
+				m_Subscribes.Add(key, callback);
 			}
 		}
 
 		/// <summary>
-		/// 타입별 콜백 등록해제.
+		/// 구독해제.
 		/// </summary>
-		public void Unregister<T>(T callback) where T : Delegate
+		public void Unsubscribe<T>(T callback) where T : Delegate
 		{
 			if (callback == null)
 				return;
 
 			var key = typeof(T);
-			if (m_Callbacks.ContainsKey(key))
+			if (m_Subscribes.ContainsKey(key))
 			{
-				var del = m_Callbacks[key];
+				var del = m_Subscribes[key];
 				if (RemoveDelegate(true, ref del, d => d.Equals(callback)) > 0)
-					m_Callbacks[key] = del;
+					m_Subscribes[key] = del;
 				else
-					Unregister<T>();
+					Unsubscribe<T>();
 			}
 		}
 
 		/// <summary>
-		/// 타입 전체 등록해제.
+		/// 대리자 종류별로 구독해제.
 		/// </summary>
-		public void Unregister<T>() where T : Delegate
+		public void Unsubscribe<T>() where T : Delegate
 		{
 			var key = typeof(T);
-			m_Callbacks.Remove(key);
-		}
-
-		/// <summary>
-		/// 타입별 등록한 모든 함수에 통지.
-		/// Invalid 검사를 생략했기에 이미 파괴된 객체에도 통지될 수 있음.
-		/// </summary>
-		public void FastNotify<T>(params object[] args) where T : Delegate
-		{
-			var key = typeof(T);
-			if (m_Callbacks.TryGetValue(key, out var del))
-				del?.DynamicInvoke(args);
+			m_Subscribes.Remove(key);
 		}
 
 		/// <summary>
 		/// 타입별 등록한 모든 함수에 통지.
 		/// </summary>
-		public void Notify<T>(params object[] args) where T : Delegate
+		public void Publish<T>(params object[] args) where T : Delegate
 		{
 			var key = typeof(T);
-			if (m_Callbacks.TryGetValue(key, out var del))
+			if (m_Subscribes.TryGetValue(key, out var del))
 			{
-				if (RemoveDelegate(false, ref del, IsInvaildDelegate) > 0)
+				// 인스턴스가 사라져 유효하지 않은 대리자를 모두 제거.
+				if (RemoveDelegate(false, ref del, IsInvaildDelegate) == 0)
 				{
-					m_Callbacks[key] = del;
-					del?.DynamicInvoke(args);
+					Unsubscribe<T>();
+					return;
 				}
-				else
-				{
-					Unregister<T>();
-				}
+
+				// 통지.
+				m_Subscribes[key] = del;
+				del?.DynamicInvoke(args);
 			}
 		}
 

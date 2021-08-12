@@ -51,7 +51,7 @@ namespace DagraacSystemsExample
 			GC.SuppressFinalize(m_ExampleObject);
 			m_ExampleObject = null;
 
-			NotificationManager.Instance.Notify<NotificationType.OnTest>();
+			MessageBroker.Instance.Publish<NotificationType.OnTest>();
 		}
 	}
 

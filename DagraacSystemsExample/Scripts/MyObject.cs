@@ -23,7 +23,7 @@ namespace DagraacSystemsExample
 
 		public MyObject()
 		{
-			NotificationManager.Instance.Register<NotificationType.OnTest>(OnTest);
+			MessageBroker.Instance.Subscribe<NotificationType.OnTest>(OnTest);
 
 			m_FSM = FSMManager.Instance.AddMachine<FSMMachine>("FSM_MACHINE", this);
 
@@ -37,7 +37,7 @@ namespace DagraacSystemsExample
 
 		~MyObject()
 		{
-			NotificationManager.Instance.Unregister<NotificationType.OnTest>(OnTest);
+			MessageBroker.Instance.Unsubscribe<NotificationType.OnTest>(OnTest);
 		}
 
 		private void OnTest()
