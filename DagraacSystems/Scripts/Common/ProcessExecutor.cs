@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Process
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 프로세스 실행기.
@@ -229,18 +229,45 @@ namespace DagraacSystems.Process
 		internal Process GetProcess(ulong processID)
 		{
 			if (m_RunningProcesses.TryGetValue(processID, out Process process))
-				return process;
+			{
+				if (!process.IsFinished())
+					return process;
+			}
 			return null;
+		}
+
+		public List<Process> GetRunningProcesses()
+		{
+			var result = new List<Process>();
+			foreach (var process in m_RunningProcesses.Values)
+			{
+				if (!process.IsFinished())
+					result.Add(process);
+			}
+
+			return result;
 		}
 
 		public bool IsRunning(ulong processID)
 		{
-			return m_RunningProcesses.ContainsKey(processID);
+			if (m_RunningProcesses.TryGetValue(processID, out Process process))
+			{
+				if (!process.IsFinished())
+					return true;
+			}
+
+			return false;
 		}
 
 		internal bool IsRunning(Process process)
 		{
-			return m_RunningProcesses.ContainsValue(process);
+			if (m_RunningProcesses.ContainsValue(process))
+			{
+				if (!process.IsFinished())
+					return true;
+			}
+
+			return false;
 		}
 	}
 }

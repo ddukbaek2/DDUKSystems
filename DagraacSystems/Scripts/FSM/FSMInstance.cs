@@ -1,5 +1,4 @@
-﻿using DagraacSystems.Process;
-using System;
+﻿using DagraacSystems;
 
 
 namespace DagraacSystems.FSM
@@ -10,7 +9,7 @@ namespace DagraacSystems.FSM
 	/// ProcessID : 실행중에만 유효한 고유식별자.
 	/// InstanceID : 영구적으로 부여받은 별도 고유식별자.
 	/// </summary>
-	public class FSMInstance : DagraacSystems.Process.Process
+	public class FSMInstance : Process
 	{
 		private ulong m_InstanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
 

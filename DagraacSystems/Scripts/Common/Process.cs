@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-
-namespace DagraacSystems.Process
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 프로세스.
