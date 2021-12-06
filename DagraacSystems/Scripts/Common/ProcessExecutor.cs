@@ -199,6 +199,26 @@ namespace DagraacSystems
 				ApplyAllDeleteReservedProcesses();
 		}
 
+		public void StopAllIf(Predicate<Process> match, bool immeditate = false)
+		{
+			if (match == null)
+				return;
+
+			foreach (var process in m_RunningProcesses)
+			{
+				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+					continue;
+
+				if (!match(process.Value))
+					continue;
+
+				Stop(process.Key, false);
+			}
+
+			if (immeditate)
+				ApplyAllDeleteReservedProcesses();
+		}
+
 		public void Stop(ulong processID, bool immeditate = false)
 		{
 			Stop(GetProcess(processID), immeditate);

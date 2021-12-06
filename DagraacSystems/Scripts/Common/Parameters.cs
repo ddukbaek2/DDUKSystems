@@ -1,23 +1,65 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 
 namespace DagraacSystems
 {
-	public struct Parameters
+	/// <summary>
+	/// object로 저장되는 동적 파라메터.
+	/// 넣거나 뺄 때 박싱/언박싱 감안하고 사용함.
+	/// Tuple<T> 변환이 가능함.
+	/// 큐대용으로 사용할 수도 있음.
+	/// </summary>
+	public struct Parameters : IEnumerable
 	{
-		private List<object> m_Args;
+		private ArrayList m_Args;
+		//private List<object> m_Args;
+		public int Count => m_Args.Count;
 
 		public Parameters(params object[] args)
 		{
-			m_Args = new List<object>();
+			//m_Args = new List<object>();
+			m_Args = new ArrayList();
 			if (args != null && args.Length > 0)
 				m_Args.AddRange(args);
+		}
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return m_Args.GetEnumerator();
 		}
 
 		public void Clear()
 		{
 			Clear();
+		}
+
+		public void Insert<T>(int index, T value)
+		{
+			m_Args.Insert(index, value);
+		}
+
+		public void Remove(int index)
+		{
+			m_Args.RemoveAt(index);
+		}
+
+		public void Sort(Comparer<object> comparer)
+		{
+			m_Args.Sort(comparer);
+		}
+
+		public void Swap(int indexA, int indexB)
+		{
+			var left = Get<object>(indexA);
+			var right = Get<object>(indexB);
+
+			Remove(indexA);
+			Remove(indexB);
+
+			Insert(indexA, right);
+			Insert(indexB, left);
 		}
 
 		public void Push<T>(T value)
@@ -108,7 +150,7 @@ namespace DagraacSystems
 			m_Args.Add(t8);
 		}
 
-		public T Get<T>(int index)
+		public T Get<T>(int index = 0)
 		{
 			return (T)m_Args[index];
 		}
@@ -148,15 +190,62 @@ namespace DagraacSystems
 			return new Tuple<T1, T2, T3, T4, T5, T6, T7, T8>(Get<T1>(0), Get<T2>(1), Get<T3>(2), Get<T4>(3), Get<T5>(4), Get<T6>(5), Get<T7>(6), Get<T8>(7));
 		}
 
-		public object[] ToArguments()
+		public object[] ToArray()
 		{
 			return m_Args.ToArray();
 		}
 
+		public static Parameters Combine(Parameters parameters1, Parameters paramters2)
+		{
+			var combinedParameters = new Parameters();
+			foreach (var parameter in parameters1)
+				combinedParameters.Push(parameter);
+			foreach (var parameter in paramters2)
+				combinedParameters.Push(parameter);
+
+			return combinedParameters;
+		}
+
+		public static Parameters Combine(Parameters parameters1, params object[] args)
+		{
+			return Combine(parameters1, Create(args));
+		}
+
+		public static implicit operator Parameters(object[] args)
+		{
+			return new Parameters(args);
+		}
+
+		public static Parameters Create(ArrayList list)
+		{
+			var parameters = new Parameters();
+			if (list == null)
+				return parameters;
+
+			if (list.Count == 0)
+				return parameters;
+
+			foreach (var element in list)
+				parameters.Push(element);
+
+			return parameters;
+		}
+
+		public static Parameters Create(IEnumerator enumerator)
+		{
+			var parameters = new Parameters();
+			if (enumerator == null)
+				return parameters;
+
+			while (enumerator.MoveNext())
+				parameters.Push(enumerator.Current);
+
+			return parameters;
+		}
+
 		public static Parameters Create(params object[] args)
 		{
-			var combinedParameters = new Parameters(args);
-			return combinedParameters;
+			return new Parameters(args);
 		}
 
 		//public static Parameters Create<T1>(T1 t1)

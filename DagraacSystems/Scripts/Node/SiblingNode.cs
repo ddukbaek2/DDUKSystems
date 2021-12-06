@@ -7,9 +7,20 @@ namespace DagraacSystems.Node
 	public interface ISiblingNode
 	{
 		ISiblingNode Root { get; }
-		void SetParent(ISiblingNode parent);
-		void AddChild(ISiblingNode child);
+		ISiblingNode Parent { get; }
+
+		void SetParent(ISiblingNode node);
+
+		void AddChild(ISiblingNode node);
+		ISiblingNode RemoveChild(ISiblingNode node);
+		ISiblingNode GetChild(int index);
+
 		int IndexOf();
+		bool Contains(ISiblingNode node);
+
+		void SetAsFirstSibling();
+		void SetAsLastSibling();
+		void SetSiblingIndex(int index);
 	}
 
 	/// <summary>
@@ -57,6 +68,8 @@ namespace DagraacSystems.Node
 			}
 		}
 
+		ISiblingNode ISiblingNode.Parent => Parent;
+
 		public SiblingNode<TValue> Parent { private set; get; } = null;
 
 		public List<ISiblingNode> Children { private set; get; } = new List<ISiblingNode>();
@@ -76,7 +89,7 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		protected virtual void OnChangeParent(SiblingNode<TValue> parent)
+		protected virtual void OnChangeParent(ISiblingNode parent)
 		{
 		}
 
@@ -108,10 +121,15 @@ namespace DagraacSystems.Node
 
 		public TSiblingNode RemoveChild<TSiblingNode>(int index) where TSiblingNode : SiblingNode<TValue>
 		{
-			return RemoveChild(GetChild<TSiblingNode>(index));
+			return (TSiblingNode)RemoveChild(GetChild(index));
 		}
 
-		public TSiblingNode RemoveChild<TSiblingNode>(TSiblingNode child) where TSiblingNode : SiblingNode<TValue>
+		public ISiblingNode RemoveChild(int index)
+		{
+			return RemoveChild(GetChild(index));
+		}
+
+		public ISiblingNode RemoveChild(ISiblingNode child)
 		{
 			if (child != null)
 				child.SetParent(null);
@@ -142,7 +160,12 @@ namespace DagraacSystems.Node
 			return Parent.Children.IndexOf(this);
 		}
 
-		public TSiblingNode GetChild<TSiblingNode>(int index) where TSiblingNode : SiblingNode<TValue>
+		public bool Contains(ISiblingNode node)
+		{
+			return Children.Contains(node);
+		}
+
+		public ISiblingNode GetChild(int index)
 		{
 			if (Parent == null)
 				return null;
@@ -150,7 +173,16 @@ namespace DagraacSystems.Node
 			if (index < 0 || index >= Children.Count)
 				return null;
 
-			return (TSiblingNode)Children[index];
+			return Children[index];
+		}
+
+		public TSiblingNode GetChild<TSiblingNode>(int index) where TSiblingNode : SiblingNode<TValue>
+		{
+			var child = GetChild(index);
+			if (child == null)
+				return default;
+
+			return (TSiblingNode)child;
 		}
 
 		public void SetSiblingIndex(int index)

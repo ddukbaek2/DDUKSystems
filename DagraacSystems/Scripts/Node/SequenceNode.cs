@@ -1,10 +1,21 @@
 ﻿namespace DagraacSystems.Node
 {
-	/// <summary>
-	/// 시퀀스에 포함되는 데이터.
-	/// </summary>
-	public interface ISequenceData
+	public class TimeAction : Sequence.ISequenceAction
 	{
+		void Sequence.ISequenceAction.Execute()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		void Sequence.ISequenceAction.Finish()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		void Sequence.ISequenceAction.Update()
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 
 
@@ -13,7 +24,20 @@
 	/// </summary>
 	public class Sequence
 	{
-		public class SequenceNode : SiblingNode<ISequenceData>
+		/// <summary>
+		/// 시퀀스에 포함되는 데이터.
+		/// </summary>
+		public interface ISequenceAction
+		{
+			void Execute();
+			void Finish();
+			void Update();
+		}
+
+		/// <summary>
+		/// 구조.
+		/// </summary>
+		public class SequenceNode : SiblingNode<ISequenceAction>
 		{
 		}
 
@@ -25,16 +49,16 @@
 			Root = new SequenceNode();
 		}
 
-		public SequenceNode AddData<TSequenceData>(int layerIndex) where TSequenceData : ISequenceData, new()
+		public SequenceNode AddData<TSequenceAction>(int layerIndex) where TSequenceAction : ISequenceAction, new()
 		{
-			var action = new TSequenceData();
+			var action = new TSequenceAction();
 			var node = new SequenceNode();
 			node.SetParent(GetLayer(layerIndex));
 			node.Value = action;
 			return node;
 		}
 
-		public SequenceNode SetData<TSequenceData>(int layerIndex, int actionIndex, TSequenceData data) where TSequenceData : ISequenceData, new()
+		public SequenceNode SetData<TSequenceAction>(int layerIndex, int actionIndex, TSequenceAction data) where TSequenceAction : ISequenceAction, new()
 		{
 			var layer = GetLayer(layerIndex);
 			if (layer == null)
@@ -42,14 +66,14 @@
 
 			if (actionIndex < 0)
 			{
-				var node = AddData<TSequenceData>(layerIndex);
+				var node = AddData<TSequenceAction>(layerIndex);
 				node.SetAsFirstSibling();
 				node.Value = data;
 				return node;
 			}
 			else if (actionIndex >= layer.ChildCount)
 			{
-				var node = AddData<TSequenceData>(layerIndex);
+				var node = AddData<TSequenceAction>(layerIndex);
 				node.SetAsLastSibling();
 				node.Value = data;
 				return node;
