@@ -1,28 +1,17 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 
 
 namespace DagraacSystems
 {
-	public class Yield
-	{
-		public Yield(object target)
-		{
-		}
-
-		public virtual bool Check()
-		{
-			return true;
-		}
-	}
-
+	/// <summary>
+	/// 코루틴.
+	/// </summary>
 	public class Coroutine
 	{
 		public enum Condition { Continue, Wait, Break, }
 
 		private IEnumerator _enumerator;
-		private Yield _yield;
+		private IYield _yield;
 		private Condition _condition;
 
 		public void StartCoroutine(IEnumerator enumerator)
@@ -39,21 +28,29 @@ namespace DagraacSystems
 			_condition = Condition.Break;
 		}
 
-
-		public void FrameMove(float deltaTime)
+		public void Tick(float tick)
 		{
 			switch (_condition)
 			{
 				case Condition.Continue:
 					{
-						_condition = Processing();
+						_condition = Continue();
+						if (_condition == Condition.Wait)
+						{
+							_yield.OnBegin();
+						}
+
 						break;
 					}
 
 				case Condition.Wait:
 					{
-						if (_yield.Check())
+						if (_yield.OnStay(tick))
+						{
+							_yield.OnEnd();
 							_condition = Condition.Continue;
+						}
+
 						break;
 					}
 
@@ -65,31 +62,15 @@ namespace DagraacSystems
 			}
 		}
 
-		private Condition Processing()
+		private Condition Continue()
 		{
 			if (_enumerator.MoveNext())
 			{
-				_yield = (Yield)_enumerator.Current;
+				_yield = (IYield)_enumerator.Current;
 				return Condition.Wait;
 			}
 
 			return Condition.Break;
-		}
-	}
-	
-	public class CoroutineProcess
-	{
-		Coroutine _coroutine;
-
-		public void Foo()
-		{
-			_coroutine = new Coroutine();
-			_coroutine.StartCoroutine(Process());
-		}
-
-		public IEnumerator Process()
-		{
-			yield break;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using DagraacSystems;
 using DagraacSystems.Log;
 using System;
+using System.Collections;
 
 
 namespace DagraacSystemsExample
@@ -12,6 +13,7 @@ namespace DagraacSystemsExample
 	{
 		private ProcessExecutor m_ProcessExecutor;
 		private MyObject m_ExampleObject;
+		private Coroutine _coroutine;
 
 		protected override void OnStart()
 		{
@@ -22,35 +24,52 @@ namespace DagraacSystemsExample
 			// 로그.
 			LogManager.Instance.AddLogger(new ConsoleLogger());
 
-			// 테이블 로드.
-			TableManager.Instance.LoadAll();
-			var exampleTableData = ExampleTable.Instance.Find(1);
+			//// 테이블 로드.
+			//TableManager.Instance.LoadAll();
+			//var exampleTableData = ExampleTable.Instance.Find(1);
 
-			LogManager.Instance.Print($"{exampleTableData.Desc}");
+			//LogManager.Instance.Print($"{exampleTableData.Desc}");
 
-			m_ProcessExecutor = new ProcessExecutor();
-			m_ProcessExecutor.Start(new ExampleProcess());
+			//m_ProcessExecutor = new ProcessExecutor();
+			//m_ProcessExecutor.Start(new ExampleProcess());
 
-			m_ExampleObject = new MyObject();
+			//m_ExampleObject = new MyObject();
+
+			_coroutine = new Coroutine();
+			_coroutine.StartCoroutine(Process());
+		}
+
+		IEnumerator Process()
+		{
+			var count = 0;
+			while (true)
+			{
+				Console.WriteLine($"count={count}");
+				yield return new WaitForSeconds(1f);
+				++count;
+			}
 		}
 
 		protected override void OnUpdate(float deltaTime)
 		{
 			base.OnUpdate(deltaTime);
 
-			m_ProcessExecutor.Update(deltaTime);
-			DagraacSystems.FSM.FSMManager.Instance.Update(deltaTime);
+			//m_ProcessExecutor.Update(deltaTime);
+			//DagraacSystems.FSM.FSMManager.Instance.Update(deltaTime);
+
+			_coroutine.Tick(deltaTime);
 		}
 
 		protected override void OnFinish()
 		{
 			base.OnFinish();
 
-			m_ProcessExecutor.StopAll();
-			GC.SuppressFinalize(m_ExampleObject);
-			m_ExampleObject = null;
+			//m_ProcessExecutor.StopAll();
+			//GC.SuppressFinalize(m_ExampleObject);
+			//m_ExampleObject = null;
 
-			MessageBroker.Instance.Publish<NotificationType.OnTest>();
+			//MessageBroker.Instance.Publish<NotificationType.OnTest>();
+			_coroutine.StopCoroutine();
 		}
 	}
 
