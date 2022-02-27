@@ -8,15 +8,15 @@ namespace DagraacSystems.Table
 	/// 테이블 매니저 베이스.
 	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
 	/// </summary>
-	public abstract class TableManagerTemplete<TTableManager, TTableID> : Manager<TTableManager>
+	public abstract class TableManagerTemplete<TTableManager, TTableID> : Singleton<TTableManager>
 		where TTableManager : TableManagerTemplete<TTableManager, TTableID>, new()
 		where TTableID : Enum, new()
 	{
-		private Dictionary<TTableID, TableContainer> m_Tables;
+		private Dictionary<TTableID, TableContainer> _tables;
 
 		public TableManagerTemplete() : base()
 		{
-			m_Tables = new Dictionary<TTableID, TableContainer>();
+			_tables = new Dictionary<TTableID, TableContainer>();
 		}
 
 		protected override void OnCreate()
@@ -24,9 +24,11 @@ namespace DagraacSystems.Table
 			base.OnCreate();
 		}
 
-		protected override void OnDispose(bool disposing)
+		protected override void OnDispose(bool explicitedDispose)
 		{
-			UnloadAll();
+			_tables.Clear();
+
+			base.OnDispose(explicitedDispose);
 		}
 
 		protected virtual void OnLoaded(TTableID tableID, TableContainer tableContainer)
@@ -110,15 +112,15 @@ namespace DagraacSystems.Table
 		private void Load<TTableData>(TTableID tableID, TTableData[] tableDataArray, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
 		{
 			var tableContainer = default(TableContainer);
-			if (m_Tables.ContainsKey(tableID))
+			if (_tables.ContainsKey(tableID))
 			{
-				tableContainer = m_Tables[tableID];
+				tableContainer = _tables[tableID];
 			}
 			else
 			{
 				isMerge = false;
 				tableContainer = new TableContainer();
-				m_Tables.Add(tableID, tableContainer);
+				_tables.Add(tableID, tableContainer);
 			}
 
 			var tableDataList = new ITableData[tableDataArray.Length];
@@ -149,27 +151,27 @@ namespace DagraacSystems.Table
 
 		public bool Unload(TTableID tableID)
 		{
-			return m_Tables.Remove(tableID);
+			return _tables.Remove(tableID);
 		}
 
 		public void UnloadAll()
 		{
-			m_Tables.Clear();
+			_tables.Clear();
 		}
 
 		public TableContainer GetTable(TTableID tableID)
 		{
-			return m_Tables[tableID];
+			return _tables[tableID];
 		}
 
 		public TTableContainer GetTable<TTableContainer>(TTableID tableID) where TTableContainer : TableContainer
 		{
-			return (TTableContainer)m_Tables[tableID];
+			return (TTableContainer)_tables[tableID];
 		}
 
 		public bool Cotains(TTableID tableID)
 		{
-			return m_Tables.ContainsKey(tableID);
+			return _tables.ContainsKey(tableID);
 		}
 	}
 }

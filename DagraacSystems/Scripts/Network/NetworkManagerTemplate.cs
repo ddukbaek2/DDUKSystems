@@ -4,14 +4,16 @@ using System.Text;
 
 namespace DagraacSystems.Network
 {
-	public class NetworkManagerTemplate<T> : Manager<T> where T : NetworkManagerTemplate<T>, new()
+	public class NetworkManagerTemplate<T> : Singleton<T> where T : NetworkManagerTemplate<T>, new()
 	{
-		public NetworkManagerTemplate() : base()
+		protected override void OnCreate()
 		{
+			base.OnCreate();
 		}
 
-		protected override void OnDispose(bool disposing)
+		protected override void OnDispose(bool explicitedDispose)
 		{
+			base.OnDispose(explicitedDispose);
 		}
 	}
 }

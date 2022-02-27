@@ -10,7 +10,7 @@ namespace DagraacSystems.Pool
 		void SleepToPool();
 	}
 
-	public class PoolManagerTemplate<TPoolManager, TKey> : Manager<TPoolManager>
+	public class PoolManagerTemplate<TPoolManager, TKey> : Singleton<TPoolManager>
 		where TPoolManager : PoolManagerTemplate<TPoolManager, TKey>, new()
 	{
 		public class PooledObjectMetaData

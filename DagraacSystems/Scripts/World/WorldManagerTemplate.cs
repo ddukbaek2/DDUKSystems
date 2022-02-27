@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace DagraacSystems.World
 {
-	public class WorldManagerTemplate<TWorldManager> : Manager<TWorldManager>
+	public class WorldManagerTemplate<TWorldManager> : Singleton<TWorldManager>
 		where TWorldManager : WorldManagerTemplate<TWorldManager>, new()
 	{
 		//public Dictionary<Guid, Object> Objects { private set; get; } = new Dictionary<Guid, Object>();

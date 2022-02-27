@@ -18,18 +18,24 @@ namespace DagraacSystems.Table
 	{
 		protected TableContainer m_Container;
 
-		public SharedTableTemplete()
+		protected virtual void OnSetContainer(TableContainer table) 
 		{
 		}
 
-		protected virtual void OnSetContainer() 
+		protected virtual void OnUnsetContainer(TableContainer table)
 		{
 		}
 
 		public void SetTableContainer(TableContainer table)
 		{
-			m_Container = table;
-			OnSetContainer();
+			if (m_Container != table)
+			{
+				m_Container = table;
+				if (table == null)
+					OnUnsetContainer(m_Container); // 이전 컨테이너를 셋팅.
+				else
+					OnSetContainer(table); // 다음컨테이너를 셋팅.
+			}
 		}
 
 		public TTableData Find(Predicate<TTableData> predicate)

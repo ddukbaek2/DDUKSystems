@@ -13,25 +13,25 @@ namespace DagraacSystems.Table
 		/// <summary>
 		/// 실제적인 자료구조.
 		/// </summary>
-		protected SortedDictionary<string, ITableData> m_Data = new SortedDictionary<string, ITableData>();
+		protected SortedDictionary<string, ITableData> _data = new SortedDictionary<string, ITableData>();
 
 		/// <summary>
 		/// 키를 생성할 콜백.
 		/// </summary>
-		protected Func<int, ITableData, string> m_MakeKeyCallback;
+		protected Func<int, ITableData, string> _makeKeyCallback;
 
 		/// <summary>
 		/// 갯수.
 		/// </summary>
-		public int Count => m_Data.Count;
+		public int Count => _data.Count;
 
 		/// <summary>
 		/// 초기화.
 		/// </summary>
 		public void Clear()
 		{
-			m_Data.Clear();
-			m_MakeKeyCallback = null;
+			_data.Clear();
+			_makeKeyCallback = null;
 		}
 
 		/// <summary>
@@ -40,7 +40,7 @@ namespace DagraacSystems.Table
 		public void SetTableData(ITableData[] tableDataList, Func<int, ITableData, string> makeKeyCallback)
 		{
 			Clear();
-			m_MakeKeyCallback = makeKeyCallback;
+			_makeKeyCallback = makeKeyCallback;
 			AddTableData(tableDataList);
 		}
 
@@ -49,19 +49,19 @@ namespace DagraacSystems.Table
 		/// </summary>
 		public void AddTableData(ITableData[] tableDataList)
 		{
-			if (m_MakeKeyCallback == null)
+			if (_makeKeyCallback == null)
 				return;
 
 			for (var index = 0; index < tableDataList.Length; ++index)
 			{
 				ITableData tableData = tableDataList[index];
-				m_Data.Add(m_MakeKeyCallback(index, tableData), tableData);
+				_data.Add(_makeKeyCallback(index, tableData), tableData);
 			}
 		}
 
 		public TTableData Get<TTableData>(string key) where TTableData : ITableData
 		{
-			return (TTableData)m_Data[key];
+			return (TTableData)_data[key];
 		}
 
 		public TTableData Get<TKey, TTableData>(TKey key) where TTableData : ITableData
@@ -77,7 +77,7 @@ namespace DagraacSystems.Table
 		{
 			if (predicate == null)
 				return default(TTableData);
-			foreach (KeyValuePair<string, ITableData> keyValuePair in m_Data)
+			foreach (KeyValuePair<string, ITableData> keyValuePair in _data)
 			{
 				if (predicate((TTableData)keyValuePair.Value))
 					return (TTableData)keyValuePair.Value;

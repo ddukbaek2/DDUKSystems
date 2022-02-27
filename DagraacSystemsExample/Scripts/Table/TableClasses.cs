@@ -9,9 +9,9 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ExampleTable : SharedTableTemplete<ExampleTable, int, ExampleTableData>
 	{
-		protected override void OnSetContainer()
+		protected override void OnSetContainer(TableContainer table)
 		{
-			base.OnSetContainer();
+			base.OnSetContainer(table);
 
 			// 초기화.
 		}

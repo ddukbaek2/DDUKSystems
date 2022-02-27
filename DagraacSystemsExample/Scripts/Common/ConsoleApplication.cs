@@ -1,10 +1,14 @@
-﻿using System;
+﻿using DagraacSystems;
+using System;
 using System.Threading;
 
 
 namespace DagraacSystemsExample
 {
-	public class ConsoleApplication<T> where T : ConsoleApplication<T>, new()
+	/// <summary>
+	/// 콘솔 어플리케이션.
+	/// </summary>
+	public class ConsoleApplication<T> : DisposableObject where T : ConsoleApplication<T>, new()
 	{
 		private static readonly Lazy<T> m_Instance = new Lazy<T>(() => new T(), true); // thread-safe.
 		public static T Instance => m_Instance.Value;
@@ -61,6 +65,11 @@ namespace DagraacSystemsExample
 
 		protected virtual void OnFinish()
 		{
+		}
+
+		public void LoadModule()
+		{
+
 		}
 	}
 }

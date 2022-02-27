@@ -1,33 +1,60 @@
-﻿using System;
-
-
-namespace DagraacSystems
+﻿namespace DagraacSystems
 {
-	public class Singleton<T> where T : Singleton<T>, new()
+	/// <summary>
+	/// 싱글톤.
+	/// </summary>
+	public class Singleton<T> : DisposableObject where T : Singleton<T>, new()
 	{
-		//private static readonly Lazy<T> m_Instance = new Lazy<T>(CreateInstance, true); // thread-safe.
-		//public static T Instance => m_Instance.Value;
-
-		protected static T m_Instance = default;
+		private static T _instance = default;
 		public static T Instance
 		{
 			get
 			{
-				if (m_Instance == null)
-					m_Instance = CreateInstance();
-				return m_Instance;
+				if (_instance == null)
+					 Create();
+
+				return _instance;
 			}
 		}
 
-		protected static T CreateInstance()
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		protected virtual void OnCreate()
 		{
-			var instance = new T();
+			_instance = (T)this;
+		}
+
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			_instance = null;
+
+			base.OnDispose(explicitedDispose);
+		}
+
+		/// <summary>
+		/// 생성.
+		/// </summary>
+		/// <returns></returns>
+		public static T Create()
+		{
+			var instance = DisposableObject.Create<T>();
 			instance.OnCreate();
 			return instance;
 		}
 
-		protected virtual void OnCreate()
+		/// <summary>
+		/// 해제.
+		/// </summary>
+		public void Dispose()
 		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
 		}
 	}
 }

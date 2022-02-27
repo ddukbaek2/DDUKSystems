@@ -36,7 +36,7 @@ namespace DagraacSystemsExample
 			//m_ExampleObject = new MyObject();
 
 			_coroutine = new Coroutine();
-			_coroutine.StartCoroutine(Process());
+			_coroutine.Start(Process());
 		}
 
 		IEnumerator Process()
@@ -69,7 +69,7 @@ namespace DagraacSystemsExample
 			//m_ExampleObject = null;
 
 			//MessageBroker.Instance.Publish<NotificationType.OnTest>();
-			_coroutine.StopCoroutine();
+			_coroutine.Stop();
 		}
 	}
 
