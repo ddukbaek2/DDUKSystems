@@ -1,0 +1,189 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
+
+
+namespace DagraacSystems
+{
+	/// <summary>
+	/// 메시지 송신 처리기.
+	/// </summary>
+	public class Messenger : DisposableObject
+	{
+		/// <summary>
+		/// 구독자 별 모든 구독 정보.
+		/// </summary>
+		private Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>> _subscriberInfos;
+
+		/// <summary>
+		/// 현재 적용중인 메시지.
+		/// </summary>
+		public IMessage CurrentMessage { private set; get; }
+
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		public Messenger() : base()
+		{
+			_subscriberInfos = new Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>>();
+			CurrentMessage = null;
+		}
+
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			Clear();
+
+			base.OnDispose(explicitedDispose);
+		}
+
+		public void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
+		}
+
+		/// <summary>
+		/// 수신자 등록.
+		/// </summary>
+		public void Add(ISubscriber subscriber)
+		{
+			if (subscriber == null)
+			{
+				//Debug.LogError($"[Messenger] Listener is null.");
+				return;
+			}
+
+			if (_subscriberInfos.ContainsKey(subscriber))
+			{
+				//Debug.LogError($"[Messenger] listener is exist.");
+				return;
+			}
+
+			var subscriberType = subscriber.GetType();
+			var methods = subscriberType.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.FlattenHierarchy);
+			var subscriberInfo = new Dictionary<Type, List<MethodInfo>>();
+
+			foreach (var method in methods)
+			{
+				if (!method.IsDefined(typeof(SubscribeAttribute)))
+					continue;
+
+				foreach (var attribute in method.GetCustomAttributes(typeof(SubscribeAttribute)))
+				{
+					var listen = attribute as SubscribeAttribute;
+
+					if (listen.Type == null)
+					{
+						//Debug.LogError($"[Messenger] Listen Attribute Parameter is null.");
+						continue;
+					}
+
+					if (listen.Type.IsSubclassOf(typeof(IMessage)))
+					{
+						//Debug.LogError($"[Messenger] Not Inherit IMessage Listen={listen.Type.FullName}");
+						continue;
+					}
+
+					if (!subscriberInfo.TryGetValue(listen.Type, out var list))
+					{
+						list = new List<MethodInfo>();
+					}
+
+					list.Add(method);
+					subscriberInfo.Add(listen.Type, list);
+				}
+			}
+
+			_subscriberInfos.Add(subscriber, subscriberInfo);
+		}
+
+		/// <summary>
+		/// 제거.
+		/// </summary>
+		public void Remove(ISubscriber subscriber)
+		{
+			_subscriberInfos.Remove(subscriber);
+		}
+
+		/// <summary>
+		/// 전체 제거.
+		/// </summary>
+		public void Clear()
+		{
+			_subscriberInfos.Clear();
+		}
+
+		/// <summary>
+		/// 특정 리스너에게 통지.
+		/// </summary>
+		public void Send(ISubscriber subscriber, IMessage message)
+		{
+			if (subscriber == null)
+			{
+				//Debug.LogError($"[Messenger] listener is null.");
+				return;
+			}
+
+			if (message == null)
+			{
+				//Debug.LogError($"[Messenger] message is null.");
+				return;
+			}
+
+			var messageType = message.GetType();
+
+			if (!_subscriberInfos.TryGetValue(subscriber, out var subscriberInfo))
+			{
+				//Debug.LogError($"[Messenger] not found listenerInfo.");
+				return;
+			}
+
+			if (!subscriberInfo.TryGetValue(messageType, out var methods))
+			{
+				// 모든 리스너가 모든 이벤트 메소드를 가지고 있는 것은 아니기에 오류를 찍지 않음.
+				////Debug.LogError($"[Messenger] not found methods.");
+				return;
+			}
+
+			foreach (var method in methods)
+			{
+				CurrentMessage = message;
+				var parameters = method.GetParameters();
+				if (parameters.Length > 0)
+					method.Invoke(subscriber, new object[] { message });
+				else
+					method.Invoke(subscriber, null);
+			}
+			CurrentMessage = null;
+		}
+
+		/// <summary>
+		/// 전체 리스너에게 통지.
+		/// </summary>
+		public void Notify(IMessage message)
+		{
+			if (message == null)
+			{
+				//Debug.LogError($"[Messenger] message is null.");
+				return;
+			}
+
+			foreach (var subscriber in _subscriberInfos.Keys)
+			{
+				// 수신부 중 하나에서 죽을 경우를 대비한 방어 처리.
+				try
+				{
+					Send(subscriber, message);
+				}
+				catch (Exception e)
+				{
+					//Debug.LogException(e);
+				}
+			}
+
+			CurrentMessage = null;
+		}
+	}
+}

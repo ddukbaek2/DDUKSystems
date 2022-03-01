@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 프로세스.
 	/// </summary>
-	public class Process
+	public class Process : DisposableObject
 	{
 		private bool m_IsStarted;
 		private bool m_IsFinished;
@@ -12,13 +12,18 @@
 		private ProcessExecutor m_ProcessExecutor;
 		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
-		public Process()
+		public Process() : base()
 		{
 			m_IsStarted = false;
 			m_IsFinished = false;
 			m_IsPaused = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
+		}
+
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			base.OnDispose(explicitedDispose);
 		}
 
 		internal void Reset()

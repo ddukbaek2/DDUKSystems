@@ -7,56 +7,38 @@ namespace DagraacSystems
 	/// <summary>
 	/// 프로세스 실행기.
 	/// </summary>
-	public class ProcessExecutor : IDisposable
+	public class ProcessExecutor : DisposableObject
 	{
-		private bool m_IsDisposed;
 		private UniqueIdentifier m_UniqueIdentifier;
 		protected Dictionary<ulong, Process> m_RunningProcesses;
 		protected List<ulong> m_DeleteReservedProcessIDList;
 
-		public ProcessExecutor()
+		public ProcessExecutor() : base()
 		{
-			m_IsDisposed = false;
 			m_UniqueIdentifier = new UniqueIdentifier();
 			m_RunningProcesses = new Dictionary<ulong, Process>();
 			m_DeleteReservedProcessIDList = new List<ulong>();
 		}
 
-		public ProcessExecutor(UniqueIdentifier uniqueIdentifier)
+		public ProcessExecutor(UniqueIdentifier uniqueIdentifier) : base()
 		{
-			m_IsDisposed = false;
 			m_UniqueIdentifier = uniqueIdentifier;
 			m_RunningProcesses = new Dictionary<ulong, Process>();
 			m_DeleteReservedProcessIDList = new List<ulong>();
 		}
 
-		~ProcessExecutor()
+		protected override void OnDispose(bool explicitedDispose)
 		{
-			if (!m_IsDisposed)
-			{
-				m_IsDisposed = true;
-				OnDispose(false);
-			}
-		}
-
-		protected virtual void OnDispose(bool disposing)
-		{
-			if (disposing)
-			{
-				StopAll(true);
-			}
+			StopAll(true);
+			base.OnDispose(explicitedDispose);
 		}
 
 		public void Dispose()
 		{
-			if (!m_IsDisposed)
-			{
-				m_IsDisposed = true;
-				OnDispose(true);
-			}
+			if (IsDisposed)
+				return;
 
-			// 소멸자 호출 안함.
-			GC.SuppressFinalize(this);
+			DisposableObject.Dispose(this);
 		}
 
 		public virtual void Update(float deltaTime)

@@ -7,36 +7,50 @@ namespace DagraacSystems
 	/// <summary>
 	/// ulong 고유식별자 생성기.
 	/// </summary>
-	public class UniqueIdentifier
+	public class UniqueIdentifier : DisposableObject
 	{
-		private Random m_Random;
-		private List<ulong> m_UsingList;
-		private ulong m_MinValue;
-		private ulong m_MaxValue;
-		private byte[] m_Buffer;
+		private Random _random;
+		private List<ulong> _usingList;
+		private ulong _minValue;
+		private ulong _maxValue;
+		private byte[] _buffer;
 
-		public UniqueIdentifier(int randomSeed = 0, ulong minValue = ulong.MinValue, ulong maxValue = ulong.MaxValue)
+		public UniqueIdentifier(int randomSeed = 0, ulong minValue = ulong.MinValue, ulong maxValue = ulong.MaxValue) : base()
 		{
-			m_Random = new Random(randomSeed);
-			m_UsingList = new List<ulong>();
-			m_MinValue = Math.Min(minValue, ulong.MinValue);
-			m_MaxValue = Math.Max(maxValue, ulong.MaxValue);
-			m_Buffer = new byte[sizeof(ulong)]; // ulong == 8byte.
+			_random = new Random(randomSeed);
+			_usingList = new List<ulong>();
+			_minValue = Math.Min(minValue, ulong.MinValue);
+			_maxValue = Math.Max(maxValue, ulong.MaxValue);
+			_buffer = new byte[sizeof(ulong)]; // ulong == 8byte.
+		}
+
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			Clear();
+			base.OnDispose(explicitedDispose);
+		}
+
+		public void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
 		}
 
 		public void Clear()
 		{
-			m_UsingList.Clear();
+			_usingList.Clear();
 		}
 
 		private ulong Next()
 		{
 			while (true)
 			{
-				m_Random.NextBytes(m_Buffer);
-				var value = BitConverter.ToUInt64(m_Buffer, 0);
+				_random.NextBytes(_buffer);
+				var value = BitConverter.ToUInt64(_buffer, 0);
 
-				if (value < m_MinValue || value > m_MaxValue)
+				if (value < _minValue || value > _maxValue)
 					continue;
 
 				return value;
@@ -45,19 +59,22 @@ namespace DagraacSystems
 
 		public void Synchronize(ulong unique)
 		{
-			if (m_UsingList.Contains(unique))
+			if (Contains(unique))
 				return;
 
-			m_UsingList.Add(unique);
+			_usingList.Add(unique);
 		}
 
+		/// <summary>
+		/// 아이디 생성.
+		/// </summary>
 		public ulong Generate()
 		{
-			var unique = m_MinValue;
+			var unique = _minValue;
 			while (true)
 			{
 				unique = Next();
-				if (!m_UsingList.Contains(unique))
+				if (!Contains(unique))
 					break;
 			}
 
@@ -65,14 +82,20 @@ namespace DagraacSystems
 			return unique;
 		}
 
+		/// <summary>
+		/// 아이디 제거.
+		/// </summary>
 		public bool Free(ulong unique)
 		{
-			return m_UsingList.Remove(unique);
+			return _usingList.Remove(unique);
 		}
 
+		/// <summary>
+		/// 포함 여부.
+		/// </summary>
 		public bool Contains(ulong unique)
 		{
-			return m_UsingList.Contains(unique);
+			return _usingList.Contains(unique);
 		}
 	}
 }

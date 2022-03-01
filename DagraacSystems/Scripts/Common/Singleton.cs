@@ -20,6 +20,13 @@
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
+		protected Singleton() : base()
+		{
+		}
+
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
 		protected virtual void OnCreate()
 		{
 			_instance = (T)this;

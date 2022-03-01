@@ -13,6 +13,9 @@ namespace DagraacSystems
 		private IEnumerator _enumerator;
 		private IYield _yield;
 		private Condition _condition;
+		private bool _isStarted;
+
+		public bool IsRunning => _isStarted;
 
 		/// <summary>
 		/// 생성됨.
@@ -22,6 +25,7 @@ namespace DagraacSystems
 			_enumerator = null;
 			_yield = null;
 			_condition = Condition.Finished;
+			_isStarted = false;
 		}
 
 		/// <summary>
@@ -53,6 +57,7 @@ namespace DagraacSystems
 			_enumerator = enumerator;
 			_yield = null;
 			_condition = Condition.Continue;
+			_isStarted = true;
 		}
 
 		/// <summary>
@@ -63,6 +68,7 @@ namespace DagraacSystems
 			_enumerator = null;
 			_yield = null;
 			_condition = Condition.Finished;
+			_isStarted = false;
 		}
 
 		/// <summary>

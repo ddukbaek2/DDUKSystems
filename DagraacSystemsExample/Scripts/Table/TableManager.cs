@@ -15,10 +15,10 @@ namespace DagraacSystemsExample
 	{
 		Invalid,
 
-		[FilePath("Tables/ExampleTable.json")]
+		[Value("Tables/ExampleTable.json")]
 		ExampleTable,
 
-		[FilePath("Tables/StringTable.json")]
+		[Value("Tables/StringTable.json")]
 		StringTable,
 	}
 
@@ -65,8 +65,8 @@ namespace DagraacSystemsExample
 		{
 			Console.WriteLine(Directory.GetCurrentDirectory());
 
-			Load<ExampleTableData>(eTableID.ExampleTable, FilePathAttributeHelper.GetFilePath(eTableID.ExampleTable), "ID");
-			Load<StringTableData>(eTableID.StringTable, FilePathAttributeHelper.GetFilePath(eTableID.StringTable), "ID");
+			Load<ExampleTableData>(eTableID.ExampleTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.ExampleTable), "ID");
+			Load<StringTableData>(eTableID.StringTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.StringTable), "ID");
 		}
 
 		/// <summary>
