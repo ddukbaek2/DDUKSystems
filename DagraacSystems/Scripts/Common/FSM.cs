@@ -4,7 +4,7 @@
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 가벼운 상태 처리기.
+	/// 단순한 상태 처리기.
 	/// Enum으로 상태 구분을 하고 상태 전이 및 현재 상태 실행만 처리.
 	/// </summary>
 	public class FSM<TState> : DisposableObject where TState : Enum

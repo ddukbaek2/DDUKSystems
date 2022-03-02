@@ -45,7 +45,7 @@ namespace DagraacSystemsExample
 			while (true)
 			{
 				Console.WriteLine($"count={count}");
-				yield return new WaitForSeconds(1f);
+				yield return new WaitTime(1f);
 				++count;
 			}
 		}

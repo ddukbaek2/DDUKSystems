@@ -31,7 +31,7 @@ namespace DagraacSystems.Node
 		/// <summary>
 		/// 반복자 구현.
 		/// </summary>
-		internal class Enumerator : IEnumerator<TValue>
+		public class Enumerator : IEnumerator<TValue>
 		{
 			private SiblingNode<TValue> m_Target;
 			private int m_Index;

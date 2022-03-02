@@ -74,6 +74,7 @@ namespace DagraacSystems
 		}
 	}
 
+
 	/// <summary>
 	/// 참이 될때까지 머무름.
 	/// </summary>
@@ -96,16 +97,16 @@ namespace DagraacSystems
 	}
 
 	/// <summary>
-	/// 일정 초만큼 머무름.
+	/// 일정 시간(초)만큼 머무름.
 	/// </summary>
-	public class WaitForSeconds : Yield
+	public class WaitTime : Yield
 	{
 		private float _time;
 		private float _duration;
 
-		public WaitForSeconds(float seconds) : base()
+		public WaitTime(float duration) : base()
 		{
-			_duration = seconds;
+			_duration = duration;
 		}
 
 		protected override void OnBegin()
