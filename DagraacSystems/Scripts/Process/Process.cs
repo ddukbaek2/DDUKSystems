@@ -3,20 +3,20 @@
 	/// <summary>
 	/// 프로세스.
 	/// </summary>
-	public class Process : DisposableObject
+	public class Process : DisposableObject, IProcess
 	{
-		private bool m_IsStarted;
-		private bool m_IsFinished;
-		private bool m_IsPaused;
+		private bool _isStarted;
+		private bool _isFinished;
+		private bool _isPaused;
 
 		private ProcessExecutor m_ProcessExecutor;
 		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
 		public Process() : base()
 		{
-			m_IsStarted = false;
-			m_IsFinished = false;
-			m_IsPaused = false;
+			_isStarted = false;
+			_isFinished = false;
+			_isPaused = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
 		}
@@ -26,57 +26,57 @@
 			base.OnDispose(explicitedDispose);
 		}
 
-		internal void Reset()
+		public void Reset()
 		{
-			m_IsStarted = false;
-			m_IsFinished = false;
-			m_IsPaused = false;
+			_isStarted = false;
+			_isFinished = false;
+			_isPaused = false;
 			m_ProcessExecutor = null;
 			m_ProcessID = 0;
 
 			OnReset();
 		}
 
-		internal void Execute(ProcessExecutor processExecutor, ulong processID, params object[] args)
+		public void Execute(ProcessExecutor processExecutor, ulong processID, params object[] args)
 		{
-			m_IsStarted = true;
-			m_IsFinished = false;
+			_isStarted = true;
+			_isFinished = false;
 			m_ProcessExecutor = processExecutor;
 			m_ProcessID = processID;
 
 			OnExecute(args);
 		}
 
-		internal void Update(float deltaTime)
+		public void Update(float deltaTime)
 		{
 			OnUpdate(deltaTime);
 		}
 
 		public void Finish()
 		{
-			if (!m_IsStarted || m_IsFinished)
+			if (!_isStarted || _isFinished)
 				return;
 
-			m_IsStarted = false;
-			m_IsFinished = true;
+			_isStarted = false;
+			_isFinished = true;
 
 			OnFinish();
 		}
 
-		internal void Resume()
+		public void Resume()
 		{
-			if (m_IsPaused)
+			if (_isPaused)
 			{
-				m_IsPaused = false;
+				_isPaused = false;
 				OnResume();
 			}
 		}
 
-		internal void Pause()
+		public void Pause()
 		{
-			if (!m_IsPaused)
+			if (!_isPaused)
 			{
-				m_IsPaused = true;
+				_isPaused = true;
 				OnPause();
 			}
 		}
@@ -107,17 +107,17 @@
 
 		public bool IsStarted()
 		{
-			return m_IsStarted;
+			return _isStarted;
 		}
 
 		public bool IsFinished()
 		{
-			return m_IsFinished;
+			return _isFinished;
 		}
 
 		public bool IsPaused()
 		{
-			return m_IsPaused;
+			return _isPaused;
 		}
 
 		public ProcessExecutor GetProcessExecutor()

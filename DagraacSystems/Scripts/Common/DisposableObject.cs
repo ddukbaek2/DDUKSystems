@@ -88,5 +88,13 @@ namespace DagraacSystems
 			if (target != null)
 				((IDisposable)target)?.Dispose();
 		}
+
+		/// <summary>
+		/// 객체가 유효한지 여부.
+		/// </summary>
+		public static implicit operator bool(DisposableObject target)
+		{
+			return target != null && !target.IsDisposed;
+		}
 	}
 }

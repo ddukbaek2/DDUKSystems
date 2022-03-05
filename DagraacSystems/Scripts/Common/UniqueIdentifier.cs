@@ -26,17 +26,24 @@ namespace DagraacSystems
 
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			Clear();
+			_random = null;
+			_usingList = null;
+			_buffer = null;
+
 			base.OnDispose(explicitedDispose);
 		}
 
-		public void Dispose()
+		/// <summary>
+		/// 파괴.
+		/// </summary>
+		public virtual void Dispose()
 		{
 			if (IsDisposed)
 				return;
 
 			DisposableObject.Dispose(this);
 		}
+
 
 		public void Clear()
 		{
@@ -59,22 +66,19 @@ namespace DagraacSystems
 
 		public void Synchronize(ulong unique)
 		{
-			if (Contains(unique))
+			if (_usingList.Contains(unique))
 				return;
 
 			_usingList.Add(unique);
 		}
 
-		/// <summary>
-		/// 아이디 생성.
-		/// </summary>
 		public ulong Generate()
 		{
 			var unique = _minValue;
 			while (true)
 			{
 				unique = Next();
-				if (!Contains(unique))
+				if (!_usingList.Contains(unique))
 					break;
 			}
 
@@ -82,17 +86,11 @@ namespace DagraacSystems
 			return unique;
 		}
 
-		/// <summary>
-		/// 아이디 제거.
-		/// </summary>
 		public bool Free(ulong unique)
 		{
 			return _usingList.Remove(unique);
 		}
 
-		/// <summary>
-		/// 포함 여부.
-		/// </summary>
 		public bool Contains(ulong unique)
 		{
 			return _usingList.Contains(unique);

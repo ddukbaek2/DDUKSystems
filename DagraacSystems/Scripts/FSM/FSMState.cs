@@ -10,20 +10,20 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMState : FSMInstance
 	{
-		private List<FSMTransition> m_Transitions; // 이동 조건 목록.
-		private List<FSMAction> m_Actions; // 실행 목록.
+		private List<FSMTransition> _transitions; // 이동 조건 목록.
+		private List<FSMAction> _actions; // 실행 목록.
 
-		private int m_ActionCursor;
-		private FSMTransition m_SelectedTransition;
+		private int _actionCursor;
+		private FSMTransition _selectedTransition;
 
 		public FSMMachine Target { internal set; get; }
 
 		public FSMState()
 		{
-			m_Actions = new List<FSMAction>();
-			m_Transitions = new List<FSMTransition>();
-			m_SelectedTransition = null;
-			m_ActionCursor = 0;
+			_actions = new List<FSMAction>();
+			_transitions = new List<FSMTransition>();
+			_selectedTransition = null;
+			_actionCursor = 0;
 		}
 
 		protected override void OnCreate(params object[] args)
@@ -40,8 +40,8 @@ namespace DagraacSystems.FSM
 		{
 			base.OnReset();
 
-			m_SelectedTransition = null;
-			m_ActionCursor = 0;
+			_selectedTransition = null;
+			_actionCursor = 0;
 		}
 
 		protected override void OnExecute(params object[] args)
@@ -54,9 +54,9 @@ namespace DagraacSystems.FSM
 				return;
 			}
 
-			if (m_ActionCursor < m_Actions.Count)
+			if (_actionCursor < _actions.Count)
 			{
-				var action = m_Actions[m_ActionCursor];
+				var action = _actions[_actionCursor];
 
 				var processExecutor = GetProcessExecutor();
 				processExecutor.Start(action);
@@ -75,15 +75,15 @@ namespace DagraacSystems.FSM
 				return;
 			}
 
-			if (m_ActionCursor < m_Actions.Count)
+			if (_actionCursor < _actions.Count)
 			{
-				var action = m_Actions[m_ActionCursor];
+				var action = _actions[_actionCursor];
 				if (action.IsFinished() || action.Async)
 				{
-					++m_ActionCursor;
-					if (m_ActionCursor < m_Actions.Count)
+					++_actionCursor;
+					if (_actionCursor < _actions.Count)
 					{
-						action = m_Actions[m_ActionCursor];
+						action = _actions[_actionCursor];
 						var processExecutor = GetProcessExecutor();
 						processExecutor.Start(action);
 					}
@@ -99,7 +99,7 @@ namespace DagraacSystems.FSM
 				else
 				{
 					// 전체 액션이 전부 종료되었는지 확인한다.
-					var processing = m_Actions.Exists(it => !it.IsFinished());
+					var processing = _actions.Exists(it => !it.IsFinished());
 					if (!processing)
 						Finish();
 				}
@@ -114,20 +114,20 @@ namespace DagraacSystems.FSM
 			{
 				var processExecutor = GetProcessExecutor();
 				if (processExecutor != null)
-					processExecutor.Start(m_SelectedTransition);
+					processExecutor.Start(_selectedTransition);
 			}
 		}
 
 		public bool CheckTransition()
 		{
-			if (m_SelectedTransition != null)
+			if (_selectedTransition != null)
 				return true;
 
-			foreach (var transition in m_Transitions)
+			foreach (var transition in _transitions)
 			{
 				if (transition.IsContidition())
 				{
-					m_SelectedTransition = transition;
+					_selectedTransition = transition;
 					return true;
 				}
 			}
@@ -139,7 +139,7 @@ namespace DagraacSystems.FSM
 		{
 			var action = FSMInstance.CreateInstance<TFSMAction>(typeof(TFSMAction).Name, args);
 			action.Target = this;
-			m_Actions.Add(action);
+			_actions.Add(action);
 
 			return action;
 		}
@@ -153,19 +153,19 @@ namespace DagraacSystems.FSM
 				action.Finish();
 
 			FSMInstance.DestroyInstance(action);
-			m_Actions.Remove(action);
+			_actions.Remove(action);
 		}
 
 		public void RemoveAllActions()
 		{
-			while (m_Actions.Count > 0)
-				RemoveAction(m_Actions[0]);
+			while (_actions.Count > 0)
+				RemoveAction(_actions[0]);
 		}
 
 		public TFSMTransition AddTransition<TFSMTransition>(string name, FSMState destinationState, Func<bool> predicate) where TFSMTransition : FSMTransition, new()
 		{
 			var transition = FSMInstance.CreateInstance<TFSMTransition>(name, this, destinationState, predicate);
-			m_Transitions.Add(transition);
+			_transitions.Add(transition);
 
 			return transition;
 		}
@@ -179,13 +179,13 @@ namespace DagraacSystems.FSM
 			//	transition.Finish();
 
 			FSMInstance.DestroyInstance(transition);
-			m_Transitions.Remove(transition);
+			_transitions.Remove(transition);
 		}
 
 		public void RemoveAllTransitions()
 		{
-			while (m_Transitions.Count > 0)
-				RemoveTransition(m_Transitions[0]);
+			while (_transitions.Count > 0)
+				RemoveTransition(_transitions[0]);
 		}
 	}
 }

@@ -8,18 +8,18 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMSimpleAction : FSMAction
 	{
-		private Action m_Action;
+		private Action _action;
 
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
-			m_Action = args[0] as Action;
+			_action = args[0] as Action;
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
 			//base.OnExecute(args);
-			m_Action?.Invoke();
+			_action?.Invoke();
 			Finish();
 		}
 	}

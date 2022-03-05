@@ -10,32 +10,32 @@ namespace DagraacSystems.Table
 	{
 		public const string ErrorFormat = "TEXTERR({0})";
 
-		private string m_Language;
-		private TableContainer m_StringTable;
+		private string _language;
+		private TableContainer _stringTable;
 
 		public LocalizationManager() : base()
 		{
-			m_Language = string.Empty;
-			m_StringTable = null;
+			_language = string.Empty;
+			_stringTable = null;
 		}
 
 		protected override void OnDispose(bool disposing)
 		{
 			if (disposing)
 			{
-				m_Language = string.Empty;
-				m_StringTable = null;
+				_language = string.Empty;
+				_stringTable = null;
 			}
 		}
 
 		public void SetCurrentLanguage(string language)
 		{
-			m_Language = language;
+			_language = language;
 		}
 
 		public void SetStringTable(TableContainer stringTable)
 		{
-			m_StringTable = stringTable;
+			_stringTable = stringTable;
 		}
 
 		private static string GetValue(ITableData tableData, string language)
@@ -56,15 +56,15 @@ namespace DagraacSystems.Table
 
 		public string Get(int id)
 		{
-			var stringTableData = m_StringTable.Get<ITableData>(id.ToString());
+			var stringTableData = _stringTable.Get<ITableData>(id.ToString());
 			if (stringTableData == null)
 				return string.Format(ErrorFormat, id);
-			return GetValue(stringTableData, m_Language);
+			return GetValue(stringTableData, _language);
 		}
 
 		public string Get(string key)
 		{
-			var stringTableData = m_StringTable.Find<ITableData>(it =>
+			var stringTableData = _stringTable.Find<ITableData>(it =>
 			{
 				var fieldIndex = it.GetFieldIndex("Key");
 				if (fieldIndex == -1)
@@ -78,7 +78,7 @@ namespace DagraacSystems.Table
 
 			if (stringTableData == null)
 				return string.Format(ErrorFormat, key);
-			return GetValue(stringTableData, m_Language);
+			return GetValue(stringTableData, _language);
 		}
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace DagraacSystems.Table
 		/// </summary>
 		public string GetCurrentLanguage()
 		{
-			return m_Language;
+			return _language;
 		}
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace DagraacSystems.Table
 		/// </summary>
 		public TableContainer GetStringTable()
 		{
-			return m_StringTable;
+			return _stringTable;
 		}
 	}
 }

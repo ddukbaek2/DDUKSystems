@@ -16,7 +16,7 @@ namespace DagraacSystems.Table
 	  where TSharedTable : SharedTableTemplete<TSharedTable, TKey, TTableData>, new()
 	  where TTableData : ITableData
 	{
-		protected TableContainer m_Container;
+		protected TableContainer _container;
 
 		protected virtual void OnSetContainer(TableContainer table) 
 		{
@@ -28,11 +28,11 @@ namespace DagraacSystems.Table
 
 		public void SetTableContainer(TableContainer table)
 		{
-			if (m_Container != table)
+			if (_container != table)
 			{
-				m_Container = table;
+				_container = table;
 				if (table == null)
-					OnUnsetContainer(m_Container); // 이전 컨테이너를 셋팅.
+					OnUnsetContainer(_container); // 이전 컨테이너를 셋팅.
 				else
 					OnSetContainer(table); // 다음컨테이너를 셋팅.
 			}
@@ -40,22 +40,22 @@ namespace DagraacSystems.Table
 
 		public TTableData Find(Predicate<TTableData> predicate)
 		{
-			return m_Container.Find<TTableData>(predicate);
+			return _container.Find<TTableData>(predicate);
 		}
 
 		public TTableData Find(TKey key)
 		{
-			return m_Container.Get<TKey, TTableData>(key);
+			return _container.Get<TKey, TTableData>(key);
 		}
 
 		public List<TTableData> FindAll(Predicate<TTableData> predicate)
 		{
-			return m_Container.FindAll<TTableData>(predicate);
+			return _container.FindAll<TTableData>(predicate);
 		}
 
 		public List<TTableData> All()
 		{
-			return m_Container.All<TTableData>();
+			return _container.All<TTableData>();
 		}
 	}
 }

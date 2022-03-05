@@ -9,15 +9,15 @@ namespace DagraacSystems.FSM
 	/// </summary>
 	public class FSMMachine : FSMInstance
 	{
-		private List<FSMTrigger> m_Triggers;
-		private List<FSMState> m_States;
+		private List<FSMTrigger> _triggers;
+		private List<FSMState> _states;
 
 		public IFSMTarget Target { internal set; get; }
 
 		public FSMMachine()
 		{
-			m_Triggers = new List<FSMTrigger>();
-			m_States = new List<FSMState>();
+			_triggers = new List<FSMTrigger>();
+			_states = new List<FSMState>();
 		}
 
 		protected override void OnCreate(params object[] args)
@@ -34,7 +34,7 @@ namespace DagraacSystems.FSM
 		{
 			base.OnUpdate(deltaTime);
 
-			foreach (var trigger in m_Triggers)
+			foreach (var trigger in _triggers)
 			{
 				//if ()
 			}
@@ -86,7 +86,7 @@ namespace DagraacSystems.FSM
 		{
 			var state = FSMInstance.CreateInstance<TFSMState>(name);
 			state.Target = this;
-			m_States.Add(state);
+			_states.Add(state);
 			return state;
 		}
 
@@ -105,31 +105,31 @@ namespace DagraacSystems.FSM
 			//	state.Finish();
 
 			FSMInstance.DestroyInstance(state);
-			m_States.Remove(state);
+			_states.Remove(state);
 		}
 
 		public void RemoveAllStates()
 		{
-			while (m_States.Count > 0)
+			while (_states.Count > 0)
 			{
-				RemoveState(m_States[0]);
+				RemoveState(_states[0]);
 			}
 		}
 
 		public void AddTrigger(string name, FSMTrigger trigger)
 		{
-			m_Triggers.Add(trigger);
+			_triggers.Add(trigger);
 		}
 
 		public void RemoveTrigger(FSMTrigger trigger)
 		{
-			m_Triggers.Remove(trigger);
+			_triggers.Remove(trigger);
 		}
 
 		public void RemoveAllTriggers()
 		{
-			while (m_Triggers.Count > 0)
-				RemoveTrigger(m_Triggers[0]);
+			while (_triggers.Count > 0)
+				RemoveTrigger(_triggers[0]);
 		}
 
 		public bool IsRunningState(FSMState state)
@@ -143,12 +143,12 @@ namespace DagraacSystems.FSM
 
 		public TFSMState GetState<TFSMState>(ulong instanceID) where TFSMState : FSMState
 		{
-			return m_States.Find(it => it.GetInstanceID() == instanceID) as TFSMState;
+			return _states.Find(it => it.GetInstanceID() == instanceID) as TFSMState;
 		}
 
 		public TFSMState GetState<TFSMState>(string name) where TFSMState : FSMState
 		{
-			return m_States.Find(it => it.Name == name) as TFSMState;
+			return _states.Find(it => it.Name == name) as TFSMState;
 		}
 	}
 }
