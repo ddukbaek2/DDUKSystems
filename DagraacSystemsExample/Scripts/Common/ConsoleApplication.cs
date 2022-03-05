@@ -16,6 +16,9 @@ namespace DagraacSystemsExample
 		private bool m_IsQuitApplication = false;
 		private long m_PrevTick = 0;
 
+		/// <summary>
+		/// 시작.
+		/// </summary>
 		public void Start(string[] args)
 		{
 			OnStart();
