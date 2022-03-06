@@ -39,7 +39,7 @@
 		/// </summary>
 		public static TModel CreateModel<TModel>(Pool pool) where TModel : Model, new()
 		{
-			var model = Object.Create<TModel>(pool.Engine);
+			var model = Object.Create<TModel>(pool.Framework);
 			pool.AddModel(model);
 			return model;
 		}

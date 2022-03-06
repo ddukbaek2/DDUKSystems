@@ -80,5 +80,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// Enum 기반 상태 처리기.
 	/// </summary>
-	public class EnumFSM<TState> : FSM<TState> where TState : Enum { }
+	public class EnumFSM<TState> : FSM<TState> where TState : Enum
+	{
+	}
 }

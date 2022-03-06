@@ -1,11 +1,11 @@
 ﻿namespace DagraacSystems.Framework
 {
 	/// <summary>
-	/// RPGENGINE 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
+	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
 	/// </summary>
 	public abstract class Object : DisposableObject, ISubscriber
 	{
-		public Framework Engine { private set; get; }
+		public Framework Framework { private set; get; }
 		public ulong InstanceID { private set; get; }
 		public bool IsActive { private set; get; }
 
@@ -14,7 +14,7 @@
 		/// </summary>
 		protected Object() : base()
 		{
-			Engine = null;
+			Framework = null;
 			InstanceID = 0ul;
 			IsActive = false;
 		}
@@ -24,7 +24,7 @@
 		/// </summary>
 		protected Object(ulong instanceID) : base()
 		{
-			Engine = null;
+			Framework = null;
 			InstanceID = instanceID;
 			IsActive = false;
 		}
@@ -35,7 +35,7 @@
 			//Logger.Log("[RPGObject] OnCreate()");
 
 			if (InstanceID == 0)
-				InstanceID = Engine.UniqueIdentifier.Generate();
+				InstanceID = Framework.UniqueIdentifier.Generate();
 		}
 
 		/// <summary>
@@ -45,10 +45,10 @@
 		{
 			//Logger.Log("[RPGObject] OnDispose()");
 
-			Engine.Messenger.Remove(this);
-			Engine.UniqueIdentifier.Free(InstanceID);
+			Framework.Messenger.Remove(this);
+			Framework.UniqueIdentifier.Free(InstanceID);
 			InstanceID = 0;
-			Engine = null;
+			Framework = null;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -87,12 +87,12 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TRPGObject Create<TRPGObject>(Framework engine) where TRPGObject : Object, new()
+		public static TObject Create<TObject>(Framework framework) where TObject : Object, new()
 		{
-			var target = DisposableObject.Create<TRPGObject>();
-			target.Engine = engine;
-			engine.Messenger.Add(target);
-			engine.Messenger.Send(target, new OnObjectCreate { });
+			var target = DisposableObject.Create<TObject>();
+			target.Framework = framework;
+			framework.Messenger.Add(target);
+			framework.Messenger.Send(target, new OnObjectCreate { });
 			return target;
 		}
 
@@ -100,15 +100,15 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TRPGObject Create<TRPGObject>(Framework engine, ulong instanceID) where TRPGObject : Object, new()
+		public static TObject Create<TObject>(Framework framework, ulong instanceID) where TObject : Object, new()
 		{
-			engine.UniqueIdentifier.Synchronize(instanceID);
+			framework.UniqueIdentifier.Synchronize(instanceID);
 
-			var target = DisposableObject.Create<TRPGObject>();
-			target.Engine = engine;
+			var target = DisposableObject.Create<TObject>();
+			target.Framework = framework;
 			target.InstanceID = instanceID;
-			engine.Messenger.Add(target);
-			engine.Messenger.Send(target, new OnObjectCreate { });
+			framework.Messenger.Add(target);
+			framework.Messenger.Send(target, new OnObjectCreate { });
 			return target;
 		}
 

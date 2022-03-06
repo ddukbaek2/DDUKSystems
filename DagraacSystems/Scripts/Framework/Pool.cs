@@ -58,7 +58,7 @@ namespace DagraacSystems.Framework
 		/// </summary>
 		public static TPool CreatePool<TPool>(Module module) where TPool : Pool, new()
 		{
-			var pool = Object.Create<TPool>(module.Engine);
+			var pool = Object.Create<TPool>(module.Framework);
 			pool._module = module;
 			return pool;
 		}

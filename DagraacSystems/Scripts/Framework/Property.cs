@@ -1,31 +1,31 @@
-﻿using System.Collections.Generic;
+﻿using DagraacSystems.Node;
+using System.Collections.Generic;
 
 
 namespace DagraacSystems.Framework
 {
-	public class Value
-	{
-		public enum eType { Number, Real, Boolean, Text, Array, }
-
-		public eType Type;
-		public int Number;
-		public float Real;
-		public bool Boolean;
-		public string Text;
-
-		public List<Value> Array;
-	}
-
-
 	/// <summary>
 	/// 속성 객체의 기본 틀.
 	/// </summary>
 	public class Property : Object
 	{
+		public class PropertyValue
+		{
+			public enum ValueType { Number, Real, Boolean, Text, Array, }
+			public ValueType Type = ValueType.Number;
+			public int Number = 0;
+			public float Real = 0f;
+			public bool Boolean = false;
+			public string Text = string.Empty;
+			public List<PropertyValue> Array = new List<PropertyValue>();
+		}
+
+
+
 		public string Name;
-		public string Value;
 		public Property Parent;
 		public List<Property> Children;
+		public PropertyValue Value;
 
 		/// <summary>
 		/// 생성됨.
@@ -33,13 +33,13 @@ namespace DagraacSystems.Framework
 		public Property() : base()
 		{
 			Name = string.Empty;
-			Value = string.Empty;
 			Parent = null;
 			Children = new List<Property>();
+			Value = new PropertyValue();
 		}
 
 		/// <summary>
-		/// 파괴됨.
+		/// 해제됨.
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{

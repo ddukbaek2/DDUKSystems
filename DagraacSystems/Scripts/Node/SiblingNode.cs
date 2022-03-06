@@ -26,45 +26,45 @@ namespace DagraacSystems.Node
 	/// <summary>
 	/// 트리형 계층구조에 자료를 보관하는 용도.
 	/// </summary>
-	public class SiblingNode<TValue> : ISiblingNode
+	public class SiblingNode<TValue> : DisposableObject, ISiblingNode
 	{
 		/// <summary>
 		/// 반복자 구현.
 		/// </summary>
 		public class Enumerator : IEnumerator<TValue>
 		{
-			private SiblingNode<TValue> m_Target;
-			private int m_Index;
+			private SiblingNode<TValue> _target;
+			private int _index;
 
-			object IEnumerator.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
-			TValue IEnumerator<TValue>.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
+			object IEnumerator.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
+			TValue IEnumerator<TValue>.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
 
 			public Enumerator(SiblingNode<TValue> target)
 			{
-				m_Target = target;
-				m_Index = 0;
+				_target = target;
+				_index = 0;
 			}
 
 			~Enumerator()
 			{
-				m_Target = null;
-				m_Index = 0;
+				_target = null;
+				_index = 0;
 			}
 
 			public void Dispose()
 			{
-				m_Target = null;
-				m_Index = 0;
+				_target = null;
+				_index = 0;
 			}
 
 			public bool MoveNext()
 			{
-				return ++m_Index < (m_Target != null ? m_Target.Children.Count : 0);
+				return ++_index < (_target != null ? _target.Children.Count : 0);
 			}
 
 			public void Reset()
 			{
-				m_Index = 0;
+				_index = 0;
 			}
 		}
 
@@ -87,6 +87,19 @@ namespace DagraacSystems.Node
 					node = node.Parent;
 				return node;
 			}
+		}
+
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			base.OnDispose(explicitedDispose);
+		}
+
+		public void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
 		}
 
 		protected virtual void OnChangeParent(ISiblingNode parent)

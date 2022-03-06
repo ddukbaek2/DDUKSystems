@@ -9,22 +9,22 @@ namespace DagraacSystems
 	/// </summary>
 	public class ProcessExecutor : DisposableObject
 	{
-		private UniqueIdentifier m_UniqueIdentifier;
-		protected Dictionary<ulong, Process> m_RunningProcesses;
-		protected List<ulong> m_DeleteReservedProcessIDList;
+		private UniqueIdentifier _uniqueIdentifier;
+		protected Dictionary<ulong, Process> _runningProcesses;
+		protected List<ulong> _deleteReservedProcessIDList;
 
 		public ProcessExecutor() : base()
 		{
-			m_UniqueIdentifier = new UniqueIdentifier();
-			m_RunningProcesses = new Dictionary<ulong, Process>();
-			m_DeleteReservedProcessIDList = new List<ulong>();
+			_uniqueIdentifier = new UniqueIdentifier();
+			_runningProcesses = new Dictionary<ulong, Process>();
+			_deleteReservedProcessIDList = new List<ulong>();
 		}
 
 		public ProcessExecutor(UniqueIdentifier uniqueIdentifier) : base()
 		{
-			m_UniqueIdentifier = uniqueIdentifier;
-			m_RunningProcesses = new Dictionary<ulong, Process>();
-			m_DeleteReservedProcessIDList = new List<ulong>();
+			_uniqueIdentifier = uniqueIdentifier;
+			_runningProcesses = new Dictionary<ulong, Process>();
+			_deleteReservedProcessIDList = new List<ulong>();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
@@ -43,9 +43,9 @@ namespace DagraacSystems
 
 		public virtual void Update(float deltaTime)
 		{
-			foreach (var process in m_RunningProcesses)
+			foreach (var process in _runningProcesses)
 			{
-				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+				if (_deleteReservedProcessIDList.Contains(process.Key))
 					continue;
 				if (process.Value.IsPaused())
 					continue;
@@ -64,19 +64,19 @@ namespace DagraacSystems
 		private void ApplyAllDeleteReservedProcesses()
 		{
 			// 삭제예정 수집.
-			foreach (var process in m_RunningProcesses)
+			foreach (var process in _runningProcesses)
 			{
-				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+				if (_deleteReservedProcessIDList.Contains(process.Key))
 					continue;
 
 				if (!process.Value.IsFinished())
 					continue;
 
-				m_DeleteReservedProcessIDList.Add(process.Key);
+				_deleteReservedProcessIDList.Add(process.Key);
 			}
 
 			// 수집된 내용 삭제.
-			foreach (var processID in m_DeleteReservedProcessIDList)
+			foreach (var processID in _deleteReservedProcessIDList)
 			{
 				var process = GetProcess(processID);
 				if (process == null)
@@ -85,11 +85,11 @@ namespace DagraacSystems
 				if (!process.IsFinished())
 					process.Finish();
 
-				m_RunningProcesses.Remove(processID);
-				m_UniqueIdentifier.Free(processID);
+				_runningProcesses.Remove(processID);
+				_uniqueIdentifier.Free(processID);
 			}
 
-			m_DeleteReservedProcessIDList.Clear();
+			_deleteReservedProcessIDList.Clear();
 		}
 
 		public TProcess Start<TProcess>(params object[] args) where TProcess : Process, new()
@@ -113,8 +113,8 @@ namespace DagraacSystems
 				return null;
 
 			// 실행.
-			var processID = m_UniqueIdentifier.Generate();
-			m_RunningProcesses.Add(processID, process);
+			var processID = _uniqueIdentifier.Generate();
+			_runningProcesses.Add(processID, process);
 			process.Reset();
 			process.Execute(this, processID, args);
 
@@ -169,9 +169,9 @@ namespace DagraacSystems
 
 		public void StopAll(bool immeditate = false)
 		{
-			foreach (var process in m_RunningProcesses)
+			foreach (var process in _runningProcesses)
 			{
-				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+				if (_deleteReservedProcessIDList.Contains(process.Key))
 					continue;
 
 				Stop(process.Key, false);
@@ -186,9 +186,9 @@ namespace DagraacSystems
 			if (match == null)
 				return;
 
-			foreach (var process in m_RunningProcesses)
+			foreach (var process in _runningProcesses)
 			{
-				if (m_DeleteReservedProcessIDList.Contains(process.Key))
+				if (_deleteReservedProcessIDList.Contains(process.Key))
 					continue;
 
 				if (!match(process.Value))
@@ -230,7 +230,7 @@ namespace DagraacSystems
 
 		internal Process GetProcess(ulong processID)
 		{
-			if (m_RunningProcesses.TryGetValue(processID, out Process process))
+			if (_runningProcesses.TryGetValue(processID, out Process process))
 			{
 				if (!process.IsFinished())
 					return process;
@@ -241,7 +241,7 @@ namespace DagraacSystems
 		public List<Process> GetRunningProcesses()
 		{
 			var result = new List<Process>();
-			foreach (var process in m_RunningProcesses.Values)
+			foreach (var process in _runningProcesses.Values)
 			{
 				if (!process.IsFinished())
 					result.Add(process);
@@ -252,7 +252,7 @@ namespace DagraacSystems
 
 		public bool IsRunning(ulong processID)
 		{
-			if (m_RunningProcesses.TryGetValue(processID, out Process process))
+			if (_runningProcesses.TryGetValue(processID, out Process process))
 			{
 				if (!process.IsFinished())
 					return true;
@@ -263,7 +263,7 @@ namespace DagraacSystems
 
 		internal bool IsRunning(Process process)
 		{
-			if (m_RunningProcesses.ContainsValue(process))
+			if (_runningProcesses.ContainsValue(process))
 			{
 				if (!process.IsFinished())
 					return true;
