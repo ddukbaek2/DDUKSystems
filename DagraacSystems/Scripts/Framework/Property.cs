@@ -7,7 +7,7 @@ namespace DagraacSystems.Framework
 	/// <summary>
 	/// 속성 객체의 기본 틀.
 	/// </summary>
-	public class Property : Object
+	public class Property : FrameworkObject
 	{
 		public class PropertyValue
 		{

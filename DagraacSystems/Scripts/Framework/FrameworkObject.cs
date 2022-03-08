@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
 	/// </summary>
-	public abstract class Object : DisposableObject, ISubscriber
+	public abstract class FrameworkObject : DisposableObject, ISubscriber
 	{
 		public Framework Framework { private set; get; }
 		public ulong InstanceID { private set; get; }
@@ -12,7 +12,7 @@
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected Object() : base()
+		protected FrameworkObject() : base()
 		{
 			Framework = null;
 			InstanceID = 0ul;
@@ -22,7 +22,7 @@
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected Object(ulong instanceID) : base()
+		protected FrameworkObject(ulong instanceID) : base()
 		{
 			Framework = null;
 			InstanceID = instanceID;
@@ -61,7 +61,7 @@
 			if (IsDisposed)
 				return;
 
-			Object.Dispose(this);
+			FrameworkObject.Dispose(this);
 		}
 
 		/// <summary>
@@ -87,7 +87,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(Framework framework) where TObject : Object, new()
+		public static TObject Create<TObject>(Framework framework) where TObject : FrameworkObject, new()
 		{
 			var target = DisposableObject.Create<TObject>();
 			target.Framework = framework;
@@ -100,7 +100,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(Framework framework, ulong instanceID) where TObject : Object, new()
+		public static TObject Create<TObject>(Framework framework, ulong instanceID) where TObject : FrameworkObject, new()
 		{
 			framework.UniqueIdentifier.Synchronize(instanceID);
 
@@ -115,7 +115,7 @@
 		/// <summary>
 		/// 제거.
 		/// </summary>
-		public static void Dispose(Object target)
+		public static void Dispose(FrameworkObject target)
 		{
 			if (target != null)
 			{

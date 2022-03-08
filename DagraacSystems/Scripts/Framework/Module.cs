@@ -6,7 +6,7 @@ namespace DagraacSystems.Framework
 	/// <summary>
 	/// 모델들을 관리하는 기능 객체의 기본 틀.
 	/// </summary>
-	public class Module : Object
+	public class Module : FrameworkObject
 	{
 		protected List<Pool> _pools;
 
