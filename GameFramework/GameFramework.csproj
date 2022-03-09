@@ -1,19 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DagraacSystems\DagraacSystems.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Scripts\GameFramework\" />
-  </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /Y $(TargetPath) $(SolutionDir)..\..\Projects\Game\Assets\Plugins\" />
   </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DagraacSystems\DagraacSystems.csproj" />
+  </ItemGroup>
 
 </Project>
