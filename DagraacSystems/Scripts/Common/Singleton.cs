@@ -45,7 +45,6 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		/// <returns></returns>
 		public static T Create()
 		{
 			var instance = DisposableObject.Create<T>();

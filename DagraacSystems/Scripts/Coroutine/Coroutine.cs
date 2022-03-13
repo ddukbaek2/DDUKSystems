@@ -13,9 +13,9 @@ namespace DagraacSystems
 		private IEnumerator _enumerator;
 		private IYield _yield;
 		private Condition _condition;
-		private bool _isStarted;
+		private bool _isRunning;
 
-		public bool IsRunning => _isStarted;
+		public bool IsRunning => _isRunning;
 
 		/// <summary>
 		/// 생성됨.
@@ -25,7 +25,7 @@ namespace DagraacSystems
 			_enumerator = null;
 			_yield = null;
 			_condition = Condition.Finished;
-			_isStarted = false;
+			_isRunning = false;
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace DagraacSystems
 			_enumerator = enumerator;
 			_yield = null;
 			_condition = Condition.Continue;
-			_isStarted = true;
+			_isRunning = true;
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace DagraacSystems
 			_enumerator = null;
 			_yield = null;
 			_condition = Condition.Finished;
-			_isStarted = false;
+			_isRunning = false;
 		}
 
 		/// <summary>
@@ -76,6 +76,9 @@ namespace DagraacSystems
 		/// </summary>
 		public void Tick(float tick)
 		{
+			if (!_isRunning)
+				return;
+
 			switch (_condition)
 			{
 				case Condition.Continue:
@@ -83,7 +86,8 @@ namespace DagraacSystems
 						_condition = Continue();
 						if (_condition == Condition.Wait)
 						{
-							_yield.Begin();
+							if (_yield != null)
+								_yield.Begin();
 						}
 
 						break;
@@ -91,9 +95,17 @@ namespace DagraacSystems
 
 				case Condition.Wait:
 					{
-						if (_yield.Stay(tick))
+						if (_yield != null)
 						{
-							_yield.End();
+							if (_yield.Stay(tick))
+							{
+								_yield.End();
+								_yield = null;
+								_condition = Condition.Continue;
+							}
+						}
+						else
+						{
 							_condition = Condition.Continue;
 						}
 
@@ -113,7 +125,7 @@ namespace DagraacSystems
 		/// </summary>
 		private Condition Continue()
 		{
-			if (_enumerator.MoveNext())
+			if (_enumerator != null && _enumerator.MoveNext())
 			{
 				_yield = (IYield)_enumerator.Current;
 				return Condition.Wait;

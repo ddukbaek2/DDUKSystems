@@ -5,18 +5,22 @@
 	/// </summary>
 	public abstract class FrameworkObject : DisposableObject, ISubscriber
 	{
-		public Framework Framework { private set; get; }
-		public ulong InstanceID { private set; get; }
-		public bool IsActive { private set; get; }
+		private bool _isActive;
+		private Framework _framework;
+		private ulong _instanceID;
+
+		public bool IsActive { set => SetActive(value); get => _isActive; }
+		public Framework Framework => _framework;
+		public ulong InstanceID => _instanceID;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		protected FrameworkObject() : base()
 		{
-			Framework = null;
-			InstanceID = 0ul;
-			IsActive = false;
+			_isActive = false;
+			_framework = null;
+			_instanceID = 0ul;
 		}
 
 		/// <summary>
@@ -24,9 +28,9 @@
 		/// </summary>
 		protected FrameworkObject(ulong instanceID) : base()
 		{
-			Framework = null;
-			InstanceID = instanceID;
-			IsActive = false;
+			_isActive = false;
+			_framework = null;
+			_instanceID = instanceID;
 		}
 
 		[Subscribe(typeof(OnObjectCreate))]
@@ -34,8 +38,10 @@
 		{
 			//Logger.Log("[RPGObject] OnCreate()");
 
-			if (InstanceID == 0)
-				InstanceID = Framework.UniqueIdentifier.Generate();
+			if (_instanceID == 0)
+				_instanceID = Framework.UniqueIdentifier.Generate();
+
+			IsActive = true;
 		}
 
 		/// <summary>
@@ -46,9 +52,9 @@
 			//Logger.Log("[RPGObject] OnDispose()");
 
 			Framework.Messenger.Remove(this);
-			Framework.UniqueIdentifier.Free(InstanceID);
-			InstanceID = 0;
-			Framework = null;
+			Framework.UniqueIdentifier.Free(_instanceID);
+			_framework = null;
+			_instanceID = 0;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -65,23 +71,32 @@
 		}
 
 		/// <summary>
-		/// 활성화.
+		/// 활성화됨.
 		/// </summary>
-		public void SetActive(bool active)
+		protected virtual void OnActive()
 		{
-			if (IsActive != active)
-			{
-				IsActive = active;
-			}
 		}
 
 		/// <summary>
-		/// 생성.
+		/// 비활성화됨.
 		/// </summary>
-		[System.Obsolete("")]
-		protected static new T Create<T>() where T : DisposableObject, new()
+		protected virtual void OnDeactive()
 		{
-			throw new System.Exception();
+		}
+
+		/// <summary>
+		/// 활성화.
+		/// </summary>
+		public void SetActive(bool isActive)
+		{
+			if (_isActive != isActive)
+			{
+				_isActive = isActive;
+				if (_isActive)
+					OnActive();
+				else
+					OnDeactive();
+			}
 		}
 
 		/// <summary>
@@ -89,11 +104,7 @@
 		/// </summary>
 		public static TObject Create<TObject>(Framework framework) where TObject : FrameworkObject, new()
 		{
-			var target = DisposableObject.Create<TObject>();
-			target.Framework = framework;
-			framework.Messenger.Add(target);
-			framework.Messenger.Send(target, new OnObjectCreate { });
-			return target;
+			return Create<TObject>(framework, 0);
 		}
 
 
@@ -102,11 +113,17 @@
 		/// </summary>
 		public static TObject Create<TObject>(Framework framework, ulong instanceID) where TObject : FrameworkObject, new()
 		{
+			if (framework == null)
+			{
+				return default;
+			}
+
 			framework.UniqueIdentifier.Synchronize(instanceID);
 
 			var target = DisposableObject.Create<TObject>();
-			target.Framework = framework;
-			target.InstanceID = instanceID;
+			target._framework = framework;
+			target._instanceID = instanceID;
+
 			framework.Messenger.Add(target);
 			framework.Messenger.Send(target, new OnObjectCreate { });
 			return target;

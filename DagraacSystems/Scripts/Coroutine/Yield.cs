@@ -8,9 +8,26 @@ namespace DagraacSystems
 	/// </summary>
 	public interface IYield
 	{
+		/// <summary>
+		/// 대기 시작.
+		/// </summary>
 		void Begin();
-		bool Stay(float tick); // 참이 되면 End() 후 다음 프레임에 재개.
+
+		/// <summary>
+		/// 대기 중.
+		/// 참이 되면 End() 후 다음 프레임에 재개.
+		/// </summary>
+		bool Stay(float tick);
+
+		/// <summary>
+		/// 대기 종료.
+		/// </summary>
 		void End();
+
+		/// <summary>
+		/// 복제.
+		/// </summary>
+		IYield Clone();
 	}
 
 	/// <summary>
@@ -59,6 +76,14 @@ namespace DagraacSystems
 			OnEnd();
 		}
 
+		/// <summary>
+		/// 복제.
+		/// </summary>
+		IYield IYield.Clone()
+		{
+			return (IYield)MemberwiseClone();
+		}
+
 		protected virtual void OnBegin()
 		{
 		}
@@ -95,6 +120,7 @@ namespace DagraacSystems
 			return _condition.Invoke();
 		}
 	}
+
 
 	/// <summary>
 	/// 일정 시간(초)만큼 머무름.

@@ -65,7 +65,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 타입을 기준으로 생성.
 		/// </summary>
-		public static T Create<T>() where T : DisposableObject, new()
+		protected static T Create<T>() where T : DisposableObject, new()
 		{
 			return new T();
 		}
@@ -74,7 +74,7 @@ namespace DagraacSystems
 		/// 타입 인스턴스를 기준으로 생성.
 		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
 		/// </summary>
-		public static DisposableObject Create(Type type)
+		protected static DisposableObject Create(Type type)
 		{
 			return Activator.CreateInstance(type) as DisposableObject;
 		}

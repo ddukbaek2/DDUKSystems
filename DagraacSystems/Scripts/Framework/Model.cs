@@ -22,17 +22,10 @@
 			base.OnDispose(explicitedDispose);
 		}
 
-		protected virtual void OnActive()
-		{
-		}
-
 		protected virtual void OnUpdate(float deltaTime)
 		{
 		}
 
-		protected virtual void OnDeactive()
-		{
-		}
 
 		/// <summary>
 		/// 생성.
