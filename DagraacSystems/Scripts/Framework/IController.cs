@@ -7,7 +7,8 @@
 	{
 		void Push();
 		void Pop();
-		void ChangedModel(Model model);
+		void SetModel(Model model);
+		void UnsetModel(Model model);
 		void UpdateModel();
 		void Tick(float deltaTime);
 	}

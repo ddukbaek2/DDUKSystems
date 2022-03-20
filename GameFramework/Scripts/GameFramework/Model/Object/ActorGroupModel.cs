@@ -4,9 +4,9 @@
 namespace GameFramework
 {
 	/// <summary>
-	/// 발사체 모델.
+	/// 액터 그룹 모델.
 	/// </summary>
-	public class ProjectileModel : Model
+	public class ActorGroupModel : Model
 	{
 	}
 }

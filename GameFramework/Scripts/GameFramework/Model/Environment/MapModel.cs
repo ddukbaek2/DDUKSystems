@@ -3,6 +3,9 @@
 
 namespace GameFramework
 {
+	/// <summary>
+	/// 지역 데이터.
+	/// </summary>
 	public class MapModel : Model
 	{
 		/// <summary>

@@ -10,6 +10,8 @@ namespace GameFramework
 	/// </summary>
 	public class MapModule : Module
 	{
+		Dictionary<long, MapModel> _models;
+
 		/// <summary>
 		/// 로드됨.
 		/// </summary>

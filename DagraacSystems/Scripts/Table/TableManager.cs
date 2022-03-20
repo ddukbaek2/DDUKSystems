@@ -8,13 +8,13 @@ namespace DagraacSystems.Table
 	/// 테이블 매니저 베이스.
 	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
 	/// </summary>
-	public abstract class TableManagerTemplete<TTableManager, TTableID> : Singleton<TTableManager>
-		where TTableManager : TableManagerTemplete<TTableManager, TTableID>, new()
+	public abstract class TableManager<TTableManager, TTableID> : Singleton<TTableManager>
+		where TTableManager : TableManager<TTableManager, TTableID>, new()
 		where TTableID : Enum, new()
 	{
 		private Dictionary<TTableID, TableContainer> _tables;
 
-		public TableManagerTemplete() : base()
+		public TableManager() : base()
 		{
 			_tables = new Dictionary<TTableID, TableContainer>();
 		}

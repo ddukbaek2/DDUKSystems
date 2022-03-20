@@ -26,7 +26,7 @@ namespace DagraacSystemsExample
 	/// <summary>
 	/// 테이블 매니저.
 	/// </summary>
-	public class TableManager : TableManagerTemplete<TableManager, eTableID>
+	public class TableManager : TableManager<TableManager, eTableID>
 	{
 		/// <summary>
 		/// 실제 어플리케이션에서의 파일 로드 구현.

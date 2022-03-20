@@ -4,9 +4,12 @@
 namespace GameFramework
 {
 	/// <summary>
-	/// 발사체 모델.
+	/// 지형 데이터.
 	/// </summary>
-	public class ProjectileModel : Model
+	public class TerreinModel : Model
 	{
+		public void Roadmap()
+		{
+		}
 	}
 }
