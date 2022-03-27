@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.Scripts.UI
+namespace GameFramework.UI
 {
 	class UIPopup
 	{

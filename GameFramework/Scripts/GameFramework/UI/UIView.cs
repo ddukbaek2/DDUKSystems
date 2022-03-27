@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.Scripts.UI
+namespace DagraacSystems.UI
 {
-	class UIItem
+	class UIView
 	{
 	}
 }
