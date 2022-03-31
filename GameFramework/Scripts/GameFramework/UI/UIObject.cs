@@ -1,18 +1,15 @@
-﻿using DagraacSystems;
+﻿using DagraacSystems.Framework;
 
 
 namespace GameFramework.UI
 {
-	public interface IUITarget
+	public class UIObject : FrameworkObject
 	{
-	}
+		public IController Controller;
 
-	public class UIObject : DisposableObject
-	{
-		public IUITarget Target;
-
-		public UIObject()
+		protected override void OnCreate()
 		{
+			base.OnCreate();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)

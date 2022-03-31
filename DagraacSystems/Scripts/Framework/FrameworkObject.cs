@@ -87,9 +87,9 @@
 		/// <summary>
 		/// 활성화.
 		/// </summary>
-		public void SetActive(bool isActive)
+		public void SetActive(bool isActive, bool isForced = false)
 		{
-			if (_isActive != isActive)
+			if (_isActive != isActive || isForced)
 			{
 				_isActive = isActive;
 				if (_isActive)
@@ -106,7 +106,6 @@
 		{
 			return Create<TObject>(framework, 0);
 		}
-
 
 		/// <summary>
 		/// 생성.

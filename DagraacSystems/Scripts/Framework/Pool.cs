@@ -9,7 +9,9 @@ namespace DagraacSystems.Framework
 	public class Pool : FrameworkObject
 	{
 		protected Module _module;
-		protected List<Model> _models;
+		protected Queue<Model> _models;
+
+		public int Count => _models.Count;
 
 		/// <summary>
 		/// 생성됨.
@@ -17,7 +19,7 @@ namespace DagraacSystems.Framework
 		public Pool() : base()
 		{
 			_module = null;
-			_models = new List<Model>();
+			_models = new Queue<Model>();
 		}
 
 		/// <summary>
@@ -33,24 +35,19 @@ namespace DagraacSystems.Framework
 			base.OnDispose(explicitedDispose);
 		}
 
-		/// <summary>
-		/// 추가.
-		/// </summary>
-		public void AddModel(Model model)
+		public void PushModel(Model model)
 		{
+			_models.Enqueue(model);
 		}
 
-		/// <summary>
-		/// 제거.
-		/// </summary>
-		public void RemoveModel(Model model)
+		public Model PopModel()
 		{
-		}
+			if (_models.Count > 0)
+			{
+				return _models.Dequeue();
+			}
 
-		public void FrameMove(float deltaTime)
-		{
-			//foreach (var model in _models)
-			//model.
+			return null;
 		}
 
 		/// <summary>

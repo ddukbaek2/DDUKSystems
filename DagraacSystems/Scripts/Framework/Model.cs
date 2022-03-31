@@ -33,7 +33,7 @@
 		public static TModel CreateModel<TModel>(Pool pool, IController controller) where TModel : Model, new()
 		{
 			var model = FrameworkObject.Create<TModel>(pool.Framework);
-			pool.AddModel(model);
+			pool.PushModel(model);
 			return model;
 		}
 	}

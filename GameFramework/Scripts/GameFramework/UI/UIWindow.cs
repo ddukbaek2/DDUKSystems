@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DagraacSystems.Framework;
 
-namespace DagraacSystems.Scripts.UI
+
+namespace GameFramework.UI
 {
-	public class UIWindow
+	public class UIWindow : UIObject
 	{
 	}
 }
