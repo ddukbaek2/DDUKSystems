@@ -45,7 +45,7 @@ namespace DagraacSystemsExample
 			while (true)
 			{
 				Console.WriteLine($"count={count}");
-				yield return new WaitTime(1f);
+				yield return new WaitForSeconds(1f);
 				++count;
 			}
 		}
@@ -57,7 +57,7 @@ namespace DagraacSystemsExample
 			//m_ProcessExecutor.Update(deltaTime);
 			//DagraacSystems.FSM.FSMManager.Instance.Update(deltaTime);
 
-			_coroutine.Tick(deltaTime);
+			_coroutine.Update(deltaTime);
 		}
 
 		protected override void OnFinish()

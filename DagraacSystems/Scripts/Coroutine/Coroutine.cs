@@ -11,7 +11,7 @@ namespace DagraacSystems
 		private enum Condition { Continue, Wait, Finished, }
 
 		private IEnumerator _enumerator;
-		private IYield _yield;
+		private YieldInstruction _yield;
 		private Condition _condition;
 		private bool _isRunning;
 
@@ -74,7 +74,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 매 프레임마다 갱신.
 		/// </summary>
-		public void Tick(float tick)
+		public void Update(float tick)
 		{
 			if (!_isRunning)
 				return;
@@ -87,7 +87,7 @@ namespace DagraacSystems
 						if (_condition == Condition.Wait)
 						{
 							if (_yield != null)
-								_yield.Begin();
+								_yield.Start();
 						}
 
 						break;
@@ -97,9 +97,9 @@ namespace DagraacSystems
 					{
 						if (_yield != null)
 						{
-							if (_yield.Stay(tick))
+							if (_yield.Update(tick))
 							{
-								_yield.End();
+								_yield.Finish();
 								_yield = null;
 								_condition = Condition.Continue;
 							}
@@ -127,7 +127,7 @@ namespace DagraacSystems
 		{
 			if (_enumerator != null && _enumerator.MoveNext())
 			{
-				_yield = (IYield)_enumerator.Current;
+				_yield = (YieldInstruction)_enumerator.Current;
 				return Condition.Wait;
 			}
 

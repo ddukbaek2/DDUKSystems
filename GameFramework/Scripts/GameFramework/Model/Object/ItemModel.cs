@@ -8,5 +8,8 @@ namespace GameFramework
 	/// </summary>
 	public class ItemModel : Model
 	{
+		public int TableID;
+		public ulong Stack;
+		public ulong MaxStack; 
 	}
 }

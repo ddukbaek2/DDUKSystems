@@ -1,4 +1,5 @@
 ﻿using DagraacSystems.Framework;
+using System.Collections.Generic;
 
 
 namespace GameFramework
@@ -8,6 +9,8 @@ namespace GameFramework
 	/// </summary>
 	public class InventoryModule : Module
 	{
+		public Dictionary<long, long> _items;
+
 		/// <summary>
 		/// 로드됨.
 		/// </summary>

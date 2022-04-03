@@ -4,44 +4,17 @@
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 코루틴의 지연 객체.
+	/// 코루틴 지연 객체.
 	/// </summary>
-	public interface IYield
-	{
-		/// <summary>
-		/// 대기 시작.
-		/// </summary>
-		void Begin();
-
-		/// <summary>
-		/// 대기 중.
-		/// 참이 되면 End() 후 다음 프레임에 재개.
-		/// </summary>
-		bool Stay(float tick);
-
-		/// <summary>
-		/// 대기 종료.
-		/// </summary>
-		void End();
-
-		/// <summary>
-		/// 복제.
-		/// </summary>
-		IYield Clone();
-	}
-
-	/// <summary>
-	/// 실제 지연객체.
-	/// </summary>
-	public class Yield : DisposableObject, IYield
+	public class YieldInstruction : DisposableObject
 	{
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public Yield() : base()
+		public YieldInstruction() : base()
 		{
 		}
-	
+
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
@@ -61,40 +34,56 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
-		void IYield.Begin()
+		/// <summary>
+		/// 지연객체 시작.
+		/// </summary>
+		public void Start()
 		{
-			OnBegin();
+			OnStarted();
 		}
 
-		bool IYield.Stay(float tick)
+		/// <summary>
+		/// 지연객체 갱신.
+		/// </summary>
+		public bool Update(float tick)
 		{
-			return OnStay(tick);
+			return OnUpdated(tick);
 		}
 
-		void IYield.End()
+		/// <summary>
+		/// 지연객체 종료.
+		/// </summary>
+		public void Finish()
 		{
-			OnEnd();
+			OnFinished();
+		}
+
+		/// <summary>
+		/// 갱신.
+		/// </summary>
+		public void Reset()
+		{
 		}
 
 		/// <summary>
 		/// 복제.
 		/// </summary>
-		IYield IYield.Clone()
+		public YieldInstruction Clone()
 		{
-			return (IYield)MemberwiseClone();
+			return (YieldInstruction)MemberwiseClone();
 		}
 
-		protected virtual void OnBegin()
+		protected virtual void OnStarted()
 		{
 		}
 
-		protected virtual bool OnStay(float tick)
+		protected virtual bool OnUpdated(float tick)
 		{
 			// 종료 후 다음프레임에 재개.
 			return true;
 		}
 
-		protected virtual void OnEnd()
+		protected virtual void OnFinished()
 		{
 		}
 	}
@@ -103,7 +92,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 참이 될때까지 머무름.
 	/// </summary>
-	public class WaitUntil : Yield
+	public class WaitUntil : YieldInstruction
 	{
 		private Func<bool> _condition;
 
@@ -112,7 +101,7 @@ namespace DagraacSystems
 			_condition = condition;
 		}
 
-		protected override bool OnStay(float tick)
+		protected override bool OnUpdated(float tick)
 		{
 			if (_condition == null)
 				return false; // 무한 대기.
@@ -125,22 +114,22 @@ namespace DagraacSystems
 	/// <summary>
 	/// 일정 시간(초)만큼 머무름.
 	/// </summary>
-	public class WaitTime : Yield
+	public class WaitForSeconds : YieldInstruction
 	{
 		private float _time;
 		private float _duration;
 
-		public WaitTime(float duration) : base()
+		public WaitForSeconds(float duration) : base()
 		{
 			_duration = duration;
 		}
 
-		protected override void OnBegin()
+		protected override void OnStarted()
 		{
 			_time = 0f;
 		}
 
-		protected override bool OnStay(float tick)
+		protected override bool OnUpdated(float tick)
 		{
 			_time += tick;
 			if (_time < _duration)
