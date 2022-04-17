@@ -6,15 +6,16 @@ using System.Text;
 namespace DagraacSystems.Network
 {
 	/// <summary>
+	/// 변수 버퍼.
 	/// 호출 순서대로 바이트 쌓기.
 	/// </summary>
 	public class VariableBuffer
 	{
-		public static StringBuilder s_Builder = new StringBuilder();
+		public static StringBuilder _builder = new StringBuilder();
 
-		private List<byte> m_Bytes;
-		private byte[] m_ByteArray;
-		private int m_ReadOffset;
+		private List<byte> _bytes;
+		private byte[] _byteArray;
+		private int _readOffset;
 
 		/// <summary>
 		/// 바이트 배열.
@@ -23,10 +24,10 @@ namespace DagraacSystems.Network
 		{
 			get
 			{
-				if (m_ByteArray == null || m_ByteArray.Length != m_Bytes.Count)
-					m_ByteArray = m_Bytes.ToArray();
+				if (_byteArray == null || _byteArray.Length != _bytes.Count)
+					_byteArray = _bytes.ToArray();
 
-				return m_ByteArray;
+				return _byteArray;
 			}
 		}
 
@@ -37,11 +38,11 @@ namespace DagraacSystems.Network
 		{
 			set
 			{
-				m_ReadOffset = Math.Min(Math.Max(value, 0), m_Bytes.Count - 1);
+				_readOffset = Math.Min(Math.Max(value, 0), _bytes.Count - 1);
 			}
 			get
 			{
-				return m_ReadOffset;
+				return _readOffset;
 			}
 		}
 
@@ -50,7 +51,7 @@ namespace DagraacSystems.Network
 		/// </summary>
 		public VariableBuffer()
 		{
-			m_Bytes = new List<byte>();
+			_bytes = new List<byte>();
 			Clear();
 		}
 
@@ -59,16 +60,16 @@ namespace DagraacSystems.Network
 		/// </summary>
 		public VariableBuffer(byte[] bytes) : this()
 		{
-			m_Bytes.AddRange(bytes);
-			m_ByteArray = bytes;
-			m_ReadOffset = 0;
+			_bytes.AddRange(bytes);
+			_byteArray = bytes;
+			_readOffset = 0;
 		}
 
 		public void Clear()
 		{
-			m_Bytes.Clear();
-			m_ByteArray = null;
-			m_ReadOffset = 0;
+			_bytes.Clear();
+			_byteArray = null;
+			_readOffset = 0;
 		}
 
 		public bool Read(out bool value)
@@ -80,7 +81,7 @@ namespace DagraacSystems.Network
 
 		public bool Read(out byte value)
 		{
-			value = m_Bytes[ReadOffset];
+			value = _bytes[ReadOffset];
 			ReadOffset += sizeof(byte);
 			return true;
 		}
@@ -108,7 +109,7 @@ namespace DagraacSystems.Network
 
 		public bool Read(out sbyte value)
 		{
-			value = (sbyte)m_Bytes[ReadOffset];
+			value = (sbyte)_bytes[ReadOffset];
 			ReadOffset += sizeof(sbyte);
 			return true;
 		}
@@ -157,7 +158,7 @@ namespace DagraacSystems.Network
 
 		public bool Read(out string value)
 		{
-			s_Builder.Clear();
+			_builder.Clear();
 			value = string.Empty;
 
 			if (!Read(out int count))
@@ -168,10 +169,10 @@ namespace DagraacSystems.Network
 				if (!Read(out char ch))
 					return false;
 
-				s_Builder.Append(ch);
+				_builder.Append(ch);
 			}
 
-			value = s_Builder.ToString();
+			value = _builder.ToString();
 			return true;
 		}
 
@@ -189,71 +190,71 @@ namespace DagraacSystems.Network
 		public void Write(bool value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(byte value)
 		{
-			m_Bytes.Add(value);
+			_bytes.Add(value);
 		}
 
 		public void Write(ushort value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(uint value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(ulong value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(sbyte value)
 		{
-			m_Bytes.Add((byte)value);
+			_bytes.Add((byte)value);
 		}
 
 		public void Write(char value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(short value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(int value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(long value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(float value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(double value)
 		{
 			byte[] bytes = BitConverter.GetBytes(value);
-			m_Bytes.AddRange(bytes);
+			_bytes.AddRange(bytes);
 		}
 
 		public void Write(string value)

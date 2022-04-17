@@ -51,8 +51,8 @@ namespace DagraacSystems.Framework
 		[Subscribe(typeof(OnModuleUpdate))]
 		protected virtual void OnUpdate(OnModuleUpdate message)
 		{
-			foreach (var pool in _pools)
-				pool.FrameMove(message.DeltaTime);
+			//foreach (var pool in _pools)
+			//	pool.FrameMove(message.DeltaTime);
 		}
 	}
 }
