@@ -5,15 +5,6 @@ using System.Net.Sockets;
 
 namespace DagraacSystems.Network
 {
-	public interface ISession
-	{
-		bool IsConnected { get; }
-
-		void Connect(string ip, ushort port);
-		void Disconnect();
-	}
-
-
 	/// <summary>
 	/// 세션.
 	/// </summary>
@@ -29,23 +20,17 @@ namespace DagraacSystems.Network
 
 
 		private Socket _socket;
-		private string _ip;
-		private int _port;
-		private TCPConnectionState _connectionState;
-
 		private SocketAsyncEventArgs _connectEvent;
 		private SocketAsyncEventArgs _disconnectEvent;
 		private SocketAsyncEventArgs _sendEvent;
 		private SocketAsyncEventArgs _receiveEvent;
+		private TCPConnectionState _connectionState;
 
 		public bool IsConnected => _socket.Connected;
 
 		public TCPSession() : base()
 		{
 			_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			_ip = string.Empty;
-			_port = 0;
-
 			_connectEvent = new SocketAsyncEventArgs();
 			_connectEvent.Completed += (sender, e) =>
 			{
@@ -67,6 +52,7 @@ namespace DagraacSystems.Network
 			};
 
 			_sendEvent = new SocketAsyncEventArgs();
+			_sendEvent.SetBuffer(new byte[4096], 0, 4096);
 			_sendEvent.Completed += (sender, e) =>
 			{
 				if (e.SocketError == SocketError.Success && e.LastOperation == SocketAsyncOperation.Send)
@@ -80,13 +66,16 @@ namespace DagraacSystems.Network
 			};
 
 			_receiveEvent = new SocketAsyncEventArgs();
+			_receiveEvent.SetBuffer(new byte[4096], 0, 4096);
 			_receiveEvent.Completed += (sender, e) =>
 			{
 				if (e.SocketError == SocketError.Success && e.LastOperation == SocketAsyncOperation.Receive)
 				{
 					if (e.BytesTransferred > 0)
 					{
-						OnReceived(e.Buffer);
+						var recvBuffer = new byte[e.BytesTransferred];
+						Buffer.BlockCopy(e.Buffer, 0, recvBuffer, 0, e.BytesTransferred);
+						OnReceived(recvBuffer);
 						Receive();
 					}
 					else
@@ -153,9 +142,7 @@ namespace DagraacSystems.Network
 			if (IsDisposed)
 				return;
 
-			_ip = ip;
-			_port = port;
-			_connectEvent.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(_ip), _port);
+			_connectEvent.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
 			Reconnect();
 		}
@@ -202,24 +189,8 @@ namespace DagraacSystems.Network
 			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
 				return;
 
+			_sendEvent.SetBuffer(data, 0, data.Length);
 			_socket.SendAsync(_sendEvent);
-		}
-
-		/// <summary>
-		/// 기존의 Discconnection 감지는 send, receive 이벤트 없이는 동작하지 않으므로 주기적 체크를 기반으로 한 별도 감지체계 추가.
-		/// </summary>
-		public void CheckDisconnection()
-		{
-			if (IsDisposed)
-				return;
-
-			if (_connectionState != TCPConnectionState.Connected)
-				return;
-
-			if (IsConnected)
-				return;
-
-			SetConnectionState(TCPConnectionState.Disconnected);
 		}
 
 		/// <summary>
