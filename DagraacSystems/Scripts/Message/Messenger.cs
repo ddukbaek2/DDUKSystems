@@ -72,27 +72,27 @@ namespace DagraacSystems
 
 				foreach (var attribute in method.GetCustomAttributes(typeof(SubscribeAttribute)))
 				{
-					var listen = attribute as SubscribeAttribute;
+					var subscribe = attribute as SubscribeAttribute;
 
-					if (listen.Type == null)
+					if (subscribe.Type == null)
 					{
 						//Debug.LogError($"[Messenger] Listen Attribute Parameter is null.");
 						continue;
 					}
 
-					if (listen.Type.IsSubclassOf(typeof(IMessage)))
+					if (subscribe.Type.IsSubclassOf(typeof(IMessage)))
 					{
 						//Debug.LogError($"[Messenger] Not Inherit IMessage Listen={listen.Type.FullName}");
 						continue;
 					}
 
-					if (!subscriberInfo.TryGetValue(listen.Type, out var list))
+					if (!subscriberInfo.TryGetValue(subscribe.Type, out var list))
 					{
 						list = new List<MethodInfo>();
 					}
 
 					list.Add(method);
-					subscriberInfo.Add(listen.Type, list);
+					subscriberInfo.Add(subscribe.Type, list);
 				}
 			}
 
@@ -147,16 +147,23 @@ namespace DagraacSystems
 				return;
 			}
 
-			foreach (var method in methods)
+			try
 			{
-				CurrentMessage = message;
-				var parameters = method.GetParameters();
-				if (parameters.Length > 0)
-					method.Invoke(subscriber, new object[] { message });
-				else
-					method.Invoke(subscriber, null);
+				foreach (var method in methods)
+				{
+					CurrentMessage = message;
+					var parameters = method.GetParameters();
+					if (parameters.Length > 0)
+						method.Invoke(subscriber, new object[] { message }); // 메시지를 인자로 삼는 메서드의 경우.
+					else
+						method.Invoke(subscriber, null); // 메시지와 동일한 이름의 메서드.
+				}
+				CurrentMessage = null;
 			}
-			CurrentMessage = null;
+			catch (Exception e)
+			{
+				//Debug.LogException(e);
+			}
 		}
 
 		/// <summary>

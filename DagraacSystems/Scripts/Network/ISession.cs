@@ -6,5 +6,6 @@
 
 		void Connect(string ip, ushort port);
 		void Disconnect();
+		void Send(byte[] data);
 	}
 }

@@ -25,7 +25,7 @@ namespace DagraacSystems.Network
 		private SocketAsyncEventArgs _sendEvent;
 		private SocketAsyncEventArgs _receiveEvent;
 		private TCPConnectionState _connectionState;
-
+		private RingByteBuffer _receiveBuffer;
 		public bool IsConnected => _socket.Connected;
 
 		public TCPSession() : base()
@@ -73,9 +73,13 @@ namespace DagraacSystems.Network
 				{
 					if (e.BytesTransferred > 0)
 					{
-						var recvBuffer = new byte[e.BytesTransferred];
-						Buffer.BlockCopy(e.Buffer, 0, recvBuffer, 0, e.BytesTransferred);
-						OnReceived(recvBuffer);
+						for (var i = 0; i < e.BytesTransferred; ++i)
+							_receiveBuffer.Write(e.Buffer[i]);
+						if (_receiveBuffer.Count > 0)
+						{
+							OnReceived(_receiveBuffer.Dequeue());
+						}
+
 						Receive();
 					}
 					else
@@ -88,6 +92,8 @@ namespace DagraacSystems.Network
 					SetConnectionState(TCPConnectionState.Disconnected);
 				}
 			};
+
+			_receiveBuffer = DisposableObject.Create<RingByteBuffer>();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
@@ -103,6 +109,12 @@ namespace DagraacSystems.Network
 			_disconnectEvent.Dispose();
 			_sendEvent.Dispose();
 			_receiveEvent.Dispose();
+
+			if (_receiveBuffer != null)
+			{
+				_receiveBuffer.Dispose();
+				_receiveBuffer = null;
+			}
 
 			if (_connectionState != TCPConnectionState.Disconnected)
 			{
@@ -123,10 +135,12 @@ namespace DagraacSystems.Network
 
 		protected virtual void OnConnected(bool isSuccssed)
 		{
+			_receiveBuffer.Clear();
 		}
 
 		protected virtual void OnDisconnected(bool explicitDisconnected)
 		{
+			_receiveBuffer.Clear();
 		}
 
 		protected virtual void OnSended(byte[] data)
