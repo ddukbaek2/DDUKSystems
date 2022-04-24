@@ -25,7 +25,7 @@ namespace DagraacSystems.Network
 		private SocketAsyncEventArgs _sendEvent;
 		private SocketAsyncEventArgs _receiveEvent;
 		private TCPConnectionState _connectionState;
-		private RingByteBuffer _receiveBuffer;
+		private ReceiveBuffer _receiveBuffer;
 		public bool IsConnected => _socket.Connected;
 
 		public TCPSession() : base()
@@ -73,8 +73,7 @@ namespace DagraacSystems.Network
 				{
 					if (e.BytesTransferred > 0)
 					{
-						for (var i = 0; i < e.BytesTransferred; ++i)
-							_receiveBuffer.Write(e.Buffer[i]);
+						_receiveBuffer.Enqueue(e.Buffer, e.BytesTransferred);
 						if (_receiveBuffer.Count > 0)
 						{
 							OnReceived(_receiveBuffer.Dequeue());
@@ -93,7 +92,7 @@ namespace DagraacSystems.Network
 				}
 			};
 
-			_receiveBuffer = DisposableObject.Create<RingByteBuffer>();
+			_receiveBuffer = DisposableObject.Create<ReceiveBuffer>();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
@@ -105,8 +104,18 @@ namespace DagraacSystems.Network
 				_socket = null;
 			}
 
-			_connectEvent.Dispose();
-			_disconnectEvent.Dispose();
+			if (_connectEvent != null)
+			{
+				_connectEvent.Dispose();
+				_connectEvent = null;
+			}
+
+			if (_disconnectEvent != null)
+			{
+				_disconnectEvent.Dispose();
+				_disconnectEvent = null;
+			}
+
 			_sendEvent.Dispose();
 			_receiveEvent.Dispose();
 
@@ -147,7 +156,7 @@ namespace DagraacSystems.Network
 		{
 		}
 
-		protected virtual void OnReceived(byte[] data)
+		protected virtual void OnReceived(ReceiveBuffer.ReceiveData receiveData)
 		{
 		}
 
