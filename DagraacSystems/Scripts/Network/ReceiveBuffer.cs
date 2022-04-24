@@ -113,7 +113,7 @@ namespace DagraacSystems.Network
 				case ReceiveState.Receiving:
 					{
 						// 데이터의 사이즈 이상 적재가 되었다면 데이터를 큐에 쌓고 제거.
-						if (_currentReceiveData.BodySize <= _buffer.Count)
+						if (_buffer.Count >= _currentReceiveData.BodySize)
 						{
 							for (var i = 0; i < _currentReceiveData.BodySize; ++i)
 								_currentReceiveData.Body[i] = _buffer.Dequeue();
