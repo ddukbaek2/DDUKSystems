@@ -16,6 +16,9 @@ namespace DagraacSystems.Network
 	/// </summary>
 	public class ReceiveBuffer : DisposableObject
 	{
+		/// <summary>
+		/// 수신 상태.
+		/// </summary>
 		public enum ReceiveState
 		{
 			Wait, // 대기중.
@@ -23,6 +26,9 @@ namespace DagraacSystems.Network
 		}
 
 
+		/// <summary>
+		/// 수신 데이터.
+		/// </summary>
 		public struct ReceiveData
 		{	
 			public ushort BodySize;
@@ -32,18 +38,27 @@ namespace DagraacSystems.Network
 		}
 
 
+		/// <summary>
+		/// 헤더의 크기 (4byte).
+		/// </summary>
 		public const int HeaderSize = sizeof(ushort) + sizeof(byte) + sizeof(byte);
+
+		/// <summary>
+		/// 바디의 최대 크기 (65536byte).
+		/// </summary>
 		public const int BodyMaxSize = sizeof(ushort);
 
 		private Queue<byte> _buffer;
 		private Queue<ReceiveData> _queue;
-
 		private ReceiveState _state;
 		private byte[] _header;
 		private ReceiveData _currentReceiveData;
 
 		public int Count => _queue.Count;
 
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
 		public ReceiveBuffer()
 		{
 			_buffer = new Queue<byte>(ReceiveBuffer.BodyMaxSize);
@@ -54,6 +69,9 @@ namespace DagraacSystems.Network
 			_currentReceiveData = new ReceiveData();
 		}
 
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			_buffer.Clear();
@@ -65,6 +83,9 @@ namespace DagraacSystems.Network
 			base.OnDispose(explicitedDispose);
 		}
 
+		/// <summary>
+		/// 해제.
+		/// </summary>
 		public void Dispose()
 		{
 			if (IsDisposed)
@@ -74,8 +95,9 @@ namespace DagraacSystems.Network
 		}
 
 		/// <summary>
-		/// 패킷을 수신한다.
-		/// 패킷은 쪼개져서 올수도 있고 더 붙어서 올 수도 있다는 것을 전제한다.
+		/// 바이트를 수신한다.
+		/// 바이트를 쪼개져서 올수도 있고 더 붙어서 올 수도 있다는 것을 전제한다.
+		/// 수신된 바이트를 조립한 수신데이터를 완성하면 큐에 담는다.
 		/// </summary>
 		public void Enqueue(byte[] bytes, int bytesTransferred)
 		{
@@ -99,7 +121,7 @@ namespace DagraacSystems.Network
 							for (var i = 0; i < ReceiveBuffer.HeaderSize; ++i)
 								_header[i] = _buffer.Dequeue();
 
-							// 바디의 경우만 매번 새로 할당한다.
+							// 수신데이터는 valuetype이므로 내부의 바디 배열의 경우만 매번 새로 할당한다.
 							_currentReceiveData.BodySize = BitConverter.ToUInt16(_header, 0);
 							_currentReceiveData.BodyType = _header[2];
 							_currentReceiveData.BodyResult = _header[3];
@@ -132,6 +154,9 @@ namespace DagraacSystems.Network
 			}
 		}
 
+		/// <summary>
+		/// 수신데이터 빼오기.
+		/// </summary>
 		public ReceiveData Dequeue()
 		{
 			return _queue.Dequeue();
