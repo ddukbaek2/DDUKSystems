@@ -73,12 +73,17 @@ namespace DagraacSystems.Network
 				{
 					if (e.BytesTransferred > 0)
 					{
+						// 무지성 수신.
 						_receiveBuffer.Enqueue(e.Buffer, e.BytesTransferred);
+
+						// 완성된 수신데이터가 있다면.
 						if (_receiveBuffer.Count > 0)
 						{
+							// 수신완료 처리.
 							OnReceived(_receiveBuffer.Dequeue());
 						}
 
+						// 다음 수신을 다시 요청.
 						Receive();
 					}
 					else
