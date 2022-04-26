@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Framework
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.

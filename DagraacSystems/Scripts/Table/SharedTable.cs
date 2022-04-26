@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Table
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 공유 테이블.

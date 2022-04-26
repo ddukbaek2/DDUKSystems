@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.FSM
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// FSM 액션.

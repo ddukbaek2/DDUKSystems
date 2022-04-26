@@ -1,6 +1,6 @@
 ﻿namespace DagraacSystemsExample
 {
-	public class IdleState : DagraacSystems.FSM.FSMState
+	public class IdleState : DagraacSystems.FSMState
 	{
 		protected override void OnExecute(params object[] args)
 		{

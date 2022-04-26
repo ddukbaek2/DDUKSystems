@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Table
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 테이블 매니저 베이스.
@@ -35,6 +35,9 @@ namespace DagraacSystems.Table
 		{
 		}
 
+		/// <summary>
+		/// 정합성 체크.
+		/// </summary>
 		protected virtual bool OnCheckIntegrity(TTableID tableID, TableContainer tableContainer)
 		{
 			return true;

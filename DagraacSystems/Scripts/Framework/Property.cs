@@ -1,8 +1,7 @@
-﻿using DagraacSystems.Node;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.Framework
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 속성 객체의 기본 틀.

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 상태가 시작되면 상태에 대한 모든 행동을 순차적으로 실행하고 (옵션에 의해 비동기적 수행 가능) 모든 액션의 수행이 끝나면 상태가 종료된다.

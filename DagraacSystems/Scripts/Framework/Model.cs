@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Framework
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 다수의 데이터로 존재할 수 있는 특정 개체의 기본 틀.

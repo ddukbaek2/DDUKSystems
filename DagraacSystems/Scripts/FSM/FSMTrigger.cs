@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.FSM
+﻿namespace DagraacSystems
 {
 	public class FSMTrigger : FSMInstance
 	{

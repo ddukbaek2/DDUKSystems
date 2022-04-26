@@ -1,7 +1,4 @@
-﻿using System.Collections;
-
-
-namespace DagraacSystems
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 코루틴.

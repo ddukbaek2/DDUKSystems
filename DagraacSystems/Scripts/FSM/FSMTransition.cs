@@ -1,7 +1,7 @@
 ﻿using System;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 상태 전이.

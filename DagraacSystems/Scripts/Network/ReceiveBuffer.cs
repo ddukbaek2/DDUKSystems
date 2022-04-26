@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.Network
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 수신 버퍼.

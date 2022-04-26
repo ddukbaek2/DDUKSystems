@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems
 {
 	/// <summary>
 	/// FSM 처리기.

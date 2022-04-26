@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Network
+﻿namespace DagraacSystems
 {
 	public interface ISession
 	{

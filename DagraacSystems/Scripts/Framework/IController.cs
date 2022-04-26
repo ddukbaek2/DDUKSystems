@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Framework
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 실제 컨텐츠레벨에서 연결될 대상 객체.

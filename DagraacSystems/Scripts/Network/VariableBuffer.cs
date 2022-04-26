@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace DagraacSystems.Network
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 변수 버퍼.

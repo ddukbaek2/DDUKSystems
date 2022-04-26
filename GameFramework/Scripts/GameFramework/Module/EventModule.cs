@@ -1,4 +1,4 @@
-using DagraacSystems.Framework;
+using DagraacSystems;
 
 
 namespace GameFramework

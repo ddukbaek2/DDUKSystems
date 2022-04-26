@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems
 {
 	/// <summary>
 	/// FSM 매니저.

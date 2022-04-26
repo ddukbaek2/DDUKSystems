@@ -1,4 +1,4 @@
-﻿namespace DagraacSystems.Table.Extension
+﻿namespace DagraacSystems
 {
 	public class EnumValue
 	{

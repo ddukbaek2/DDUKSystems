@@ -1,7 +1,7 @@
 ﻿using DagraacSystems;
 
 
-namespace DagraacSystems.FSM
+namespace DagraacSystems
 {
 	/// <summary>
 	/// FSM 오브젝트.

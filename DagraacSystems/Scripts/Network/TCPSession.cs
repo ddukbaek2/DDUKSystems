@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 
 
-namespace DagraacSystems.Network
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 세션.

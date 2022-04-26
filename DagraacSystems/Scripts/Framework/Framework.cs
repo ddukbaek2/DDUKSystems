@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Framework
+namespace DagraacSystems
 {
 	[Serializable]
 	public struct OnObjectCreate : IMessage

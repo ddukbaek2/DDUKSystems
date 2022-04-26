@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace DagraacSystems.Framework
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 모델들을 관리하는 객체.

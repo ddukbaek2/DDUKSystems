@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Table
+namespace DagraacSystems
 {
 	/// <summary>
 	/// 테이블 데이터의 인터페이스.
