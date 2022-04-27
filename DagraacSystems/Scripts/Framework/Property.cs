@@ -141,6 +141,7 @@ namespace DagraacSystems
 
 		public bool IsDirty()
 		{
+			return false;
 		}
 	}
 }

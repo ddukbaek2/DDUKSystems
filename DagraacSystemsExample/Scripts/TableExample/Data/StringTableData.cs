@@ -1,7 +1,4 @@
-using DagraacSystems.Table.Extension;
-
-
-public class StringTableData : DagraacSystems.Table.ITableData
+public class StringTableData : DagraacSystems.ITableData
 {
 	/// <summary>고유식별자</summary>
 	public int ID;

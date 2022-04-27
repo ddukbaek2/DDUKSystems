@@ -57,7 +57,7 @@ namespace DagraacSystemsExample
 			//m_ProcessExecutor.Update(deltaTime);
 			//DagraacSystems.FSMManager.Instance.Update(deltaTime);
 
-			_coroutine.Update(deltaTime);
+			_coroutine.Tick(deltaTime);
 		}
 
 		protected override void OnFinish()

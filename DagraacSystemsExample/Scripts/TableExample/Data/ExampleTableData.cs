@@ -1,6 +1,3 @@
-using DagraacSystems;
-
-
 public class ExampleTableData : DagraacSystems.ITableData
 {
 	/// <summary>고유식별자</summary>

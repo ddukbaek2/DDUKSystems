@@ -74,7 +74,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 매 프레임마다 갱신.
 		/// </summary>
-		public void Update(float tick)
+		public void Tick(float tick)
 		{
 			if (!_isRunning)
 				return;
