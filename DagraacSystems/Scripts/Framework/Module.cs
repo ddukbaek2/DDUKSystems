@@ -4,18 +4,15 @@
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 모델들을 관리하는 기능 객체의 기본 틀.
+	/// 모델들을 관리하는 기능 객체의 기본 틀 (=시스템).
 	/// </summary>
 	public class Module : FrameworkObject
 	{
-		protected List<Pool> _pools;
-
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		public Module() : base()
 		{
-			_pools = new List<Pool>();
 		}
 
 		/// <summary>
@@ -23,9 +20,6 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			_pools.Clear();
-			_pools = null;
-
 			base.OnDispose(explicitedDispose);
 		}
 
@@ -51,8 +45,6 @@ namespace DagraacSystems
 		[Subscribe(typeof(OnModuleUpdate))]
 		protected virtual void OnUpdate(OnModuleUpdate message)
 		{
-			//foreach (var pool in _pools)
-			//	pool.FrameMove(message.DeltaTime);
 		}
 	}
 }

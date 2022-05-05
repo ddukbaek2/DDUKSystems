@@ -4,22 +4,20 @@
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 모델들을 관리하는 객체.
+	/// 프레임워크 오브젝트들을 관리하는 객체.
 	/// </summary>
 	public class Pool : FrameworkObject
 	{
-		protected Module _module;
-		protected Queue<Model> _models;
+		protected Queue<FrameworkObject> _objects;
 
-		public int Count => _models.Count;
+		public int Count => _objects.Count;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		public Pool() : base()
 		{
-			_module = null;
-			_models = new Queue<Model>();
+			_objects = new Queue<FrameworkObject>();
 		}
 
 		/// <summary>
@@ -27,37 +25,31 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			_module = null;
-
-			_models.Clear();
-			_models = null;
+			_objects.Clear();
+			_objects = null;
 
 			base.OnDispose(explicitedDispose);
 		}
 
-		public void PushModel(Model model)
+		/// <summary>
+		/// 집어넣음.
+		/// </summary>
+		public void Push(FrameworkObject obj)
 		{
-			_models.Enqueue(model);
-		}
-
-		public Model PopModel()
-		{
-			if (_models.Count > 0)
-			{
-				return _models.Dequeue();
-			}
-
-			return null;
+			_objects.Enqueue(obj);
 		}
 
 		/// <summary>
-		/// 생성.
+		/// 꺼냄.
 		/// </summary>
-		public static TPool CreatePool<TPool>(Module module) where TPool : Pool, new()
+		public T Pop<T>() where T : FrameworkObject
 		{
-			var pool = FrameworkObject.Create<TPool>(module.Framework);
-			pool._module = module;
-			return pool;
+			if (_objects.Count > 0)
+			{
+				return _objects.Dequeue() as T;
+			}
+
+			return null;
 		}
 	}
 }

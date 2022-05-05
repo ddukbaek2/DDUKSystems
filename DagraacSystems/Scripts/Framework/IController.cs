@@ -10,6 +10,6 @@
 		void SetModel(Model model);
 		void UnsetModel(Model model);
 		void UpdateModel();
-		void Tick(float deltaTime);
+		void Update(float deltaTime);
 	}
 }

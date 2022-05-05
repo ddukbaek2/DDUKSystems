@@ -5,7 +5,6 @@
 	/// </summary>
 	public class Model : FrameworkObject
 	{
-		protected Pool _pool;
 		protected IController _controller;
 
 		/// <summary>
@@ -33,7 +32,7 @@
 		public static TModel CreateModel<TModel>(Pool pool, IController controller) where TModel : Model, new()
 		{
 			var model = FrameworkObject.Create<TModel>(pool.Framework);
-			pool.PushModel(model);
+			pool.Push(model);
 			return model;
 		}
 	}

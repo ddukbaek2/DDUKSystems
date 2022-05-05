@@ -9,8 +9,19 @@
 		private Framework _framework;
 		private ulong _instanceID;
 
+		/// <summary>
+		/// 활성화 여부 (기본값: 꺼짐).
+		/// </summary>
 		public bool IsActive { set => SetActive(value); get => _isActive; }
+
+		/// <summary>
+		/// 참조된 프레임워크.
+		/// </summary>
 		public Framework Framework => _framework;
+
+		/// <summary>
+		/// 고유식별자.
+		/// </summary>
 		public ulong InstanceID => _instanceID;
 
 		/// <summary>
@@ -45,7 +56,7 @@
 		}
 
 		/// <summary>
-		/// 파괴됨.
+		/// 해제됨.
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
@@ -60,7 +71,7 @@
 		}
 
 		/// <summary>
-		/// 파괴.
+		/// 해제.
 		/// </summary>
 		public virtual void Dispose()
 		{

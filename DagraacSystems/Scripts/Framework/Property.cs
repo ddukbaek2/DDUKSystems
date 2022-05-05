@@ -134,9 +134,16 @@ namespace DagraacSystems
 			base.OnDispose(explicitedDispose);
 		}
 
-		public static void SaveProperty(Property property)
+		public static bool LoadProperty(byte[] bytes, out Property property)
 		{
+			property = new Property();
+			return false;
+		}
 
+		public static bool SaveProperty(Property property, out byte[] bytes)
+		{
+			bytes = new byte[0];
+			return false;
 		}
 
 		public bool IsDirty()
