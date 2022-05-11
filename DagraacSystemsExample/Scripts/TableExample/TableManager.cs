@@ -99,7 +99,7 @@ namespace DagraacSystemsExample
 					var exampleTableData = tableContainer.Get<int, ExampleTableData>(1);
 					if (exampleTableData.Mob_Speed < 0)
 					{
-						LogManager.Instance.Print($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
+						Debug.Instance.Print($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
 						return false;
 					}
 

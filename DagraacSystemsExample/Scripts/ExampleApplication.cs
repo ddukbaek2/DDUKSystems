@@ -22,7 +22,7 @@ namespace DagraacSystemsExample
 			Console.WriteLine("DagraacSystems Example!");
 
 			// 로그.
-			LogManager.Instance.AddLogger(new ConsoleLogger());
+			Debug.Instance.AddLogger(new ConsoleLogger());
 
 			//// 테이블 로드.
 			//TableManager.Instance.LoadAll();

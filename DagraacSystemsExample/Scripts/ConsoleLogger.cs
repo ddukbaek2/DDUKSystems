@@ -7,7 +7,7 @@ namespace DagraacSystemsExample
 	{
 		public Action<string> OnWrite { set; get; }
 
-		public void Write(string text)
+		public void Log(string text)
 		{
 			Console.WriteLine(text);
 		}

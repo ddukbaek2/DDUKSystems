@@ -42,7 +42,7 @@ namespace DagraacSystemsExample
 
 		private void OnTest()
 		{
-			LogManager.Instance.Print("OnCreate()");
+			Debug.Instance.Print("OnCreate()");
 		}
 
 		void IFSMTarget.OnChangeState(FSMMachine machine, FSMTransition transition, FSMState state)
