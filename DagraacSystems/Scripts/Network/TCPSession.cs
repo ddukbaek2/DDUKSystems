@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 세션.
 	/// </summary>
-	public class TCPSession : DisposableObject
+	public class TCPSession : DisposableObject, ISession
 	{
 		public enum TCPConnectionState
 		{
@@ -190,7 +190,7 @@ namespace DagraacSystems
 			_socket.ConnectAsync(_connectEvent);
 		}
 
-		public void Disconnect(bool forced)
+		public void Disconnect()
 		{
 			if (IsDisposed)
 				return;

@@ -1,6 +1,5 @@
 ﻿using System;
 using DagraacSystems;
-using DagraacSystems.Log;
 
 
 namespace DagraacSystemsExample
@@ -42,7 +41,7 @@ namespace DagraacSystemsExample
 
 		private void OnTest()
 		{
-			Debug.Instance.Print("OnCreate()");
+			Debug.Log("OnCreate()");
 		}
 
 		void IFSMTarget.OnChangeState(FSMMachine machine, FSMTransition transition, FSMState state)

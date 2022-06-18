@@ -1,5 +1,4 @@
 ﻿using DagraacSystems;
-using DagraacSystems.Log;
 using System;
 using System.IO;
 using System.Text.Json;
@@ -99,7 +98,7 @@ namespace DagraacSystemsExample
 					var exampleTableData = tableContainer.Get<int, ExampleTableData>(1);
 					if (exampleTableData.Mob_Speed < 0)
 					{
-						Debug.Instance.Print($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
+						Debug.Log($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
 						return false;
 					}
 

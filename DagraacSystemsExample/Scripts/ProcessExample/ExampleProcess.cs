@@ -1,5 +1,4 @@
 ﻿using DagraacSystems;
-using DagraacSystems.Log;
 
 
 namespace DagraacSystemsExample
@@ -18,13 +17,13 @@ namespace DagraacSystemsExample
 
 			m_Count = 0;
 			m_AccTime = 0f;
-			Debug.Instance.Print("OnReset()");
+			Debug.Log("OnReset()");
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
 			base.OnExecute(args);
-			Debug.Instance.Print("OnExecute()");
+			Debug.Log("OnExecute()");
 		}
 
 		protected override void OnUpdate(float deltaTime)
@@ -36,7 +35,7 @@ namespace DagraacSystemsExample
 			{
 				m_AccTime = 0f;
 				++m_Count;
-				Debug.Instance.Print($"{m_Count}");
+				Debug.Log($"{m_Count}");
 			}
 
 			if (m_Count >= 5)
@@ -48,7 +47,7 @@ namespace DagraacSystemsExample
 		protected override void OnFinish()
 		{
 			base.OnFinish();
-			Debug.Instance.Print("OnFinish()");
+			Debug.Log("OnFinish()");
 		}
 	}
 }

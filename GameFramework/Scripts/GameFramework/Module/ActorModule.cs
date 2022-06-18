@@ -26,8 +26,8 @@ namespace GameFramework
 		{
 			base.OnLoad(message);
 
-			_pools.Add(Pool.CreatePool<ActorPool>(this));
-			_pools.Add(Pool.CreatePool<ProjectilePool>(this));
+			//_pools.Add(Pool.CreatePool<ActorPool>(this));
+			//_pools.Add(Pool.CreatePool<ProjectilePool>(this));
 		}
 
 		/// <summary>

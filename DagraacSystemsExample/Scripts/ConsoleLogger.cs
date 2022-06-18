@@ -3,7 +3,7 @@
 
 namespace DagraacSystemsExample
 {
-	public class ConsoleLogger : DagraacSystems.Log.ILogger
+	public class ConsoleLogger : DagraacSystems.ILogger
 	{
 		public Action<string> OnWrite { set; get; }
 

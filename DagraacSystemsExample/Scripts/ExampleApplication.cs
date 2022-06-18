@@ -1,5 +1,4 @@
 ﻿using DagraacSystems;
-using DagraacSystems.Log;
 using System;
 using System.Collections;
 
@@ -22,7 +21,7 @@ namespace DagraacSystemsExample
 			Console.WriteLine("DagraacSystems Example!");
 
 			// 로그.
-			Debug.Instance.AddLogger(new ConsoleLogger());
+			Debug.AddLogger(new ConsoleLogger());
 
 			//// 테이블 로드.
 			//TableManager.Instance.LoadAll();
