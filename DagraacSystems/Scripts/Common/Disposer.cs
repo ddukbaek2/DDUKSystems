@@ -1,7 +1,4 @@
-﻿using System;
-
-
-namespace DagraacSystems
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 해제가능한 오브젝트의 해제 대행자.
