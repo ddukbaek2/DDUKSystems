@@ -10,8 +10,8 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ExampleApplication : ConsoleApplication<ExampleApplication>
 	{
-		private ProcessExecutor m_ProcessExecutor;
-		private MyObject m_ExampleObject;
+		private ProcessExecutor _processExecutor;
+		private MyObject _exampleObject;
 		private Coroutine _coroutine;
 
 		protected override void OnStart()

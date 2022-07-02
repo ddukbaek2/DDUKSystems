@@ -8,15 +8,15 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ExampleProcess : Process
 	{
-		private int m_Count;
-		private float m_AccTime;
+		private int _count;
+		private float _accTime;
 
 		protected override void OnReset()
 		{
 			base.OnReset();
 
-			m_Count = 0;
-			m_AccTime = 0f;
+			_count = 0;
+			_accTime = 0f;
 			Debug.Log("OnReset()");
 		}
 
@@ -30,15 +30,15 @@ namespace DagraacSystemsExample
 		{
 			base.OnUpdate(deltaTime);
 
-			m_AccTime += deltaTime;
-			if (m_AccTime >= 1.0f)
+			_accTime += deltaTime;
+			if (_accTime >= 1.0f)
 			{
-				m_AccTime = 0f;
-				++m_Count;
-				Debug.Log($"{m_Count}");
+				_accTime = 0f;
+				++_count;
+				Debug.Log($"{_count}");
 			}
 
-			if (m_Count >= 5)
+			if (_count >= 5)
 			{
 				Finish();
 			}

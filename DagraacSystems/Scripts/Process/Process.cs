@@ -9,16 +9,16 @@
 		private bool _isFinished;
 		private bool _isPaused;
 
-		private ProcessExecutor m_ProcessExecutor;
-		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
+		private ProcessExecutor _processExecutor;
+		private ulong _processID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
 		public Process() : base()
 		{
 			_isStarted = false;
 			_isFinished = false;
 			_isPaused = false;
-			m_ProcessExecutor = null;
-			m_ProcessID = 0;
+			_processExecutor = null;
+			_processID = 0;
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
@@ -31,8 +31,8 @@
 			_isStarted = false;
 			_isFinished = false;
 			_isPaused = false;
-			m_ProcessExecutor = null;
-			m_ProcessID = 0;
+			_processExecutor = null;
+			_processID = 0;
 
 			OnReset();
 		}
@@ -41,8 +41,8 @@
 		{
 			_isStarted = true;
 			_isFinished = false;
-			m_ProcessExecutor = processExecutor;
-			m_ProcessID = processID;
+			_processExecutor = processExecutor;
+			_processID = processID;
 
 			OnExecute(args);
 		}
@@ -122,12 +122,12 @@
 
 		public ProcessExecutor GetProcessExecutor()
 		{
-			return m_ProcessExecutor;
+			return _processExecutor;
 		}
 
 		public ulong GetProcessID()
 		{
-			return m_ProcessID;
+			return _processID;
 		}
 	}
 }

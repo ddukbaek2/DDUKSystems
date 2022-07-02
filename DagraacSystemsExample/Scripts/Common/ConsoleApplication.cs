@@ -10,11 +10,11 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ConsoleApplication<T> : DisposableObject where T : ConsoleApplication<T>, new()
 	{
-		private static readonly Lazy<T> m_Instance = new Lazy<T>(() => new T(), true); // thread-safe.
-		public static T Instance => m_Instance.Value;
+		private static readonly Lazy<T> _instance = new Lazy<T>(() => new T(), true); // thread-safe.
+		public static T Instance => _instance.Value;
 
-		private bool m_IsQuitApplication = false;
-		private long m_PrevTick = 0;
+		private bool _isQuitApplication = false;
+		private long _prevTick = 0;
 
 		/// <summary>
 		/// 시작.
@@ -35,7 +35,7 @@ namespace DagraacSystemsExample
 				Thread.Sleep(1);
 			}
 
-			m_IsQuitApplication = true;
+			_isQuitApplication = true;
 			thread.Join();
 
 			OnFinish();
@@ -43,16 +43,16 @@ namespace DagraacSystemsExample
 
 		private void Update()
 		{
-			while (!m_IsQuitApplication)
+			while (!_isQuitApplication)
 			{
 				var currentTick = DateTime.Now.Ticks;
-				if (m_PrevTick > 0)
+				if (_prevTick > 0)
 				{
-					var time = TimeSpan.FromTicks(currentTick - m_PrevTick);
+					var time = TimeSpan.FromTicks(currentTick - _prevTick);
 					var deltaTime = (float)time.TotalMilliseconds * 0.001f;
 					OnUpdate(deltaTime);
 				}
-				m_PrevTick = currentTick;
+				_prevTick = currentTick;
 
 				Thread.Sleep(1);
 			}

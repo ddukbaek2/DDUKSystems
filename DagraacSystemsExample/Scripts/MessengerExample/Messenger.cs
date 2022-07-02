@@ -10,7 +10,7 @@ namespace DagraacSystemsExample
 
 	public class Messenger : DagraacSystems.Messenger
 	{
-		private static readonly Lazy<Messenger> m_Instance = new Lazy<Messenger>(() => new Messenger(), true); // thread-safe.
-		public static Messenger Instance => m_Instance.Value;
+		private static readonly Lazy<Messenger> _instance = new Lazy<Messenger>(() => new Messenger(), true); // thread-safe.
+		public static Messenger Instance => _instance.Value;
 	}
 }

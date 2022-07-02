@@ -8,9 +8,9 @@ namespace DagraacSystems
 	/// </summary>
 	public class FSMTransition : FSMInstance
 	{
-		private FSMState m_Source;
-		private FSMState m_Destination;
-		private Func<bool> m_Predicate;
+		private FSMState _source;
+		private FSMState _destination;
+		private Func<bool> _predicate;
 
 		/// <summary>
 		/// 생성됨.
@@ -19,16 +19,16 @@ namespace DagraacSystems
 		{
 			base.OnCreate(args);
 
-			m_Source = args[0] as FSMState;
-			m_Destination = args[1] as FSMState;
-			m_Predicate = args[2] as Func<bool>;
+			_source = args[0] as FSMState;
+			_destination = args[1] as FSMState;
+			_predicate = args[2] as Func<bool>;
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
 			base.OnExecute(args);
 
-			m_Source.Target.RunState(m_Destination);
+			_source.Target.RunState(_destination);
 			Finish();
 		}
 
@@ -37,7 +37,7 @@ namespace DagraacSystems
 		/// </summary>
 		public virtual bool IsContidition()
 		{
-			return m_Predicate?.Invoke() ?? false;
+			return _predicate?.Invoke() ?? false;
 		}
 
 		/// <summary>
@@ -45,7 +45,7 @@ namespace DagraacSystems
 		/// </summary>
 		public FSMState GetSourceState()
 		{
-			return m_Source;
+			return _source;
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace DagraacSystems
 		/// </summary>
 		public FSMState GetDestinationState()
 		{
-			return m_Destination;
+			return _destination;
 		}
 	}
 }

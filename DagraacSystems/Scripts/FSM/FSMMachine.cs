@@ -64,11 +64,11 @@ namespace DagraacSystems
 
 			if (IsRunningState(state))
 			{
-				FSMManager.Instance.m_ProcessExecutor.Stop(state.GetProcessID(), true);
+				FSMManager.Instance._processExecutor.Stop(state.GetProcessID(), true);
 				return;
 			}
 
-			FSMManager.Instance.m_ProcessExecutor.Start(state);
+			FSMManager.Instance._processExecutor.Start(state);
 		}
 
 		public void SuspendState(FSMState state)
@@ -79,7 +79,7 @@ namespace DagraacSystems
 			if (!IsRunningState(state))
 				return;
 
-			FSMManager.Instance.m_ProcessExecutor.Stop(state.GetProcessID());
+			FSMManager.Instance._processExecutor.Stop(state.GetProcessID());
 		}
 
 		public TFSMState AddState<TFSMState>(string name) where TFSMState : FSMState, new()

@@ -11,17 +11,17 @@ namespace DagraacSystems
 	/// </summary>
 	public class FSMManager : Singleton<FSMManager>
 	{
-		private List<FSMMachine> m_Machines;
-		internal ProcessExecutor m_ProcessExecutor;
-		internal UniqueIdentifier m_UniqueIdentifier;
+		private List<FSMMachine> _machines;
+		internal ProcessExecutor _processExecutor;
+		internal UniqueIdentifier _uniqueIdentifier;
 
 		protected override void OnCreate()
 		{
 			base.OnCreate();
 
-			m_Machines = new List<FSMMachine>();
-			m_UniqueIdentifier = new UniqueIdentifier(0, 1000000000, 9999999999);
-			m_ProcessExecutor = new ProcessExecutor(m_UniqueIdentifier);
+			_machines = new List<FSMMachine>();
+			_uniqueIdentifier = new UniqueIdentifier(0, 1000000000, 9999999999);
+			_processExecutor = new ProcessExecutor(_uniqueIdentifier);
 		}
 
 		protected override void OnDispose(bool disposing)
@@ -30,21 +30,21 @@ namespace DagraacSystems
 
 			if (disposing)
 			{
-				m_ProcessExecutor.Dispose();
-				m_ProcessExecutor = null;
+				_processExecutor.Dispose();
+				_processExecutor = null;
 			}
 		}
 
 		public void Update(float deltaTime)
 		{
-			m_ProcessExecutor.Update(deltaTime);
+			_processExecutor.Update(deltaTime);
 		}
 
 		public TFSMMachine AddMachine<TFSMMachine>(string name, IFSMTarget target) where TFSMMachine : FSMMachine, new()
 		{
 			var machine = FSMInstance.CreateInstance<TFSMMachine>(name);
 			machine.Target = target;
-			m_ProcessExecutor.Start(machine);
+			_processExecutor.Start(machine);
 			return machine;
 		}
 
@@ -54,13 +54,13 @@ namespace DagraacSystems
 				return;
 
 			FSMInstance.DestroyInstance(machine);
-			m_ProcessExecutor.Stop(machine.GetProcessID());
+			_processExecutor.Stop(machine.GetProcessID());
 		}
 
 		public void RemoveAllMachines()
 		{
-			while (m_Machines.Count > 0)
-				RemoveMachine(m_Machines[0]);
+			while (_machines.Count > 0)
+				RemoveMachine(_machines[0]);
 		}
 	}
 }

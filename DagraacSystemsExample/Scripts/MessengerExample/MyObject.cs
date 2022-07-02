@@ -18,20 +18,20 @@ namespace DagraacSystemsExample
 
 	public class MyObject : IFSMTarget
 	{
-		private FSMMachine m_FSM { set; get; }
+		private FSMMachine _fsm { set; get; }
 
 		public MyObject()
 		{
 			//Messenger.Instance.Add<NotificationType.OnTest>(OnTest);
 
-			m_FSM = FSMManager.Instance.AddMachine<FSMMachine>("FSM_MACHINE", this);
+			_fsm = FSMManager.Instance.AddMachine<FSMMachine>("FSM_MACHINE", this);
 
 
 			var state = default(FSMState);
-			state = m_FSM.AddState<FSMState>("FSM_STATE_IDLE");
+			state = _fsm.AddState<FSMState>("FSM_STATE_IDLE");
 			state.AddAction<FSMSimpleAction>(new Action(() => { Console.WriteLine("FSMSimpleAction();"); }));
 
-			m_FSM.RunState("FSM_STATE_IDLE");
+			_fsm.RunState("FSM_STATE_IDLE");
 		}
 
 		~MyObject()

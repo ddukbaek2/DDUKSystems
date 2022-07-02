@@ -23,12 +23,12 @@ namespace DagraacSystems
 
 		protected virtual void OnCreate(params object[] args)
 		{
-			_instanceID = FSMManager.Instance.m_UniqueIdentifier.Generate();
+			_instanceID = FSMManager.Instance._uniqueIdentifier.Generate();
 		}
 
 		protected virtual void OnDestroy()
 		{
-			FSMManager.Instance.m_UniqueIdentifier.Free(_instanceID);
+			FSMManager.Instance._uniqueIdentifier.Free(_instanceID);
 			_instanceID = 0;
 		}
 
@@ -70,7 +70,7 @@ namespace DagraacSystems
 			if (instance == null)
 				return;
 
-			if (!FSMManager.Instance.m_UniqueIdentifier.Contains(instance.GetInstanceID()))
+			if (!FSMManager.Instance._uniqueIdentifier.Contains(instance.GetInstanceID()))
 				return;
 
 			var processExecutor = instance.GetProcessExecutor();
