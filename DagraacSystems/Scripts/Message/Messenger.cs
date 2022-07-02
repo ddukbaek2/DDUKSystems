@@ -187,7 +187,7 @@ namespace DagraacSystems
 			}
 			catch (Exception e)
 			{
-				//Debug.LogException(e);
+				Debug.LogException(e);
 			}
 		}
 
@@ -221,7 +221,7 @@ namespace DagraacSystems
 				}
 				catch (Exception e)
 				{
-					//Debug.LogException(e);
+					Debug.LogException(e);
 				}
 			}
 

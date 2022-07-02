@@ -1,15 +1,29 @@
-﻿using System;
+﻿using DagraacSystems;
+using System;
 
 
 namespace DagraacSystemsExample
 {
-	public class ConsoleLogger : DagraacSystems.ILogger
+	public class ConsoleLogger : ILogger
 	{
-		public Action<string> OnWrite { set; get; }
-
-		public void Log(string text)
+		void ILogger.Log(string text)
 		{
 			Console.WriteLine(text);
+		}
+
+		void ILogger.LogWarning(string text)
+		{
+			Console.WriteLine(text);
+		}
+
+		void ILogger.LogError(string text)
+		{
+			Console.WriteLine(text);
+		}
+
+		void ILogger.LogException(Exception e)
+		{
+			Console.WriteLine(e.ToString());
 		}
 	}
 }

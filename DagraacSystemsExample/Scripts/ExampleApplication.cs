@@ -20,7 +20,7 @@ namespace DagraacSystemsExample
 
 			Console.WriteLine("DagraacSystems Example!");
 
-			// 로그.
+			// 로거 등록.
 			Debug.AddLogger(new ConsoleLogger());
 
 			//// 테이블 로드.
