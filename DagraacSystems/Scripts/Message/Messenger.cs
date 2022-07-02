@@ -16,6 +16,11 @@ namespace DagraacSystems
 		private Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>> _subscriberInfos;
 
 		/// <summary>
+		/// 송신자.
+		/// </summary>
+		public object Sender { private set; get; }
+
+		/// <summary>
 		/// 현재 적용중인 메시지.
 		/// </summary>
 		public IMessage CurrentMessage { private set; get; }
@@ -120,6 +125,14 @@ namespace DagraacSystems
 		/// </summary>
 		public void Send(ISubscriber subscriber, IMessage message)
 		{
+			Send(null, subscriber, message);
+		}
+
+		/// <summary>
+		/// 특정 리스너에게 통지.
+		/// </summary>
+		public void Send(object sender, ISubscriber subscriber, IMessage message)
+		{
 			if (subscriber == null)
 			{
 				//Debug.LogError($"[Messenger] listener is null.");
@@ -151,13 +164,25 @@ namespace DagraacSystems
 			{
 				foreach (var method in methods)
 				{
+					Sender = sender;
 					CurrentMessage = message;
+
 					var parameters = method.GetParameters();
-					if (parameters.Length > 0)
-						method.Invoke(subscriber, new object[] { message }); // 메시지를 인자로 삼는 메서드의 경우.
-					else
-						method.Invoke(subscriber, null); // 메시지와 동일한 이름의 메서드.
+					switch (parameters.Length)
+					{
+						case 2:
+							method.Invoke(subscriber, new object[] { sender, message }); // 메시지를 인자로 삼는 메서드의 경우.
+							break;
+						case 1:
+							method.Invoke(subscriber, new object[] { message }); // 메시지를 인자로 삼는 메서드의 경우.
+							break;
+						case 0:
+							method.Invoke(subscriber, null); // 메시지와 동일한 이름의 메서드.
+							break;
+					}
 				}
+
+				Sender = null;
 				CurrentMessage = null;
 			}
 			catch (Exception e)
@@ -171,11 +196,21 @@ namespace DagraacSystems
 		/// </summary>
 		public void Notify(IMessage message)
 		{
+			Notify(null, message);
+		}
+
+		/// <summary>
+		/// 전체 리스너에게 통지.
+		/// </summary>
+		public void Notify(object sender, IMessage message)
+		{
 			if (message == null)
 			{
 				//Debug.LogError($"[Messenger] message is null.");
 				return;
 			}
+
+			Sender = sender;
 
 			foreach (var subscriber in _subscriberInfos.Keys)
 			{
@@ -190,6 +225,7 @@ namespace DagraacSystems
 				}
 			}
 
+			Sender = null;
 			CurrentMessage = null;
 		}
 	}

@@ -189,7 +189,7 @@ namespace DagraacSystems
 
 		public void Write(bool value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
@@ -200,19 +200,19 @@ namespace DagraacSystems
 
 		public void Write(ushort value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(uint value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(ulong value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
@@ -223,37 +223,37 @@ namespace DagraacSystems
 
 		public void Write(char value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(short value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(int value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(long value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(float value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
 		public void Write(double value)
 		{
-			byte[] bytes = BitConverter.GetBytes(value);
+			var bytes = BitConverter.GetBytes(value);
 			_bytes.AddRange(bytes);
 		}
 
