@@ -5,8 +5,6 @@
 	/// </summary>
 	public class Model : FrameworkObject
 	{
-		protected IController _controller;
-
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
@@ -29,7 +27,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TModel CreateModel<TModel>(Pool pool, IController controller) where TModel : Model, new()
+		public static TModel CreateModel<TModel>(Pool pool) where TModel : Model, new()
 		{
 			var model = FrameworkObject.Create<TModel>(pool.Framework);
 			pool.Push(model);
