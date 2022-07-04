@@ -8,7 +8,7 @@ namespace DagraacSystems
 		public static double DirectionVector2ToDegreeAngle(this Vector2 value)
 		{
 			var radian = Math.Atan2(value.Y, value.X);
-			var degree = radian * MathHelper.RadianToDegree;
+			var degree = MathHelper.RadianToDegree(radian);
 
 			return degree;
 		}

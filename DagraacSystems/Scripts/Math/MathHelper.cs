@@ -4,6 +4,9 @@
 	{
 		public const double PI = 3.1415926535897931d;
 
-		public const double RadianToDegree = (MathHelper.PI / 180d);
+		public static double RadianToDegree(double radian)
+		{
+			return radian * (MathHelper.PI / 180d);
+		}
 	}
 }
