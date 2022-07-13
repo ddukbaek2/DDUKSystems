@@ -27,7 +27,7 @@
 		/// <summary>
 		/// 주기적으로 호출됨.
 		/// </summary>
-		void Update(float deltaTime);
+		void UpdateModel(float deltaTime);
 
 		//void Connection();
 	}

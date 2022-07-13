@@ -3,13 +3,23 @@
 	/// <summary>
 	/// 다수의 데이터로 존재할 수 있는 특정 개체의 기본 틀.
 	/// </summary>
-	public class Model : FrameworkObject
+	public class Model : FrameworkObject, IPooledObject
 	{
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		public Model() : base()
 		{
+		}
+
+		void IPooledObject.OnPush(Pool pool)
+		{
+			OnPush();
+		}
+
+		void IPooledObject.OnPop(Pool pool)
+		{
+			OnPop();
 		}
 
 		/// <summary>
@@ -20,17 +30,35 @@
 			base.OnDispose(explicitedDispose);
 		}
 
+		/// <summary>
+		/// 업데이트 됨.
+		/// </summary>
 		protected virtual void OnUpdate(float deltaTime)
+		{
+		}
+
+		/// <summary>
+		/// 풀에 집어넣음.
+		/// </summary>
+		protected virtual void OnPush()
+		{
+		}
+
+		/// <summary>
+		/// 풀에서 빠져나옴.
+		/// </summary>
+		protected virtual void OnPop()
 		{
 		}
 
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TModel CreateModel<TModel>(Pool pool) where TModel : Model, new()
+		public static TModel CreateModel<TModel>(Pool pool = null) where TModel : Model, new()
 		{
 			var model = FrameworkObject.Create<TModel>(pool.Framework);
-			pool.Push(model);
+			if (pool != null)
+				pool.Push(model);
 			return model;
 		}
 	}

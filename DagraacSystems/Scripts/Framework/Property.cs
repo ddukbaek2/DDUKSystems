@@ -4,9 +4,24 @@ using System.Collections.Generic;
 
 namespace DagraacSystems
 {
-	public enum ValueType { Number, Real, Boolean, Text, Object, Array, }
+	public enum ValueType
+	{
+		None,
+		Number,
+		Real,
+		Boolean,
+		Text,
+		Object,
+		Array
+	}
 
-	public struct Value
+	public interface IValue
+	{
+		object GetValue();
+		ValueType GetType();
+	}
+
+	public struct Value : IValue
 	{
 		public ValueType Type;
 		public int Number;
@@ -62,13 +77,13 @@ namespace DagraacSystems
 
 		public Value(Value value)
 		{
-			Type = ValueType.Object;
-			Number = 0;
-			Real = 0.0;
-			Boolean = false;
-			Text = string.Empty;
-			Object = new Nullable<Value>(value);
-			Array = new List<Value>();
+			Type = value.Type;
+			Number = value.Number;
+			Real = value.Real;
+			Boolean = value.Boolean;
+			Text = value.Text;
+			Object = new Nullable<Value>(value.Object.Value);
+			Array = new List<Value>(value.Array);
 		}
 
 		public Value(List<Value> value)
@@ -82,6 +97,30 @@ namespace DagraacSystems
 			Array = new List<Value>(value);
 		}
 
+		object IValue.GetValue()
+		{
+			switch(Type)
+			{
+				case ValueType.Number:
+					return Number;
+				case ValueType.Real:
+					return Real;
+				case ValueType.Text:
+					return Text;
+				case ValueType.Array:
+					return Array;
+				case ValueType.Object:
+					return Object;
+			}
+
+			return null;
+		}
+
+		ValueType IValue.GetType()
+		{
+			return Type;
+		}
+
 		public static implicit operator Value(int value) => new Value(value);
 		public static implicit operator Value(double value) => new Value(value);
 		public static implicit operator Value(bool value) => new Value(value);
@@ -93,7 +132,21 @@ namespace DagraacSystems
 		public static implicit operator bool(Value value) => value.Boolean;
 		public static implicit operator string(Value value) => value.Text;
 		public static implicit operator List<Value>(Value value) => value.Array;
+
+		public static ValueType GetValueType(object value)
+		{
+			//var type = value.GetType();
+			//switch (type)
+			//{
+			//	case typeof(long):
+			//	case typeof(int):
+			//	case typeof(short):
+			//		return ValueType.Number;
+			//}
+			return ValueType.Object;
+		}
 	}
+
 
 	/// <summary>
 	/// 속성 객체의 기본 틀.

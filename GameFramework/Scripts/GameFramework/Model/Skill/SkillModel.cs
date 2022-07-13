@@ -8,5 +8,8 @@ namespace GameFramework
 	/// </summary>
 	public class SkillModel : Model
 	{
+		public SkillModel() : base()
+		{
+		}
 	}
 }

@@ -4,20 +4,30 @@
 namespace DagraacSystems
 {
 	/// <summary>
+	/// 관리 대상.
+	/// </summary>
+	public interface IPooledObject
+	{
+		void OnPush(Pool pool);
+		void OnPop(Pool pool);
+	}
+
+
+	/// <summary>
 	/// 프레임워크 오브젝트들을 관리하는 객체.
 	/// </summary>
 	public class Pool : FrameworkObject
 	{
-		protected Queue<FrameworkObject> _objects;
+		protected Queue<IPooledObject> _pooledObjects;
 
-		public int Count => _objects.Count;
+		public int Count => _pooledObjects.Count;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		public Pool() : base()
 		{
-			_objects = new Queue<FrameworkObject>();
+			_pooledObjects = new Queue<IPooledObject>();
 		}
 
 		/// <summary>
@@ -25,8 +35,11 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			_objects.Clear();
-			_objects = null;
+			if (_pooledObjects != null)
+			{
+				_pooledObjects.Clear();
+				_pooledObjects = null;
+			}
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -34,22 +47,23 @@ namespace DagraacSystems
 		/// <summary>
 		/// 집어넣음.
 		/// </summary>
-		public void Push(FrameworkObject obj)
+		public void Push(IPooledObject pooledObject)
 		{
-			_objects.Enqueue(obj);
+			pooledObject.OnPush(this);
+			_pooledObjects.Enqueue(pooledObject);
 		}
 
 		/// <summary>
 		/// 꺼냄.
 		/// </summary>
-		public T Pop<T>() where T : FrameworkObject
+		public T Pop<T>() where T : IPooledObject
 		{
-			if (_objects.Count > 0)
-			{
-				return _objects.Dequeue() as T;
-			}
+			if (_pooledObjects.Count == 0)
+				return default;
 
-			return null;
+			var pooledObject = (T)_pooledObjects.Dequeue();
+			pooledObject.OnPop(this);
+			return pooledObject;
 		}
 	}
 }

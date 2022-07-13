@@ -8,5 +8,9 @@ namespace GameFramework
 	/// </summary>
 	public class BuffModel : Model
 	{
+		public BuffModel() : base()
+		{
+
+		}
 	}
 }
