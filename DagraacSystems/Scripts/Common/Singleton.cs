@@ -47,6 +47,9 @@
 		/// </summary>
 		public static T Create()
 		{
+			if (_instance != null)
+				return _instance;
+
 			var instance = DisposableObject.Create<T>();
 			instance.OnCreate();
 			return instance;
