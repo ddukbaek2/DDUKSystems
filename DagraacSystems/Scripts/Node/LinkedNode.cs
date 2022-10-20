@@ -3,6 +3,14 @@
 
 namespace DagraacSystems.Node
 {
+	public interface ILinkedNode
+	{
+
+	}
+
+	/// <summary>
+	/// 연결 노드.
+	/// </summary>
 	public class LinkedNode<T>
 	{
 		public LinkedNode<T> Previous { private set; get; } = null;
