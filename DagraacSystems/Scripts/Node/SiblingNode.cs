@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace DagraacSystems.Node
 {
+	/// <summary>
+	/// 형제노드 인터페이스.
+	/// </summary>
 	public interface ISiblingNode
 	{
 		ISiblingNode Root { get; }
@@ -24,7 +27,7 @@ namespace DagraacSystems.Node
 	}
 
 	/// <summary>
-	/// 트리형 계층구조에 자료를 보관하는 용도.
+	/// 트리형 계층구조에 자료를 보관하는 용도의 형제노드.
 	/// </summary>
 	public class SiblingNode<TValue> : DisposableObject, ISiblingNode
 	{

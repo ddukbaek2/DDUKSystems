@@ -11,30 +11,30 @@ namespace DagraacSystems
 	{
 		private class Enumerator : IEnumerator<T>
 		{
-			private T[] m_Data;
-			ValueTuple<int, int, int, int> m_Range;
+			private T[] _data;
+			ValueTuple<int, int, int, int> _range;
 			private int m_Index;
-			private T m_Current;
-			public int HeadIndex => m_Range.Item1;
-			public int TailIndex => m_Range.Item2;
-			public int Count => m_Range.Item3;
-			public int Capacity => m_Range.Item4;
+			private T _current;
+			public int HeadIndex => _range.Item1;
+			public int TailIndex => _range.Item2;
+			public int Count => _range.Item3;
+			public int Capacity => _range.Item4;
 
-			public T Current => m_Current;
-			object IEnumerator.Current => m_Current;
+			public T Current => _current;
+			object IEnumerator.Current => _current;
 
 			public Enumerator(CircleQueue<T> queue)
 			{
-				m_Data = queue.m_Data;
-				m_Range = (queue.m_HeadIndex, queue.m_TailIndex, queue.Count, queue.Capacity);
+				_data = queue._data;
+				_range = (queue._headIndex, queue._tailIndex, queue.Count, queue.Capacity);
 				m_Index = HeadIndex;
-				m_Current = default;
+				_current = default;
 			}
 
 			public void Dispose()
 			{
-				m_Data = null;
-				m_Current = default;
+				_data = null;
+				_current = default;
 			}
 
 			public bool MoveNext()
@@ -42,7 +42,7 @@ namespace DagraacSystems
 				if (Count == 0)
 					return false;
 
-				m_Current = m_Data[m_Index];
+				_current = _data[m_Index];
 				if (m_Index < TailIndex)
 				{
 					++m_Index;
@@ -62,37 +62,37 @@ namespace DagraacSystems
 			public void Reset()
 			{
 				m_Index = HeadIndex;
-				m_Current = default;
+				_current = default;
 			}
 		}
 
-		private T[] m_Data;
-		private int m_HeadIndex;
-		private int m_TailIndex;
+		private T[] _data;
+		private int _headIndex;
+		private int _tailIndex;
 
 		public CircleQueue(int capacity)
 		{
-			m_Data = new T[capacity];
-			m_HeadIndex = 0;
-			m_TailIndex = 0;
+			_data = new T[capacity];
+			_headIndex = 0;
+			_tailIndex = 0;
 		}
 
-		public T[] Data => m_Data;
-		public T Front => m_Data[m_HeadIndex];
-		public T Back => m_Data[m_TailIndex];
-		public int Capacity => m_Data.Length;
+		public T[] Data => _data;
+		public T Front => _data[_headIndex];
+		public T Back => _data[_tailIndex];
+		public int Capacity => _data.Length;
 
 		public int Count
 		{
 			get
 			{
-				if (m_HeadIndex < m_TailIndex)
+				if (_headIndex < _tailIndex)
 				{
-					return (m_TailIndex - m_HeadIndex) + 1;
+					return (_tailIndex - _headIndex) + 1;
 				}
-				else if (m_HeadIndex > m_TailIndex)
+				else if (_headIndex > _tailIndex)
 				{
-					return (m_TailIndex + (Capacity - 1 - m_HeadIndex)) + 1;
+					return (_tailIndex + (Capacity - 1 - _headIndex)) + 1;
 				}
 				else
 				{
@@ -106,10 +106,10 @@ namespace DagraacSystems
 			if (Count == Capacity)
 				throw new Exception("CircleQueue is Full.");
 
-			m_Data[m_TailIndex] = value;
-			++m_TailIndex;
-			if (m_TailIndex == Capacity)
-				m_TailIndex = 0;
+			_data[_tailIndex] = value;
+			++_tailIndex;
+			if (_tailIndex == Capacity)
+				_tailIndex = 0;
 		}
 
 		public T Peek()
@@ -117,7 +117,7 @@ namespace DagraacSystems
 			if (Count == 0) // m_HeadIndex == m_TailIndex
 				throw new Exception("CircleQueue is Empty.");
 
-			return m_Data[m_HeadIndex];
+			return _data[_headIndex];
 		}
 
 		public T Dequeue()
@@ -125,19 +125,19 @@ namespace DagraacSystems
 			if (Count == 0) // m_HeadIndex == m_TailIndex
 				throw new Exception("CircleQueue is Empty.");
 
-			if (m_HeadIndex < m_TailIndex)
+			if (_headIndex < _tailIndex)
 			{
-				return m_Data[m_HeadIndex++];
+				return _data[_headIndex++];
 			}
 			else
 			{
-				if (m_HeadIndex >= Capacity)
+				if (_headIndex >= Capacity)
 				{
-					m_HeadIndex = 0;
-					return m_Data[m_HeadIndex++];
+					_headIndex = 0;
+					return _data[_headIndex++];
 				}
 				
-				return m_Data[m_HeadIndex++];
+				return _data[_headIndex++];
 			}
 		}
 
