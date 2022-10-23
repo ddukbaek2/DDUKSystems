@@ -5,7 +5,7 @@
 	/// </summary>
 	public class Singleton<T> : DisposableObject where T : Singleton<T>, new()
 	{
-		private static T _instance = default;
+		private static T _instance = null;
 		public static T Instance
 		{
 			get
@@ -20,14 +20,7 @@
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected Singleton() : base()
-		{
-		}
-
-		/// <summary>
-		/// 생성됨.
-		/// </summary>
-		protected virtual void OnCreate()
+		protected override void OnCreate(params object[] args)
 		{
 			_instance = (T)this;
 		}
@@ -45,14 +38,12 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static T Create()
+		public static T Create(params object[] args)
 		{
 			if (_instance != null)
 				return _instance;
 
-			var instance = DisposableObject.Create<T>();
-			instance.OnCreate();
-			return instance;
+			return DisposableObject.Create<T>(args);
 		}
 
 		/// <summary>

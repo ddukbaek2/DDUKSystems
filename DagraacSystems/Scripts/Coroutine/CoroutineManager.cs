@@ -11,9 +11,9 @@ namespace DagraacSystems
 	{
 		private List<Coroutine> _coroutines;
 
-		protected override void OnCreate()
+		protected override void OnCreate(params object[] args)
 		{
-			base.OnCreate();
+			base.OnCreate(args);
 
 			_coroutines = new List<Coroutine>();
 		}
@@ -27,12 +27,12 @@ namespace DagraacSystems
 			base.OnDispose(explicitedDispose);
 		}
 
-		public void Tick(float tick)
+		public void Update(float deltaTime)
 		{
 			foreach (var coroutine in _coroutines)
 			{
 				if (coroutine.IsRunning)
-					coroutine.Tick(tick);
+					coroutine.Update(deltaTime);
 			}
 
 			for (var i = 0; i < _coroutines.Count; ++i)

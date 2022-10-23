@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace DagraacSystems
 {
-	public class CircleQueue<T> : IEnumerable<T>, IEnumerable, IReadOnlyCollection<T>/*, ICollection*/
+	public class CircleQueue<T> : IEnumerable<T>, IEnumerable, IReadOnlyCollection<T>
 	{
 		private class Enumerator : IEnumerator<T>
 		{

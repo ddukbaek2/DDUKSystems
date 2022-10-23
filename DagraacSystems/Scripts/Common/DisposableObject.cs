@@ -33,6 +33,13 @@ namespace DagraacSystems
 		}
 
 		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		protected virtual void OnCreate(params object[] args)
+		{
+		}
+
+		/// <summary>
 		/// 해제됨.
 		/// </summary>
 		protected virtual void OnDispose(bool explicitedDispose)
@@ -65,21 +72,24 @@ namespace DagraacSystems
 		/// <summary>
 		/// 타입을 기준으로 생성.
 		/// </summary>
-		protected static T Create<T>() where T : DisposableObject, new()
+		protected static T Create<T>(params object[] args) where T : DisposableObject, new()
 		{
-			return Create(typeof(T)) as T;// new T();
+			return Create(typeof(T), args) as T;// new T();
 		}
 
 		/// <summary>
 		/// 타입 인스턴스를 기준으로 생성.
 		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
 		/// </summary>
-		protected static DisposableObject Create(Type disposableObjectType)
+		protected static DisposableObject Create(Type disposableObjectType, params object[] args)
 		{
 			if (disposableObjectType.DeclaringType != typeof(DisposableObject))
 				return null;
 
-			return Activator.CreateInstance(disposableObjectType) as DisposableObject;
+			var disposableObject = Activator.CreateInstance(disposableObjectType) as DisposableObject;
+			disposableObject.OnCreate(args);
+
+			return disposableObject;
 		}
 
 		/// <summary>
