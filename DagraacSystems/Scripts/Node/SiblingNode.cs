@@ -34,7 +34,7 @@ namespace DagraacSystems.Node
 		/// <summary>
 		/// 반복자 구현.
 		/// </summary>
-		public class Enumerator : IEnumerator<TValue>
+		public class Enumerator : DisposableObject, IEnumerator<TValue>
 		{
 			private SiblingNode<TValue> _target;
 			private int _index;
@@ -42,22 +42,25 @@ namespace DagraacSystems.Node
 			object IEnumerator.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
 			TValue IEnumerator<TValue>.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
 
-			public Enumerator(SiblingNode<TValue> target)
+			protected override void OnCreate(params object[] args)
 			{
-				_target = target;
+				base.OnCreate(args);
+
+				_target = args[0] as SiblingNode<TValue>; // SiblingNode<TValue>
 				_index = 0;
 			}
 
-			~Enumerator()
+			protected override void OnDispose(bool explicitedDispose)
 			{
+				base.OnDispose(explicitedDispose);
+
 				_target = null;
 				_index = 0;
 			}
 
 			public void Dispose()
 			{
-				_target = null;
-				_index = 0;
+				DisposableObject.Dispose(this);
 			}
 
 			public bool MoveNext()
@@ -236,7 +239,7 @@ namespace DagraacSystems.Node
 		/// </summary>
 		public IEnumerator<TValue> GetChildEnumerator()
 		{
-			return new Enumerator(this);
+			return DisposableObject.Create<Enumerator>(this);
 		}
 
 		/// <summary>
@@ -244,7 +247,7 @@ namespace DagraacSystems.Node
 		/// </summary>
 		public IEnumerator<TValue> GetSiblingEnumerator()
 		{
-			return new Enumerator(Parent);
+			return DisposableObject.Create<Enumerator>(Parent);
 		}
 
 		public static SiblingNode<TValue> Convert(IEnumerable array)
