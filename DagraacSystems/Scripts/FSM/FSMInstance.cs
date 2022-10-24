@@ -21,8 +21,10 @@ namespace DagraacSystems
 			_instanceID = 0;
 		}
 
-		protected virtual void OnCreate(params object[] args)
+		protected override void OnCreate(params object[] args)
 		{
+			base.OnCreate(args);
+
 			_instanceID = FSMManager.Instance._uniqueIdentifier.Generate();
 		}
 
