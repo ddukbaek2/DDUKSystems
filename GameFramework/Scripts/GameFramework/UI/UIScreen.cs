@@ -3,7 +3,7 @@
 
 namespace GameFramework.UI
 {
-	public class UIWindow : UIObject
+	public class UIScreen : UIObject
 	{
 	}
 }

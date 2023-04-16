@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DagraacSystems;
+
 
 namespace GameFramework.UI
 {
-	class UIPopup
+	public class UIPopup : UIObject
 	{
 	}
 }

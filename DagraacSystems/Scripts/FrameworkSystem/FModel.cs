@@ -12,12 +12,12 @@
 		{
 		}
 
-		void IPooledObject.OnPush(FPool pool)
+		void IPooledObject.OnPush(FPool _pool)
 		{
 			OnPush();
 		}
 
-		void IPooledObject.OnPop(FPool pool)
+		void IPooledObject.OnPop(FPool _pool)
 		{
 			OnPop();
 		}
@@ -25,15 +25,15 @@
 		/// <summary>
 		/// 파괴됨.
 		/// </summary>
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
-			base.OnDispose(explicitedDispose);
+			base.OnDispose(_explicitedDispose);
 		}
 
 		/// <summary>
 		/// 업데이트 됨.
 		/// </summary>
-		protected virtual void OnUpdate(float deltaTime)
+		protected virtual void OnTick(float deltaTime)
 		{
 		}
 

@@ -4,11 +4,11 @@
 namespace GameFramework
 {
 	/// <summary>
-	/// 미션 모델.
+	/// 퀘스트 모델.
 	/// </summary>
-	public class MissionModel : FModel
+	public class FQuest : FModel
 	{
-		public MissionModel() : base()
+		public FQuest() : base()
 		{
 		}
 	}

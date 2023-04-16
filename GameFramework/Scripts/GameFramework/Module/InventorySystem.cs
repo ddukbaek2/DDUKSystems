@@ -1,15 +1,18 @@
-using DagraacSystems;
+ï»¿using DagraacSystems;
+using System.Collections.Generic;
 
 
 namespace GameFramework
 {
 	/// <summary>
-	/// ¾À ¸ğµâ.
+	/// ì¸ë²¤í† ë¦¬ ëª¨ë“ˆ.
 	/// </summary>
-	public class SceneModule : FModule
+	public class InventorySystem : FModule
 	{
+		public Dictionary<long, long> _items;
+
 		/// <summary>
-		/// ·ÎµåµÊ.
+		/// ë¡œë“œë¨.
 		/// </summary>
 		protected override void OnLoad(OnModuleLoad message)
 		{
@@ -17,7 +20,7 @@ namespace GameFramework
 		}
 
 		/// <summary>
-		/// ¾ğ·ÎµåµÊ.
+		/// ì–¸ë¡œë“œë¨.
 		/// </summary>
 		protected override void OnUnload(OnModuleUnload message)
 		{
@@ -25,7 +28,7 @@ namespace GameFramework
 		}
 
 		/// <summary>
-		/// ¾÷µ¥ÀÌÆ®µÊ.
+		/// ì—…ë°ì´íŠ¸ë¨.
 		/// </summary>
 		protected override void OnTick(OnModuleTick message)
 		{

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using GameFramework.UI;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace DagraacSystems.UI
 {
-	class UIView
+	public class UIView : UIObject
 	{
 	}
 }

@@ -1,13 +1,17 @@
 ﻿using DagraacSystems;
+using System.Collections;
+using System.Collections.Generic;
 
 
 namespace GameFramework
 {
 	/// <summary>
-	/// 전투 모듈.
+	/// 맵 모듈.
 	/// </summary>
-	public class BattleModule : FModule
+	public class MapSystem : FModule
 	{
+		Dictionary<long, MapModel> _models;
+
 		/// <summary>
 		/// 로드됨.
 		/// </summary>

@@ -4,9 +4,12 @@
 namespace GameFramework
 {
 	/// <summary>
-	/// 발사체 모델.
+	/// 미션 모델.
 	/// </summary>
-	public class ProjectileModel : FModel
+	public class FMission : FModel
 	{
+		public FMission() : base()
+		{
+		}
 	}
 }

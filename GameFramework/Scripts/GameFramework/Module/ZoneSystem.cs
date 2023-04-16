@@ -1,33 +1,19 @@
 ﻿using DagraacSystems;
-using System.Collections.Generic;
 
 
 namespace GameFramework
 {
-	public class ActorPool : FPool
-	{
-	}
-
-	public class ProjectilePool : FPool
-	{
-
-	}
-
 	/// <summary>
-	/// 액터 모듈.
+	/// 존 모듈.
 	/// </summary>
-	public class ActorModule : FModule
+	public class ZoneSystem : FModule
 	{
-		//private Dictionary<ulong, ActorModel> _
 		/// <summary>
 		/// 로드됨.
 		/// </summary>
 		protected override void OnLoad(OnModuleLoad message)
 		{
 			base.OnLoad(message);
-
-			//_pools.Add(Pool.CreatePool<ActorPool>(this));
-			//_pools.Add(Pool.CreatePool<ProjectilePool>(this));
 		}
 
 		/// <summary>
@@ -35,7 +21,6 @@ namespace GameFramework
 		/// </summary>
 		protected override void OnUnload(OnModuleUnload message)
 		{
-			//_pools.Remove()
 			base.OnUnload(message);
 		}
 

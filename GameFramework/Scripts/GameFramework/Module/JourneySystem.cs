@@ -1,17 +1,13 @@
 ﻿using DagraacSystems;
-using System.Collections;
-using System.Collections.Generic;
 
 
 namespace GameFramework
 {
 	/// <summary>
-	/// 맵 모듈.
+	/// 여정 모듈.
 	/// </summary>
-	public class MapModule : FModule
+	public class JourneySystem : FModule
 	{
-		Dictionary<long, MapModel> _models;
-
 		/// <summary>
 		/// 로드됨.
 		/// </summary>

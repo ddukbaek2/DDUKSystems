@@ -3,7 +3,7 @@
 
 namespace GameFramework
 {
-	public class StatusModel : FModel
+	public class FStatus : FModel
 	{
 	}
 }

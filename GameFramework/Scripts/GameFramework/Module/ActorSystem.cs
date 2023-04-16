@@ -1,50 +1,46 @@
-using DagraacSystems;
+ï»¿using DagraacSystems;
+using System.Collections.Generic;
 
 
 namespace GameFramework
 {
-	public enum EventTrigger
+	public class ActorPool : FPool
 	{
-		TileIn,
-		TileOut,
-		TileInTime,
 	}
 
-	public enum EventCondition
-	{
-		In,
-		Out,
-	}
-
-	public enum EventAction
+	public class ProjectilePool : FPool
 	{
 
 	}
 
-	
 	/// <summary>
-	/// ÀÌº¥Æ® ¸ğµâ.
+	/// ì•¡í„° ëª¨ë“ˆ.
 	/// </summary>
-	public class EventModule : FModule
+	public class ActorSystem : FModule
 	{
+		//private Dictionary<ulong, ActorModel> _
 		/// <summary>
-		/// ·ÎµåµÊ.
+		/// ë¡œë“œë¨.
 		/// </summary>
 		protected override void OnLoad(OnModuleLoad message)
 		{
 			base.OnLoad(message);
+
+			//_pools.Add(Pool.CreatePool<ActorPool>(this));
+			//_pools.Add(Pool.CreatePool<ProjectilePool>(this));
 		}
 
 		/// <summary>
-		/// ¾ğ·ÎµåµÊ.
+		/// ì–¸ë¡œë“œë¨.
 		/// </summary>
 		protected override void OnUnload(OnModuleUnload message)
 		{
+			//_pools.Remove()
 			base.OnUnload(message);
 		}
 
 		/// <summary>
-		/// ¾÷µ¥ÀÌÆ®µÊ.
+		/// ì—…ë°ì´íŠ¸ë¨.
 		/// </summary>
 		protected override void OnTick(OnModuleTick message)
 		{

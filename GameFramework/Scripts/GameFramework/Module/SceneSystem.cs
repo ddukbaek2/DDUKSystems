@@ -1,15 +1,15 @@
-ï»¿using DagraacSystems;
+using DagraacSystems;
 
 
 namespace GameFramework
 {
 	/// <summary>
-	/// ì¡´ ëª¨ë“ˆ.
+	/// ¾À ¸ğµâ.
 	/// </summary>
-	public class ZoneModule : FModule
+	public class SceneSystem : FModule
 	{
 		/// <summary>
-		/// ë¡œë“œë¨.
+		/// ·ÎµåµÊ.
 		/// </summary>
 		protected override void OnLoad(OnModuleLoad message)
 		{
@@ -17,7 +17,7 @@ namespace GameFramework
 		}
 
 		/// <summary>
-		/// ì–¸ë¡œë“œë¨.
+		/// ¾ğ·ÎµåµÊ.
 		/// </summary>
 		protected override void OnUnload(OnModuleUnload message)
 		{
@@ -25,7 +25,7 @@ namespace GameFramework
 		}
 
 		/// <summary>
-		/// ì—…ë°ì´íŠ¸ë¨.
+		/// ¾÷µ¥ÀÌÆ®µÊ.
 		/// </summary>
 		protected override void OnTick(OnModuleTick message)
 		{

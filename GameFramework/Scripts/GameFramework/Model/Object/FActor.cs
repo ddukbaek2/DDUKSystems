@@ -6,11 +6,16 @@ namespace GameFramework
 	/// <summary>
 	/// 액터 모델.
 	/// </summary>
-	public class ActorModel : FModel
+	public class FActor : FModel
 	{
-		protected override void OnCreate()
+		protected override void OnCreate(params object[] _args)
 		{
-			base.OnCreate();
+			base.OnCreate(_args);
+		}
+
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			base.OnDispose(explicitedDispose);
 		}
 
 		protected override void OnActive()
@@ -23,14 +28,9 @@ namespace GameFramework
 			base.OnDeactive();
 		}
 
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnTick(float _tick)
 		{
-			base.OnDispose(explicitedDispose);
-		}
-
-		protected override void OnUpdate(float deltaTime)
-		{
-			base.OnUpdate(deltaTime);
+			base.OnTick(_tick);
 		}
 
 		protected virtual void OnSpawn()
@@ -50,19 +50,19 @@ namespace GameFramework
 		}
 
 	
-		protected void OnAttack(ActorModel defensive)
+		protected void OnAttack(FActor defensive)
 		{
 		}
 
-		protected void OnHitAttack(ActorModel offensive)
+		protected void OnHitAttack(FActor offensive)
 		{
 		}
 
-		protected void OnSkill(ActorModel defensive, SkillModel skill)
+		protected void OnSkill(FActor defensive, FSkill skill)
 		{
 		}
 
-		protected void OnHitSkill(ActorModel offensive, SkillModel skill)
+		protected void OnHitSkill(FActor offensive, FSkill skill)
 		{
 		}
 

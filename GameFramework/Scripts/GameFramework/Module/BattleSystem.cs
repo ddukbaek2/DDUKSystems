@@ -1,16 +1,13 @@
 ﻿using DagraacSystems;
-using System.Collections.Generic;
 
 
 namespace GameFramework
 {
 	/// <summary>
-	/// 인벤토리 모듈.
+	/// 전투 모듈.
 	/// </summary>
-	public class InventoryModule : FModule
+	public class BattleSystem : FModule
 	{
-		public Dictionary<long, long> _items;
-
 		/// <summary>
 		/// 로드됨.
 		/// </summary>
