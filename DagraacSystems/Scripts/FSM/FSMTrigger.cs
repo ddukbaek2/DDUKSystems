@@ -1,6 +1,6 @@
 ﻿namespace DagraacSystems
 {
-	public class FSMTrigger : FSMInstance
+	public class FSMTrigger : FSMObject
 	{
 		public FSMState Target { set; get; }
 

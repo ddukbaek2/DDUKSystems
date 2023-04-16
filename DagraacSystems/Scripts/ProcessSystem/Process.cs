@@ -9,7 +9,7 @@
 		private bool m_IsFinished;
 		private bool m_IsPaused;
 
-		private ProcessSystem m_ProcessExecutor;
+		private ProcessSystem m_ProcessSystem;
 		private ulong m_ProcessID; // 객체의 프로세스 아이디. execute ~ finish 까지 0이 아님.
 
 		protected override void OnCreate(params object[] _args)
@@ -19,7 +19,7 @@
 			m_IsStarted = false;
 			m_IsFinished = false;
 			m_IsPaused = false;
-			m_ProcessExecutor = null;
+			m_ProcessSystem = null;
 			m_ProcessID = 0;
 		}
 
@@ -33,7 +33,7 @@
 			m_IsStarted = false;
 			m_IsFinished = false;
 			m_IsPaused = false;
-			m_ProcessExecutor = null;
+			m_ProcessSystem = null;
 			m_ProcessID = 0;
 
 			OnReset();
@@ -43,7 +43,7 @@
 		{
 			m_IsStarted = true;
 			m_IsFinished = false;
-			m_ProcessExecutor = processExecutor;
+			m_ProcessSystem = processExecutor;
 			m_ProcessID = processID;
 
 			OnExecute(args);
@@ -124,7 +124,7 @@
 
 		public ProcessSystem GetProcessExecutor()
 		{
-			return m_ProcessExecutor;
+			return m_ProcessSystem;
 		}
 
 		public ulong GetProcessID()

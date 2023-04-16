@@ -42,7 +42,7 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
-		public virtual void Update(float deltaTime)
+		public virtual void Tick(float deltaTime)
 		{
 			foreach (var process in m_RunningProcesses)
 			{

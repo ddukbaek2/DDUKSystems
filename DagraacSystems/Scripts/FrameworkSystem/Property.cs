@@ -151,7 +151,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 속성 객체의 기본 틀.
 	/// </summary>
-	public class Property : FrameworkObject
+	public class Property : FObject
 	{
 		public string Name;
 		public Property Parent;

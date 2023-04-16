@@ -23,25 +23,25 @@ namespace DagraacSystems
 			m_ProcessSystem = new ProcessSystem(m_UniqueIdentifier);
 		}
 
-		protected override void OnDispose(bool disposing)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
-			base.OnDispose(disposing);
+			base.OnDispose(_explicitedDispose);
 
-			if (disposing)
+			if (_explicitedDispose)
 			{
 				m_ProcessSystem.Dispose();
 				m_ProcessSystem = null;
 			}
 		}
 
-		public void Update(float deltaTime)
+		public void Tick(float _tick)
 		{
-			m_ProcessSystem.Update(deltaTime);
+			m_ProcessSystem.Tick(_tick);
 		}
 
 		public TFSMMachine AddMachine<TFSMMachine>(string name, IFSMTarget target) where TFSMMachine : FSMMachine, new()
 		{
-			var machine = FSMInstance.CreateInstance<TFSMMachine>(name);
+			var machine = FSMObject.CreateInstance<TFSMMachine>(name);
 			machine.Target = target;
 			m_ProcessSystem.Start(machine);
 			return machine;
@@ -52,7 +52,7 @@ namespace DagraacSystems
 			if (machine == null)
 				return;
 
-			FSMInstance.DestroyInstance(machine);
+			FSMObject.DestroyInstance(machine);
 			m_ProcessSystem.Stop(machine.GetProcessID());
 		}
 

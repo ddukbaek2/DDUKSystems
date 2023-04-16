@@ -16,7 +16,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 프레임워크 오브젝트들을 관리하는 객체.
 	/// </summary>
-	public class Pool : FrameworkObject
+	public class Pool : FObject
 	{
 		protected Queue<IPooledObject> _pooledObjects;
 

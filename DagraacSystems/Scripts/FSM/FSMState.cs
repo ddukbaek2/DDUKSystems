@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// 상태가 시작되면 상태에 대한 모든 행동을 순차적으로 실행하고 (옵션에 의해 비동기적 수행 가능) 모든 액션의 수행이 끝나면 상태가 종료된다.
 	/// 상태의 시작~종료 까지 트랜지션이 존재하면 기존 상태를 중단하고 언제고 새로운 상태를 수행한다.
 	/// </summary>
-	public class FSMState : FSMInstance
+	public class FSMState : FSMObject
 	{
 		private List<FSMTransition> _transitions; // 이동 조건 목록.
 		private List<FSMAction> _actions; // 실행 목록.
@@ -137,7 +137,7 @@ namespace DagraacSystems
 
 		public TFSMAction AddAction<TFSMAction>(params object[] args) where TFSMAction : FSMAction, new()
 		{
-			var action = FSMInstance.CreateInstance<TFSMAction>(typeof(TFSMAction).Name, args);
+			var action = FSMObject.CreateInstance<TFSMAction>(typeof(TFSMAction).Name, args);
 			action.Target = this;
 			_actions.Add(action);
 
@@ -152,7 +152,7 @@ namespace DagraacSystems
 			if (!action.IsFinished())
 				action.Finish();
 
-			FSMInstance.DestroyInstance(action);
+			FSMObject.DestroyInstance(action);
 			_actions.Remove(action);
 		}
 
@@ -164,7 +164,7 @@ namespace DagraacSystems
 
 		public TFSMTransition AddTransition<TFSMTransition>(string name, FSMState destinationState, Func<bool> predicate) where TFSMTransition : FSMTransition, new()
 		{
-			var transition = FSMInstance.CreateInstance<TFSMTransition>(name, this, destinationState, predicate);
+			var transition = FSMObject.CreateInstance<TFSMTransition>(name, this, destinationState, predicate);
 			_transitions.Add(transition);
 
 			return transition;
@@ -178,7 +178,7 @@ namespace DagraacSystems
 			//if (!transition.IsFinished())
 			//	transition.Finish();
 
-			FSMInstance.DestroyInstance(transition);
+			FSMObject.DestroyInstance(transition);
 			_transitions.Remove(transition);
 		}
 

@@ -31,9 +31,9 @@ namespace GameFramework
 		/// <summary>
 		/// 업데이트됨.
 		/// </summary>
-		protected override void OnUpdate(OnModuleUpdate message)
+		protected override void OnTick(OnModuleTick message)
 		{
-			base.OnUpdate(message);
+			base.OnTick(message);
 		}
 	}
 }

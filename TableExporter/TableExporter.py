@@ -339,14 +339,14 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	#result += "\n"
 
 	#int ToFields();
-	result += "\tpublic System.Collections.Generic.List<System.Tuple<string, System.Type, object>> ToFields()\n"
+	result += "\tpublic System.Collections.Generic.List<DagraacSystems.FieldInfo> ToFields()\n"
 	result += "\t{\n"
-	result += "\t\treturn new System.Collections.Generic.List<System.Tuple<string, System.Type, object>>()\n"
+	result += "\t\treturn new System.Collections.Generic.List<DagraacSystems.FieldInfo>()\n"
 	result += "\t\t{\n"
 	field_index = 0
 	for field in table.field_dict_.values():
 		field_name = field.name_
-		result += f"\t\t\tnew System.Tuple<string, System.Type, object>(\"{field_name}\", {field_name}.GetType(), {field_name}),\n"
+		result += f"\t\t\tnew DagraacSystems.FieldInfo(\"{field_name}\", {field_name}.GetType(), {field_name}),\n"
 		field_index += 1
 	result += "\t\t};\n"
 	result += "\t}\n"

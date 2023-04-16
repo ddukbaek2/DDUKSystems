@@ -3,7 +3,7 @@
 	/// <summary>
 	/// FSM 액션.
 	/// </summary>
-	public class FSMAction : FSMInstance
+	public class FSMAction : FSMObject
 	{
 		public FSMState Target { internal set; get; }
 

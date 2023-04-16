@@ -6,7 +6,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 상태 전이.
 	/// </summary>
-	public class FSMTransition : FSMInstance
+	public class FSMTransition : FSMObject
 	{
 		private FSMState _source;
 		private FSMState _destination;

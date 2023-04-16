@@ -5,11 +5,6 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	[Serializable]
-	public struct OnObjectCreate : IMessage
-	{
-	}
-
-	[Serializable]
 	public struct OnModuleLoad : IMessage
 	{
 	}
@@ -20,7 +15,7 @@ namespace DagraacSystems
 	}
 
 	[Serializable]
-	public struct OnModuleUpdate : IMessage
+	public struct OnModuleTick : IMessage
 	{
 		public float DeltaTime;
 	}
@@ -32,29 +27,28 @@ namespace DagraacSystems
 	/// </summary>
 	public class FrameworkSystem : DisposableObject
 	{
-		protected MessageSystem m_MessageSystem;
-		protected UniqueIdentifier m_UniqueIdentifier;
 		protected List<Module> m_Modules;
 
-		public UniqueIdentifier UniqueIdentifier => m_UniqueIdentifier;
-		public MessageSystem Messenger => m_MessageSystem;
+		public UniqueIdentifier UniqueIdentifier { private set; get; }
+
+		public MessageSystem MessageSystem { private set; get; }
 
 		public FrameworkSystem() : base()
 		{
-			m_MessageSystem = new MessageSystem();
-			m_UniqueIdentifier = new UniqueIdentifier();
 			m_Modules = new List<Module>();
+			UniqueIdentifier = new UniqueIdentifier();
+			MessageSystem = new MessageSystem();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			DisposeModuleAll();
 
-			m_MessageSystem.Dispose();
-			m_MessageSystem = null;
+			MessageSystem.Dispose();
+			MessageSystem = null;
 
-			m_UniqueIdentifier.Dispose();
-			m_UniqueIdentifier = null;
+			UniqueIdentifier.Dispose();
+			UniqueIdentifier = null;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -114,7 +108,7 @@ namespace DagraacSystems
 				return;
 
 			m_Modules.Add(module);
-			m_MessageSystem.Send(module, new OnModuleLoad { });
+			MessageSystem.Send(module, new OnModuleLoad { });
 		}
 
 		/// <summary>
@@ -126,7 +120,7 @@ namespace DagraacSystems
 				return;
 
 			m_Modules.Remove(module);
-			m_MessageSystem.Send(module, new OnModuleUnload { });
+			MessageSystem.Send(module, new OnModuleUnload { });
 		}
 
 		public TModule GetModule<TModule>() where TModule : Module
@@ -136,7 +130,7 @@ namespace DagraacSystems
 
 		public virtual void FrameMove(float deltaTime)
 		{
-			m_MessageSystem.Notify(new OnModuleUpdate { DeltaTime = deltaTime });
+			MessageSystem.Notify(new OnModuleTick { DeltaTime = deltaTime });
 		}
 	}
 }

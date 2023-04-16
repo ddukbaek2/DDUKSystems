@@ -9,7 +9,7 @@ namespace DagraacSystems
 	/// ProcessID : 실행중에만 유효한 고유식별자.
 	/// InstanceID : 영구적으로 부여받은 별도 고유식별자.
 	/// </summary>
-	public class FSMInstance : Process
+	public class FSMObject : Process
 	{
 		private FSMSystem m_FSMSystem;
 		private ulong m_InstanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
@@ -17,7 +17,7 @@ namespace DagraacSystems
 		public string Name { private set; get; } = string.Empty;
 		public bool Async { set; get; } = false; // 끝나기를 기다리지 않는 옵션.
 
-		public FSMInstance()
+		public FSMObject()
 		{
 			m_InstanceID = 0;
 		}
@@ -60,7 +60,7 @@ namespace DagraacSystems
 			return m_InstanceID;
 		}
 
-		internal static TFSMInstance CreateInstance<TFSMInstance>(string _name, params object[] _args) where TFSMInstance : FSMInstance, new()
+		internal static TFSMInstance CreateInstance<TFSMInstance>(string _name, params object[] _args) where TFSMInstance : FSMObject, new()
 		{
 			var instance = new TFSMInstance();
 			instance.Name = _name;
@@ -68,7 +68,7 @@ namespace DagraacSystems
 			return instance;
 		}
 
-		internal static void DestroyInstance(FSMInstance _instance)
+		internal static void DestroyInstance(FSMObject _instance)
 		{
 			if (_instance == null)
 				return;

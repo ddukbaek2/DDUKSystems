@@ -3,18 +3,18 @@
 
 namespace GameFramework.UI
 {
-	public class UIObject : FrameworkObject
+	public class UIObject : FObject
 	{
 		public IController Controller;
 
-		protected override void OnCreate()
+		protected override void OnCreate(params object[] _args)
 		{
-			base.OnCreate();
+			base.OnCreate(_args);
 		}
 
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
-			base.OnDispose(explicitedDispose);
+			base.OnDispose(_explicitedDispose);
 		}
 	}
 }

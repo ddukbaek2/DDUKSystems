@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 다수의 데이터로 존재할 수 있는 특정 개체의 기본 틀.
 	/// </summary>
-	public class Model : FrameworkObject, IPooledObject
+	public class Model : FObject, IPooledObject
 	{
 		/// <summary>
 		/// 생성됨.
@@ -56,7 +56,7 @@
 		/// </summary>
 		public static TModel CreateModel<TModel>(Pool pool = null) where TModel : Model, new()
 		{
-			var model = FrameworkObject.Create<TModel>(pool.FrameworkSystem);
+			var model = FObject.Create<TModel>(pool.FrameworkSystem);
 			if (pool != null)
 				pool.Push(model);
 			return model;

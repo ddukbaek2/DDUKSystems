@@ -7,7 +7,7 @@ namespace DagraacSystems
 	/// FSM 처리기.
 	/// FSM에서 사용되는 STATE는 상태의 고유성을 가져야함. 예를들어 IDLESTATE가 있다면 동일한 클래스 2개를 등록할 수 없음.
 	/// </summary>
-	public class FSMMachine : FSMInstance
+	public class FSMMachine : FSMObject
 	{
 		private FSMSystem FSMSystem;
 		private List<FSMTrigger> _triggers;
@@ -85,7 +85,7 @@ namespace DagraacSystems
 
 		public TFSMState AddState<TFSMState>(string name) where TFSMState : FSMState, new()
 		{
-			var state = FSMInstance.CreateInstance<TFSMState>(name);
+			var state = FSMObject.CreateInstance<TFSMState>(name);
 			state.Target = this;
 			_states.Add(state);
 			return state;
@@ -105,7 +105,7 @@ namespace DagraacSystems
 			//if (!state.IsFinished())
 			//	state.Finish();
 
-			FSMInstance.DestroyInstance(state);
+			FSMObject.DestroyInstance(state);
 			_states.Remove(state);
 		}
 

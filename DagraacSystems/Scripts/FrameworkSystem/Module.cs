@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 모델들을 관리하는 기능 객체의 기본 틀 (=시스템).
 	/// </summary>
-	public class Module : FrameworkObject
+	public class Module : FObject
 	{
 		/// <summary>
 		/// 생성됨.
@@ -16,16 +16,16 @@
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
-			base.OnDispose(explicitedDispose);
+			base.OnDispose(_explicitedDispose);
 		}
 
 		/// <summary>
 		/// 로드됨.
 		/// </summary>
 		[Message(typeof(OnModuleLoad))]
-		protected virtual void OnLoad(OnModuleLoad message)
+		protected virtual void OnLoad(OnModuleLoad _message)
 		{
 		}
 
@@ -33,15 +33,15 @@
 		/// 언로드됨.
 		/// </summary>
 		[Message(typeof(OnModuleUnload))]
-		protected virtual void OnUnload(OnModuleUnload message)
+		protected virtual void OnUnload(OnModuleUnload _message)
 		{
 		}
 
 		/// <summary>
 		/// 업데이트됨.
 		/// </summary>
-		[Message(typeof(OnModuleUpdate))]
-		protected virtual void OnUpdate(OnModuleUpdate message)
+		[Message(typeof(OnModuleTick))]
+		protected virtual void OnTick(OnModuleTick _message)
 		{
 		}
 	}

@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
 	/// </summary>
-	public abstract class FrameworkObject : ManagedObject, IMessageTarget
+	public abstract class FObject : ManagedObject, IMessageTarget
 	{
 		private bool m_IsActive;
 
@@ -32,10 +32,9 @@
 		//	InstanceID = instanceID;
 		//}
 
-		[Message(typeof(OnObjectCreate))]
-		protected virtual void OnCreate()
+		protected override void OnCreate(params object[] _args)
 		{
-			//Logger.Log("[RPGObject] OnCreate()");
+			base.OnCreate(_args);
 
 			if (InstanceID == 0)
 				InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
@@ -48,25 +47,12 @@
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			//Logger.Log("[RPGObject] OnDispose()");
-
-			FrameworkSystem.Messenger.Remove(this);
+			FrameworkSystem.MessageSystem.Remove(this);
 			FrameworkSystem.UniqueIdentifier.Free(InstanceID);
 			FrameworkSystem = null;
 			InstanceID = 0;
 
 			base.OnDispose(explicitedDispose);
-		}
-
-		/// <summary>
-		/// 해제.
-		/// </summary>
-		public virtual void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			FrameworkObject.Dispose(this);
 		}
 
 		/// <summary>
@@ -101,7 +87,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(FrameworkSystem framework) where TObject : FrameworkObject, new()
+		public static TObject Create<TObject>(FrameworkSystem framework) where TObject : FObject, new()
 		{
 			return Create<TObject>(framework, 0);
 		}
@@ -109,7 +95,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(FrameworkSystem framework, ulong instanceID) where TObject : FrameworkObject, new()
+		public static TObject Create<TObject>(FrameworkSystem framework, ulong instanceID) where TObject : FObject, new()
 		{
 			if (framework == null)
 			{
@@ -121,16 +107,15 @@
 			var target = ManagedObject.Create<TObject>();
 			target.FrameworkSystem = framework;
 			target.InstanceID = instanceID;
+			framework.MessageSystem.Add(target);
 
-			framework.Messenger.Add(target);
-			framework.Messenger.Send(target, new OnObjectCreate { });
 			return target;
 		}
 
 		/// <summary>
 		/// 제거.
 		/// </summary>
-		public static void Dispose(FrameworkObject target)
+		public static void Dispose(FObject target)
 		{
 			if (target != null)
 			{
