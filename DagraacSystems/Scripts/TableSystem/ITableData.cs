@@ -7,7 +7,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 테이블 필드 정보.
 	/// </summary>
-	public struct TableFieldInfo
+	public struct FieldInfo
 	{
 		public string Name;
 		public Type Type;
@@ -22,7 +22,7 @@ namespace DagraacSystems
 	/// </summary>
 	public interface ITableData
 	{
-		List<TableFieldInfo> ToFields();
+		List<FieldInfo> ToFields();
 		int GetFieldIndex(string _name);
 		string GetFieldName(int _index);
 		Type GetFieldType(int _index);

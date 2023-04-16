@@ -24,7 +24,7 @@ namespace DagraacSystemsExample
 	/// <summary>
 	/// 테이블 매니저.
 	/// </summary>
-	public class TableManager : TableSystem<TableManager, eTableID>
+	public class TableSystem : TableSystem<eTableID>
 	{
 		/// <summary>
 		/// 실제 어플리케이션에서의 파일 로드 구현.
@@ -63,8 +63,8 @@ namespace DagraacSystemsExample
 		{
 			Console.WriteLine(Directory.GetCurrentDirectory());
 
-			Load<ExampleTableData>(eTableID.ExampleTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.ExampleTable), "ID");
-			Load<StringTableData>(eTableID.StringTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.StringTable), "ID");
+			//Load<ExampleTableData>(eTableID.ExampleTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.ExampleTable), "ID");
+			//Load<StringTableData>(eTableID.StringTable, ValueAttributeHelper.ExtractValueFromEnum(eTableID.StringTable), "ID");
 		}
 
 		/// <summary>
@@ -72,16 +72,16 @@ namespace DagraacSystemsExample
 		/// </summary>
 		protected override void OnLoaded(eTableID tableID, TableContainer tableContainer)
 		{
-			switch (tableID)
-			{
-				case eTableID.ExampleTable:
-					ExampleTable.Instance.SetTableContainer(tableContainer);
-					break;
+			//switch (tableID)
+			//{
+			//	case eTableID.ExampleTable:
+			//		ExampleTable.Instance.SetTableContainer(tableContainer);
+			//		break;
 
-				case eTableID.StringTable:
-					// used to LocalizationManager.
-					return;
-			}
+			//	case eTableID.StringTable:
+			//		// used to LocalizationManager.
+			//		return;
+			//}
 
 			CheckIntegrity(tableID);
 		}
@@ -91,20 +91,20 @@ namespace DagraacSystemsExample
 		/// </summary>
 		protected override bool OnCheckIntegrity(eTableID tableID, TableContainer tableContainer)
 		{
-			switch (tableID)
-			{
-				case eTableID.ExampleTable:
-				{
-					var exampleTableData = tableContainer.Get<int, ExampleTableData>(1);
-					if (exampleTableData.Mob_Speed < 0)
-					{
-						Debug.Log($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
-						return false;
-					}
+			//switch (tableID)
+			//{
+			//	case eTableID.ExampleTable:
+			//	{
+			//		var exampleTableData = tableContainer.Get<int, ExampleTableData>(1);
+			//		if (exampleTableData.Mob_Speed < 0)
+			//		{
+			//			Debug.Log($"[ERR][{tableID}][{exampleTableData.ID}] Mob_Speed: {exampleTableData.Mob_Speed}");
+			//			return false;
+			//		}
 
-					return true;
-				}
-			}
+			//		return true;
+			//	}
+			//}
 
 			return base.OnCheckIntegrity(tableID, tableContainer);
 		}

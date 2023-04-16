@@ -29,33 +29,33 @@ namespace DagraacSystems.Node
 	/// <summary>
 	/// 트리형 계층구조에 자료를 보관하는 용도의 형제노드.
 	/// </summary>
-	public class SiblingNode<TValue> : DisposableObject, ISiblingNode
+	public class SiblingNode<TValue> : ManagedObject, ISiblingNode
 	{
 		/// <summary>
 		/// 반복자 구현.
 		/// </summary>
-		public class Enumerator : DisposableObject, IEnumerator<TValue>
+		public class Enumerator : ManagedObject, IEnumerator<TValue>
 		{
-			private SiblingNode<TValue> _target;
-			private int _index;
+			private SiblingNode<TValue> m_Target;
+			private int m_Index;
 
-			object IEnumerator.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
-			TValue IEnumerator<TValue>.Current => _target != null ? ((SiblingNode<TValue>)_target.Children[_index]).Value : default;
+			object IEnumerator.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
+			TValue IEnumerator<TValue>.Current => m_Target != null ? ((SiblingNode<TValue>)m_Target.Children[m_Index]).Value : default;
 
-			protected override void OnCreate(params object[] args)
+			protected override void OnCreate(params object[] _args)
 			{
-				base.OnCreate(args);
+				base.OnCreate(_args);
 
-				_target = args[0] as SiblingNode<TValue>; // SiblingNode<TValue>
-				_index = 0;
+				m_Target = _args[0] as SiblingNode<TValue>; // SiblingNode<TValue>
+				m_Index = 0;
 			}
 
 			protected override void OnDispose(bool explicitedDispose)
 			{
 				base.OnDispose(explicitedDispose);
 
-				_target = null;
-				_index = 0;
+				m_Target = null;
+				m_Index = 0;
 			}
 
 			public void Dispose()
@@ -65,12 +65,12 @@ namespace DagraacSystems.Node
 
 			public bool MoveNext()
 			{
-				return ++_index < (_target != null ? _target.Children.Count : 0);
+				return ++m_Index < (m_Target != null ? m_Target.Children.Count : 0);
 			}
 
 			public void Reset()
 			{
-				_index = 0;
+				m_Index = 0;
 			}
 		}
 
@@ -239,7 +239,7 @@ namespace DagraacSystems.Node
 		/// </summary>
 		public IEnumerator<TValue> GetChildEnumerator()
 		{
-			return DisposableObject.Create<Enumerator>(this);
+			return ManagedObject.Create<Enumerator>(this);
 		}
 
 		/// <summary>
@@ -247,7 +247,7 @@ namespace DagraacSystems.Node
 		/// </summary>
 		public IEnumerator<TValue> GetSiblingEnumerator()
 		{
-			return DisposableObject.Create<Enumerator>(Parent);
+			return ManagedObject.Create<Enumerator>(Parent);
 		}
 
 		public static SiblingNode<TValue> Convert(IEnumerable array)

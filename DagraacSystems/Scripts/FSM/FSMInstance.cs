@@ -11,27 +11,28 @@ namespace DagraacSystems
 	/// </summary>
 	public class FSMInstance : Process
 	{
-		private ulong _instanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
+		private FSMSystem m_FSMSystem;
+		private ulong m_InstanceID; // 인스턴스의 아이디. create ~ destroy 까지 0이 아님.
 
 		public string Name { private set; get; } = string.Empty;
 		public bool Async { set; get; } = false; // 끝나기를 기다리지 않는 옵션.
 
 		public FSMInstance()
 		{
-			_instanceID = 0;
+			m_InstanceID = 0;
 		}
 
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
 
-			_instanceID = FSMManager.Instance._uniqueIdentifier.Generate();
+			m_InstanceID = m_FSMSystem.m_UniqueIdentifier.Generate();
 		}
 
 		protected virtual void OnDestroy()
 		{
-			FSMManager.Instance._uniqueIdentifier.Free(_instanceID);
-			_instanceID = 0;
+			m_FSMSystem.m_UniqueIdentifier.Free(m_InstanceID);
+			m_InstanceID = 0;
 		}
 
 		protected override void OnReset()
@@ -56,30 +57,30 @@ namespace DagraacSystems
 
 		public ulong GetInstanceID()
 		{
-			return _instanceID;
+			return m_InstanceID;
 		}
 
-		internal static TFSMInstance CreateInstance<TFSMInstance>(string name, params object[] args) where TFSMInstance : FSMInstance, new()
+		internal static TFSMInstance CreateInstance<TFSMInstance>(string _name, params object[] _args) where TFSMInstance : FSMInstance, new()
 		{
 			var instance = new TFSMInstance();
-			instance.Name = name;
-			instance.OnCreate(args);
+			instance.Name = _name;
+			instance.OnCreate(_args);
 			return instance;
 		}
 
-		internal static void DestroyInstance(FSMInstance instance)
+		internal static void DestroyInstance(FSMInstance _instance)
 		{
-			if (instance == null)
+			if (_instance == null)
 				return;
 
-			if (!FSMManager.Instance._uniqueIdentifier.Contains(instance.GetInstanceID()))
+			if (!_instance.m_FSMSystem.m_UniqueIdentifier.Contains(_instance.GetInstanceID()))
 				return;
 
-			var processExecutor = instance.GetProcessExecutor();
+			var processExecutor = _instance.GetProcessExecutor();
 			if (processExecutor != null)
-				processExecutor.Stop(instance.GetProcessID(), true);
+				processExecutor.Stop(_instance.GetProcessID(), true);
 
-			instance.OnDestroy();
+			_instance.OnDestroy();
 		}
 	}
 }

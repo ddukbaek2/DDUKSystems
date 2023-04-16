@@ -8,12 +8,13 @@
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public Module(FrameworkSystem _frameworkSystem) : base(_frameworkSystem)
+		protected override void OnCreate(params object[] _args)
 		{
+			base.OnCreate(_args);
 		}
 
 		/// <summary>
-		/// 파괴됨.
+		/// 해제됨.
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{

@@ -8,9 +8,9 @@ namespace DagraacSystemsExample
 		public delegate void OnTest();
 	}
 
-	public class Messenger : DagraacSystems.MessageSystem
+	public class MessageSystem : DagraacSystems.MessageSystem
 	{
-		private static readonly Lazy<Messenger> _instance = new Lazy<Messenger>(() => new Messenger(), true); // thread-safe.
-		public static Messenger Instance => _instance.Value;
+		private static readonly Lazy<MessageSystem> _instance = new Lazy<MessageSystem>(() => new MessageSystem(), true); // thread-safe.
+		public static MessageSystem Instance => _instance.Value;
 	}
 }

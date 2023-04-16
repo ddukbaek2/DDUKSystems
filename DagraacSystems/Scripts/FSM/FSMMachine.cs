@@ -9,6 +9,7 @@ namespace DagraacSystems
 	/// </summary>
 	public class FSMMachine : FSMInstance
 	{
+		private FSMSystem FSMSystem;
 		private List<FSMTrigger> _triggers;
 		private List<FSMState> _states;
 
@@ -64,11 +65,11 @@ namespace DagraacSystems
 
 			if (IsRunningState(state))
 			{
-				FSMManager.Instance._processExecutor.Stop(state.GetProcessID(), true);
+				FSMSystem.m_ProcessSystem.Stop(state.GetProcessID(), true);
 				return;
 			}
 
-			FSMManager.Instance._processExecutor.Start(state);
+			FSMSystem.m_ProcessSystem.Start(state);
 		}
 
 		public void SuspendState(FSMState state)
@@ -79,7 +80,7 @@ namespace DagraacSystems
 			if (!IsRunningState(state))
 				return;
 
-			FSMManager.Instance._processExecutor.Stop(state.GetProcessID());
+			FSMSystem.m_ProcessSystem.Stop(state.GetProcessID());
 		}
 
 		public TFSMState AddState<TFSMState>(string name) where TFSMState : FSMState, new()

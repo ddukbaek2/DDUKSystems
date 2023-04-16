@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
 	/// </summary>
-	public abstract class FrameworkObject : DisposableObject, IMessageTarget
+	public abstract class FrameworkObject : ManagedObject, IMessageTarget
 	{
 		private bool m_IsActive;
 
@@ -22,15 +22,15 @@
 		/// </summary>
 		public ulong InstanceID { internal set; get; }
 
-		/// <summary>
-		/// 생성됨.
-		/// </summary>
-		protected FrameworkObject(FrameworkSystem _franeworkSystem = null, ulong instanceID = 0ul) : base()
-		{
-			m_IsActive = false;
-			FrameworkSystem = _franeworkSystem;
-			InstanceID = instanceID;
-		}
+		///// <summary>
+		///// 생성됨.
+		///// </summary>
+		//protected FrameworkObject(FrameworkSystem _franeworkSystem = null, ulong instanceID = 0ul) : base()
+		//{
+		//	m_IsActive = false;
+		//	FrameworkSystem = _franeworkSystem;
+		//	InstanceID = instanceID;
+		//}
 
 		[Message(typeof(OnObjectCreate))]
 		protected virtual void OnCreate()

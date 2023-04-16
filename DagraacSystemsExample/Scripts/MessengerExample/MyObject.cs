@@ -20,11 +20,11 @@ namespace DagraacSystemsExample
 	{
 		private FSMMachine _fsm { set; get; }
 
-		public MyObject()
+		public MyObject(FSMSystem _system)
 		{
 			//Messenger.Instance.Add<NotificationType.OnTest>(OnTest);
 
-			_fsm = FSMManager.Instance.AddMachine<FSMMachine>("FSM_MACHINE", this);
+			_fsm = _system.AddMachine<FSMMachine>("FSM_MACHINE", this);
 
 
 			var state = default(FSMState);
