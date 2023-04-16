@@ -30,18 +30,18 @@ namespace DagraacSystems
 	/// 프레임워크 클래스.
 	/// 모듈들을 관리한다.
 	/// </summary>
-	public class Framework : DisposableObject
+	public class FrameworkSystem : DisposableObject
 	{
-		protected Messenger _messenger;
+		protected MessageSystem _messenger;
 		protected UniqueIdentifier _uniqueIdentifier;
 		protected Dictionary<Type, Module> _modules;
 
 		public UniqueIdentifier UniqueIdentifier => _uniqueIdentifier;
-		public Messenger Messenger => _messenger;
+		public MessageSystem Messenger => _messenger;
 
-		public Framework() : base()
+		public FrameworkSystem() : base()
 		{
-			_messenger = new Messenger();
+			_messenger = new MessageSystem();
 			_uniqueIdentifier = new UniqueIdentifier();
 			_modules = new Dictionary<Type, Module>();
 		}

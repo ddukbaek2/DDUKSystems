@@ -5,16 +5,17 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 테이블 매니저 베이스.
+	/// 테이블 시스템.
 	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
 	/// </summary>
-	public abstract class TableManager<TTableManager, TTableID> : SharedClass<TTableManager>
-		where TTableManager : TableManager<TTableManager, TTableID>, new()
-		where TTableID : Enum, new()
+	public abstract class TableSystem<TTableID> : ManagedObject where TTableID : Enum, new()
 	{
 		private Dictionary<TTableID, TableContainer> m_Tables;
 
-		public TableManager() : base()
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		public TableSystem() : base()
 		{
 			m_Tables = new Dictionary<TTableID, TableContainer>();
 		}
@@ -27,6 +28,9 @@ namespace DagraacSystems
 			base.OnCreate();
 		}
 
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
 		protected override void OnDispose(bool _explicitedDispose)
 		{
 			m_Tables.Clear();

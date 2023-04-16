@@ -5,7 +5,7 @@
 	/// </summary>
 	public interface IProcess
 	{
-		void Execute(ProcessExecutor processExecutor, ulong processID, params object[] args);
+		void Execute(ProcessSystem processExecutor, ulong processID, params object[] args);
 		void Update(float tick);
 		void Reset();
 		void Pause();

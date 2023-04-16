@@ -11,7 +11,7 @@ namespace DagraacSystems
 	public class FSMManager : SharedClass<FSMManager>
 	{
 		private List<FSMMachine> _machines;
-		internal ProcessExecutor _processExecutor;
+		internal ProcessSystem _processExecutor;
 		internal UniqueIdentifier _uniqueIdentifier;
 
 		protected override void OnCreate()
@@ -20,7 +20,7 @@ namespace DagraacSystems
 
 			_machines = new List<FSMMachine>();
 			_uniqueIdentifier = new UniqueIdentifier(0, 1000000000, 9999999999);
-			_processExecutor = new ProcessExecutor(_uniqueIdentifier);
+			_processExecutor = new ProcessSystem(_uniqueIdentifier);
 		}
 
 		protected override void OnDispose(bool disposing)

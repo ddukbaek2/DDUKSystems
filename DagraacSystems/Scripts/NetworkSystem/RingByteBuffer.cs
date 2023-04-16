@@ -68,7 +68,7 @@
 			else
 			{
 				var count = 0;
-				for (var i = startIndex; i < _buffer.Length; ++i)
+				for (var i = startIndex; i < _buffer.Capacity; ++i)
 				{
 					result[i - startIndex] = _buffer.Get(i);
 					++count;
@@ -87,7 +87,7 @@
 		/// </summary>
 		private int WrapIndex(int index)
 		{
-			return WrapIndex(index, _buffer.Length);
+			return WrapIndex(index, _buffer.Capacity);
 		}
 
 		/// <summary>

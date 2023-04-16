@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 메시지 송신 처리기.
 	/// </summary>
-	public class Messenger : DisposableObject
+	public class MessageSystem : DisposableObject, ISubscriber
 	{
 		/// <summary>
 		/// 구독자 별 모든 구독 정보.
@@ -28,7 +28,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public Messenger() : base()
+		public MessageSystem() : base()
 		{
 			_subscriberInfos = new Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>>();
 			CurrentMessage = null;

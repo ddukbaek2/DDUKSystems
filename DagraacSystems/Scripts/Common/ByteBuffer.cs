@@ -8,9 +8,9 @@ namespace DagraacSystems
 	/// </summary>
 	public class ByteBuffer : DisposableObject
 	{
-		private byte[] _buffer;
+		private byte[] m_Buffer;
 
-		public int Length => _buffer.Length;
+		public int Capacity => m_Buffer.Length;
 
 		public byte this[int index]
 		{
@@ -18,18 +18,27 @@ namespace DagraacSystems
 			set => Set(index, value);
 		}
 
-		public ByteBuffer(int capacity = 4096)
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		public ByteBuffer(int _capacity = 4096)
 		{
-			_buffer = new byte[capacity];
+			m_Buffer = new byte[_capacity];
 		}
 
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			_buffer = null;
+			m_Buffer = null;
 
 			base.OnDispose(explicitedDispose);
 		}
 
+		/// <summary>
+		/// 해제.
+		/// </summary>
 		public void Dispose()
 		{
 			if (IsDisposed)
@@ -38,26 +47,29 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
+		/// <summary>
+		/// 비우기.
+		/// </summary>
 		public void Clear()
 		{
-			for (var i = 0; i < _buffer.Length; ++i)
-				_buffer[i] = 0x00;
+			for (var i = 0; i < m_Buffer.Length; ++i)
+				m_Buffer[i] = 0x00;
 		}
 
 		public void Set(int index, byte value)
 		{
-			_buffer[index] = value;
+			m_Buffer[index] = value;
 		}
 
 		public byte Get(int index)
 		{
-			return _buffer[index];
+			return m_Buffer[index];
 		}
 
 		public byte[] Copy(int offset, int size)
 		{
 			var copy = new byte[size];
-			Buffer.BlockCopy(_buffer, offset, copy, 0, size);
+			Buffer.BlockCopy(m_Buffer, offset, copy, 0, size);
 			return copy;
 		}
 	}

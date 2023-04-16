@@ -56,7 +56,7 @@
 		/// </summary>
 		public static TModel CreateModel<TModel>(Pool pool = null) where TModel : Model, new()
 		{
-			var model = FrameworkObject.Create<TModel>(pool.Framework);
+			var model = FrameworkObject.Create<TModel>(pool.FrameworkSystem);
 			if (pool != null)
 				pool.Push(model);
 			return model;

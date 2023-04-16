@@ -1,7 +1,7 @@
 ﻿namespace DagraacSystems
 {
 	/// <summary>
-	/// 싱글톤 클래스.
+	/// 공유 클래스.
 	/// </summary>
 	public class SharedClass<T> : ManagedObject where T : SharedClass<T>, new()
 	{

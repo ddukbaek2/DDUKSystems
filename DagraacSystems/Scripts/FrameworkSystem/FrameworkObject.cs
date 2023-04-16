@@ -5,33 +5,33 @@
 	/// </summary>
 	public abstract class FrameworkObject : DisposableObject, ISubscriber
 	{
-		private bool _isActive;
-		private Framework _framework;
-		private ulong _instanceID;
+		private bool m_IsActive;
+		private FrameworkSystem m_FrameworkSystem;
+		private ulong m_InstanceID;
 
 		/// <summary>
 		/// 활성화 여부 (기본값: 꺼짐).
 		/// </summary>
-		public bool IsActive { set => SetActive(value); get => _isActive; }
+		public bool IsActive { set => SetActive(value); get => m_IsActive; }
 
 		/// <summary>
 		/// 참조된 프레임워크.
 		/// </summary>
-		public Framework Framework => _framework;
+		public FrameworkSystem FrameworkSystem => m_FrameworkSystem;
 
 		/// <summary>
 		/// 고유식별자.
 		/// </summary>
-		public ulong InstanceID => _instanceID;
+		public ulong InstanceID => m_InstanceID;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		protected FrameworkObject() : base()
 		{
-			_isActive = false;
-			_framework = null;
-			_instanceID = 0ul;
+			m_IsActive = false;
+			m_FrameworkSystem = null;
+			m_InstanceID = 0ul;
 		}
 
 		/// <summary>
@@ -39,9 +39,9 @@
 		/// </summary>
 		protected FrameworkObject(ulong instanceID) : base()
 		{
-			_isActive = false;
-			_framework = null;
-			_instanceID = instanceID;
+			m_IsActive = false;
+			m_FrameworkSystem = null;
+			m_InstanceID = instanceID;
 		}
 
 		[Subscribe(typeof(OnObjectCreate))]
@@ -49,8 +49,8 @@
 		{
 			//Logger.Log("[RPGObject] OnCreate()");
 
-			if (_instanceID == 0)
-				_instanceID = Framework.UniqueIdentifier.Generate();
+			if (m_InstanceID == 0)
+				m_InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
 
 			IsActive = true;
 		}
@@ -62,10 +62,10 @@
 		{
 			//Logger.Log("[RPGObject] OnDispose()");
 
-			Framework.Messenger.Remove(this);
-			Framework.UniqueIdentifier.Free(_instanceID);
-			_framework = null;
-			_instanceID = 0;
+			FrameworkSystem.Messenger.Remove(this);
+			FrameworkSystem.UniqueIdentifier.Free(m_InstanceID);
+			m_FrameworkSystem = null;
+			m_InstanceID = 0;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -100,10 +100,10 @@
 		/// </summary>
 		public void SetActive(bool isActive, bool isForced = false)
 		{
-			if (_isActive != isActive || isForced)
+			if (m_IsActive != isActive || isForced)
 			{
-				_isActive = isActive;
-				if (_isActive)
+				m_IsActive = isActive;
+				if (m_IsActive)
 					OnActive();
 				else
 					OnDeactive();
@@ -113,7 +113,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(Framework framework) where TObject : FrameworkObject, new()
+		public static TObject Create<TObject>(FrameworkSystem framework) where TObject : FrameworkObject, new()
 		{
 			return Create<TObject>(framework, 0);
 		}
@@ -121,7 +121,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TObject Create<TObject>(Framework framework, ulong instanceID) where TObject : FrameworkObject, new()
+		public static TObject Create<TObject>(FrameworkSystem framework, ulong instanceID) where TObject : FrameworkObject, new()
 		{
 			if (framework == null)
 			{

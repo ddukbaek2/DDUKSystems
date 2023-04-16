@@ -6,7 +6,7 @@ namespace DagraacSystems.Extension
 {
 	public static class GenericExtension
 	{
-		private static List<int> _indices = new List<int>();
+		private static List<int> s_Indices = new List<int>();
 
 		public static bool TryGetKey<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TValue value, out TKey key)
 		{
@@ -41,20 +41,20 @@ namespace DagraacSystems.Extension
 			if (match == null)
 				return false;
 
-			_indices.Clear();
+			s_Indices.Clear();
 			for (var i = 0; i < list.Count; ++i)
 			{
 				var value = list[i];
 				if (match(value))
 				{
-					_indices.Add(i);
+					s_Indices.Add(i);
 				}
 			}
 
-			_indices.Sort();
-			for (var i = _indices.Count - 1; i >= 0; --i)
+			s_Indices.Sort();
+			for (var i = s_Indices.Count - 1; i >= 0; --i)
 			{
-				var index = _indices[i];
+				var index = s_Indices[i];
 				list.RemoveAt(index);
 			}
 

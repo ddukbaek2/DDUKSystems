@@ -10,7 +10,7 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ExampleApplication : ConsoleApplication<ExampleApplication>
 	{
-		private ProcessExecutor _processExecutor;
+		private ProcessSystem _processExecutor;
 		private MyObject _exampleObject;
 		private Coroutine _coroutine;
 
