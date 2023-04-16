@@ -5,9 +5,9 @@ using System.Reflection;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 리플렉션 유틸리티.
+	/// 리플렉션 기능.
 	/// </summary>
-	public static class ReflectionUtility
+	public static class Reflection
 	{
 		/// <summary>
 		/// 대상 참조타입을 통해 공개되지 않은 일반 함수를 호출.
