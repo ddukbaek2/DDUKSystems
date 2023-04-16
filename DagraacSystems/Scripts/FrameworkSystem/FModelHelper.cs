@@ -1,6 +1,6 @@
 ﻿namespace DagraacSystems
 {
-	public static class ModelHelper
+	public static class FModelHelper
 	{
 		public static void SetTimer(FModel model)
 		{
