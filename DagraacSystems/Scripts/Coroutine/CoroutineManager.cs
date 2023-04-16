@@ -5,9 +5,9 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 코루틴.
+	/// 코루틴 처리기.
 	/// </summary>
-	public class CoroutineManager : Singleton<CoroutineManager>
+	internal class CoroutineManager : SharedClass<CoroutineManager>
 	{
 		private List<Coroutine> _coroutines;
 

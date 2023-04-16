@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 스트링테이블에 기반한 국가별 문자열 매니저.
 	/// </summary>
-	public class LocalizationManager : Singleton<LocalizationManager>
+	public class LocalizationManager : SharedClass<LocalizationManager>
 	{
 		public const string ErrorFormat = "TEXTERR({0})";
 

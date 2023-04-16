@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// 역할은 FSMMachine의 관리 및 프로세스의 실행, 고유식별자 할당.
 	/// 딱히 확장이 필요없는 객체.
 	/// </summary>
-	public class FSMManager : Singleton<FSMManager>
+	public class FSMManager : SharedClass<FSMManager>
 	{
 		private List<FSMMachine> _machines;
 		internal ProcessExecutor _processExecutor;

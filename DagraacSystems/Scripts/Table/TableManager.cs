@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// 테이블 매니저 베이스.
 	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
 	/// </summary>
-	public abstract class TableManager<TTableManager, TTableID> : Singleton<TTableManager>
+	public abstract class TableManager<TTableManager, TTableID> : SharedClass<TTableManager>
 		where TTableManager : TableManager<TTableManager, TTableID>, new()
 		where TTableID : Enum, new()
 	{

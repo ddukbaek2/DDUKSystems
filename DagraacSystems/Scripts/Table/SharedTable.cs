@@ -12,7 +12,7 @@ namespace DagraacSystems
 	/// 싱글톤으로 접근되지만 매니저는 아니다.
 	/// 테이블컨테이너를 별도로 확장 관리할 수 있는 체계.
 	/// </summary>
-	public class SharedTable<TSharedTable, TKey, TTableData> : Singleton<TSharedTable>
+	public class SharedTable<TSharedTable, TKey, TTableData> : SharedClass<TSharedTable>
 	  where TSharedTable : SharedTable<TSharedTable, TKey, TTableData>, new()
 	  where TTableData : ITableData
 	{
