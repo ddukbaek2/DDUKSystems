@@ -17,13 +17,13 @@ namespace DagraacSystemsExample
 
 			_count = 0;
 			_accTime = 0f;
-			Debug.Log("OnReset()");
+			DagraacSystems.Debug.Log("OnReset()");
 		}
 
 		protected override void OnExecute(params object[] args)
 		{
 			base.OnExecute(args);
-			Debug.Log("OnExecute()");
+			DagraacSystems.Debug.Log("OnExecute()");
 		}
 
 		protected override void OnUpdate(float deltaTime)
@@ -35,7 +35,7 @@ namespace DagraacSystemsExample
 			{
 				_accTime = 0f;
 				++_count;
-				Debug.Log($"{_count}");
+				DagraacSystems.Debug.Log($"{_count}");
 			}
 
 			if (_count >= 5)
@@ -47,7 +47,7 @@ namespace DagraacSystemsExample
 		protected override void OnFinish()
 		{
 			base.OnFinish();
-			Debug.Log("OnFinish()");
+			DagraacSystems.Debug.Log("OnFinish()");
 		}
 	}
 }

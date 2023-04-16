@@ -10,11 +10,11 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ConsoleApplication<T> : DisposableObject where T : ConsoleApplication<T>, new()
 	{
-		private static readonly Lazy<T> _instance = new Lazy<T>(() => new T(), true); // thread-safe.
-		public static T Instance => _instance.Value;
+		private static readonly Lazy<T> m_Instance = new Lazy<T>(() => new T(), true); // thread-safe.
+		public static T Instance => m_Instance.Value;
 
-		private bool _isQuitApplication = false;
-		private long _prevTick = 0;
+		private bool m_IsQuitApplication = false;
+		private long m_PrevTick = 0;
 
 		/// <summary>
 		/// 시작.
@@ -35,7 +35,7 @@ namespace DagraacSystemsExample
 				Thread.Sleep(1);
 			}
 
-			_isQuitApplication = true;
+			m_IsQuitApplication = true;
 			thread.Join();
 
 			OnFinish();
@@ -43,16 +43,16 @@ namespace DagraacSystemsExample
 
 		private void Update()
 		{
-			while (!_isQuitApplication)
+			while (!m_IsQuitApplication)
 			{
 				var currentTick = DateTime.Now.Ticks;
-				if (_prevTick > 0)
+				if (m_PrevTick > 0)
 				{
-					var time = TimeSpan.FromTicks(currentTick - _prevTick);
+					var time = TimeSpan.FromTicks(currentTick - m_PrevTick);
 					var deltaTime = (float)time.TotalMilliseconds * 0.001f;
-					OnUpdate(deltaTime);
+					OnTick(deltaTime);
 				}
-				_prevTick = currentTick;
+				m_PrevTick = currentTick;
 
 				Thread.Sleep(1);
 			}
@@ -62,7 +62,7 @@ namespace DagraacSystemsExample
 		{
 		}
 
-		protected virtual void OnUpdate(float deltaTime)
+		protected virtual void OnTick(float deltaTime)
 		{
 		}
 

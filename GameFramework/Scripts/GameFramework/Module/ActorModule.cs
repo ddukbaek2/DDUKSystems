@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 namespace GameFramework
 {
-	public class ActorPool : Pool
+	public class ActorPool : FPool
 	{
 	}
 
-	public class ProjectilePool : Pool
+	public class ProjectilePool : FPool
 	{
 
 	}
@@ -16,7 +16,7 @@ namespace GameFramework
 	/// <summary>
 	/// 액터 모듈.
 	/// </summary>
-	public class ActorModule : Module
+	public class ActorModule : FModule
 	{
 		//private Dictionary<ulong, ActorModel> _
 		/// <summary>

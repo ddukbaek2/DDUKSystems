@@ -41,7 +41,7 @@ namespace DagraacSystemsExample
 
 		private void OnTest()
 		{
-			Debug.Log("OnCreate()");
+			DagraacSystems.Debug.Log("OnCreate()");
 		}
 
 		void IFSMTarget.OnChangeState(FSMMachine machine, FSMTransition transition, FSMState state)

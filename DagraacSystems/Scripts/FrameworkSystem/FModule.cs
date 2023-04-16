@@ -3,7 +3,7 @@
 	/// <summary>
 	/// 모델들을 관리하는 기능 객체의 기본 틀 (=시스템).
 	/// </summary>
-	public class Module : FObject
+	public class FModule : FObject
 	{
 		/// <summary>
 		/// 생성됨.

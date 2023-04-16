@@ -9,7 +9,7 @@
 		/// 모델 로드.
 		/// 모델에서 사용해야하는 리소스 역시 이 타이밍에 로드해야함.
 		/// </summary>
-		void LoadModel(Model model);
+		void LoadModel(FModel model);
 		void LoadModelComplete();
 
 		/// <summary>
@@ -22,7 +22,7 @@
 		/// <summary>
 		/// 모델의 내부 데이터가 변경됨.
 		/// </summary>
-		void ModifyModel(Model modifiedModel);
+		void ModifyModel(FModel modifiedModel);
 
 		/// <summary>
 		/// 주기적으로 호출됨.

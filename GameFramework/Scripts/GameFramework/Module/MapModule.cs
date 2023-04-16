@@ -8,7 +8,7 @@ namespace GameFramework
 	/// <summary>
 	/// 맵 모듈.
 	/// </summary>
-	public class MapModule : Module
+	public class MapModule : FModule
 	{
 		Dictionary<long, MapModel> _models;
 

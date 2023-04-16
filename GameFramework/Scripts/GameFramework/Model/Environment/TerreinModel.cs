@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 지형 데이터.
 	/// </summary>
-	public class TerreinModel : Model
+	public class TerreinModel : FModel
 	{
 		public void Roadmap()
 		{

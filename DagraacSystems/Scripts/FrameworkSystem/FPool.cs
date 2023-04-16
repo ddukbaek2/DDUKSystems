@@ -8,26 +8,26 @@ namespace DagraacSystems
 	/// </summary>
 	public interface IPooledObject
 	{
-		void OnPush(Pool pool);
-		void OnPop(Pool pool);
+		void OnPush(FPool pool);
+		void OnPop(FPool pool);
 	}
 
 
 	/// <summary>
 	/// 프레임워크 오브젝트들을 관리하는 객체.
 	/// </summary>
-	public class Pool : FObject
+	public class FPool : FObject
 	{
-		protected Queue<IPooledObject> _pooledObjects;
+		protected Queue<IPooledObject> m_PooledObjects;
 
-		public int Count => _pooledObjects.Count;
+		public int Count => m_PooledObjects.Count;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public Pool() : base()
+		public FPool() : base()
 		{
-			_pooledObjects = new Queue<IPooledObject>();
+			m_PooledObjects = new Queue<IPooledObject>();
 		}
 
 		/// <summary>
@@ -35,10 +35,10 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			if (_pooledObjects != null)
+			if (m_PooledObjects != null)
 			{
-				_pooledObjects.Clear();
-				_pooledObjects = null;
+				m_PooledObjects.Clear();
+				m_PooledObjects = null;
 			}
 
 			base.OnDispose(explicitedDispose);
@@ -50,7 +50,7 @@ namespace DagraacSystems
 		public void Push(IPooledObject pooledObject)
 		{
 			pooledObject.OnPush(this);
-			_pooledObjects.Enqueue(pooledObject);
+			m_PooledObjects.Enqueue(pooledObject);
 		}
 
 		/// <summary>
@@ -58,10 +58,10 @@ namespace DagraacSystems
 		/// </summary>
 		public T Pop<T>() where T : IPooledObject
 		{
-			if (_pooledObjects.Count == 0)
+			if (m_PooledObjects.Count == 0)
 				return default;
 
-			var pooledObject = (T)_pooledObjects.Dequeue();
+			var pooledObject = (T)m_PooledObjects.Dequeue();
 			pooledObject.OnPop(this);
 			return pooledObject;
 		}

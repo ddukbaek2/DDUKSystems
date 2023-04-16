@@ -151,21 +151,21 @@ namespace DagraacSystems
 	/// <summary>
 	/// 속성 객체의 기본 틀.
 	/// </summary>
-	public class Property : FObject
+	public class FProperty : FObject
 	{
 		public string Name;
-		public Property Parent;
-		public List<Property> Children;
+		public FProperty Parent;
+		public List<FProperty> Children;
 		public Value Value;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public Property() : base()
+		public FProperty() : base()
 		{
 			Name = string.Empty;
 			Parent = null;
-			Children = new List<Property>();
+			Children = new List<FProperty>();
 			Value = new Value();
 		}
 
@@ -187,13 +187,13 @@ namespace DagraacSystems
 			base.OnDispose(explicitedDispose);
 		}
 
-		public static bool LoadProperty(byte[] bytes, out Property property)
+		public static bool LoadProperty(byte[] bytes, out FProperty property)
 		{
-			property = new Property();
+			property = new FProperty();
 			return false;
 		}
 
-		public static bool SaveProperty(Property property, out byte[] bytes)
+		public static bool SaveProperty(FProperty property, out byte[] bytes)
 		{
 			bytes = new byte[0];
 			return false;

@@ -7,7 +7,7 @@
 	{
 		public static void Main(string[] args)
 		{
-			ExampleApplication.Instance.Start(args);
+			Application.Instance.Start(args);
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 액터 모델.
 	/// </summary>
-	public class ActorModel : Model
+	public class ActorModel : FModel
 	{
 		protected override void OnCreate()
 		{

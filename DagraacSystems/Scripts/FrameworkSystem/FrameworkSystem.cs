@@ -17,7 +17,7 @@ namespace DagraacSystems
 	[Serializable]
 	public struct OnModuleTick : IMessage
 	{
-		public float DeltaTime;
+		public float Tick;
 	}
 
 
@@ -27,7 +27,7 @@ namespace DagraacSystems
 	/// </summary>
 	public class FrameworkSystem : DisposableObject
 	{
-		protected List<Module> m_Modules;
+		protected List<FModule> m_Modules;
 
 		public UniqueIdentifier UniqueIdentifier { private set; get; }
 
@@ -35,7 +35,7 @@ namespace DagraacSystems
 
 		public FrameworkSystem() : base()
 		{
-			m_Modules = new List<Module>();
+			m_Modules = new List<FModule>();
 			UniqueIdentifier = new UniqueIdentifier();
 			MessageSystem = new MessageSystem();
 		}
@@ -68,18 +68,18 @@ namespace DagraacSystems
 		/// <summary>
 		/// 새로운 모듈을 생성.
 		/// </summary>
-		public virtual TModule CreateModule<TModule>() where TModule : Module, new()
+		public virtual TModule CreateModule<TModule>() where TModule : FModule, new()
 		{
 			var module = new TModule();
-
 			LoadModule(module);
+
 			return module as TModule;
 		}
 
 		/// <summary>
 		/// 기존 모듈의 해제.
 		/// </summary>
-		public virtual void DisposeModule(Module module)
+		public virtual void DisposeModule(FModule module)
 		{
 			if (module == null)
 				return;
@@ -90,7 +90,7 @@ namespace DagraacSystems
 
 		public void DisposeModuleAll()
 		{
-			var copiedModules = new List<Module>(m_Modules);
+			var copiedModules = new List<FModule>(m_Modules);
 			foreach (var copiedModule in copiedModules)
 				DisposeModule(copiedModule);
 			m_Modules.Clear();
@@ -99,38 +99,38 @@ namespace DagraacSystems
 		/// <summary>
 		/// 로드 모듈.
 		/// </summary>
-		public virtual void LoadModule(Module module)
+		public virtual void LoadModule(FModule _module)
 		{
-			if (module == null)
+			if (_module == null)
 				return;
 
-			if (m_Modules.Contains(module))
+			if (m_Modules.Contains(_module))
 				return;
 
-			m_Modules.Add(module);
-			MessageSystem.Send(module, new OnModuleLoad { });
+			m_Modules.Add(_module);
+			MessageSystem.Send(_module, new OnModuleLoad { });
 		}
 
 		/// <summary>
 		/// 언로드 모듈.
 		/// </summary>
-		public virtual void UnloadModule(Module module)
+		public virtual void UnloadModule(FModule _module)
 		{
-			if (!m_Modules.Contains(module))
+			if (!m_Modules.Contains(_module))
 				return;
 
-			m_Modules.Remove(module);
-			MessageSystem.Send(module, new OnModuleUnload { });
+			m_Modules.Remove(_module);
+			MessageSystem.Send(_module, new OnModuleUnload { });
 		}
 
-		public TModule GetModule<TModule>() where TModule : Module
+		public TModule GetModule<TModule>() where TModule : FModule
 		{
 			return m_Modules.Find(_module => _module is TModule) as TModule;
 		}
 
-		public virtual void FrameMove(float deltaTime)
+		public virtual void Tick(float _tick)
 		{
-			MessageSystem.Notify(new OnModuleTick { DeltaTime = deltaTime });
+			MessageSystem.Notify(new OnModuleTick { Tick = _tick });
 		}
 	}
 }

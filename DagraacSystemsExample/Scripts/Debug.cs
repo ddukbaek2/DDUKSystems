@@ -4,7 +4,7 @@ using System;
 
 namespace DagraacSystemsExample
 {
-	public class ConsoleLogger : ILogger
+	public class Debug : ILogger
 	{
 		void ILogger.Log(string text)
 		{

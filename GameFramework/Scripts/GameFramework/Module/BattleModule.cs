@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 전투 모듈.
 	/// </summary>
-	public class BattleModule : Module
+	public class BattleModule : FModule
 	{
 		/// <summary>
 		/// 로드됨.

@@ -25,7 +25,7 @@ namespace GameFramework
 	/// <summary>
 	/// 이벤트 모듈.
 	/// </summary>
-	public class EventModule : Module
+	public class EventModule : FModule
 	{
 		/// <summary>
 		/// 로드됨.

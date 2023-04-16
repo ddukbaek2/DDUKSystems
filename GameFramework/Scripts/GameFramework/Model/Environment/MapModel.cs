@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 지역 데이터.
 	/// </summary>
-	public class MapModel : Model
+	public class MapModel : FModel
 	{
 		/// <summary>
 		/// 맵 셋팅.

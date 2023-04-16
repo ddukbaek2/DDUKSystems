@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// ¾À ¸ðµâ.
 	/// </summary>
-	public class SceneModule : Module
+	public class SceneModule : FModule
 	{
 		/// <summary>
 		/// ·ÎµåµÊ.

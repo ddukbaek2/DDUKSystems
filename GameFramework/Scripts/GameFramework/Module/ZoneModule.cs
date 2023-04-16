@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 존 모듈.
 	/// </summary>
-	public class ZoneModule : Module
+	public class ZoneModule : FModule
 	{
 		/// <summary>
 		/// 로드됨.

@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 퀘스트 모델.
 	/// </summary>
-	public class QuestModel : Model
+	public class QuestModel : FModel
 	{
 		public QuestModel() : base()
 		{

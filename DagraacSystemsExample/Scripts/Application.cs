@@ -8,7 +8,7 @@ namespace DagraacSystemsExample
 	/// <summary>
 	/// 샘플 프로그램.
 	/// </summary>
-	public class ExampleApplication : ConsoleApplication<ExampleApplication>
+	public class Application : ConsoleApplication<Application>
 	{
 		private ProcessSystem m_ProcessExecutor;
 		private MyObject m_ExampleObject;
@@ -21,7 +21,7 @@ namespace DagraacSystemsExample
 			Console.WriteLine("DagraacSystems Example!");
 
 			// 로거 등록.
-			Debug.AddLogger(new ConsoleLogger());
+			DagraacSystems.Debug.AddLogger(new Debug());
 
 			//// 테이블 로드.
 			//TableManager.Instance.LoadAll();
@@ -49,14 +49,14 @@ namespace DagraacSystemsExample
 			}
 		}
 
-		protected override void OnUpdate(float deltaTime)
+		protected override void OnTick(float _tick)
 		{
-			base.OnUpdate(deltaTime);
+			base.OnTick(_tick);
 
 			//m_ProcessExecutor.Update(deltaTime);
 			//DagraacSystems.FSMManager.Instance.Update(deltaTime);
 
-			m_Coroutine.Update(deltaTime);
+			m_Coroutine.Update(_tick);
 		}
 
 		protected override void OnFinish()

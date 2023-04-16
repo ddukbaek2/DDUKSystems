@@ -6,27 +6,27 @@
 	/// </summary>
 	public class RingByteBuffer : DisposableObject
 	{
-		protected ByteBuffer _buffer;
-		protected int _offset;
+		protected ByteBuffer m_ByteBuffer;
+		protected int m_Offset;
 
 		public RingByteBuffer(int capacity = 4096)
 		{
-			_buffer = new ByteBuffer(capacity);
-			_offset = 0;
+			m_ByteBuffer = new ByteBuffer(capacity);
+			m_Offset = 0;
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			_buffer.Dispose();
-			_buffer = null;
+			m_ByteBuffer.Dispose();
+			m_ByteBuffer = null;
 
 			base.OnDispose(explicitedDispose);
 		}
 
 		public void Clear()
 		{
-			_buffer.Clear();
-			_offset = 0;
+			m_ByteBuffer.Clear();
+			m_Offset = 0;
 		}
 
 		/// <summary>
@@ -43,10 +43,10 @@
 		/// </summary>
 		public void Write(byte value)
 		{
-			_buffer.Set(_offset, value);
+			m_ByteBuffer.Set(m_Offset, value);
 
 			// 위치를 다음 요소로 셋팅.
-			_offset = WrapIndex(_offset + 1);
+			m_Offset = WrapIndex(m_Offset + 1);
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@
 		/// </summary>
 		public byte[] Read(int size)
 		{
-			var destIndex = WrapIndex(_offset - 1);
+			var destIndex = WrapIndex(m_Offset - 1);
 			var startIndex = WrapIndex(destIndex - size);
 
 			var result = new byte[size];
@@ -63,19 +63,19 @@
 			if (startIndex < destIndex)
 			{
 				for (var i = startIndex; i <= destIndex; ++i)
-					result[i - startIndex] = _buffer.Get(i);
+					result[i - startIndex] = m_ByteBuffer.Get(i);
 			}
 			else
 			{
 				var count = 0;
-				for (var i = startIndex; i < _buffer.Capacity; ++i)
+				for (var i = startIndex; i < m_ByteBuffer.Capacity; ++i)
 				{
-					result[i - startIndex] = _buffer.Get(i);
+					result[i - startIndex] = m_ByteBuffer.Get(i);
 					++count;
 				}
 
 				for (var i = 0; i < (size - count); ++i)
-					result[count + i] = _buffer.Get(i);
+					result[count + i] = m_ByteBuffer.Get(i);
 			}
 
 			return result;
@@ -87,7 +87,7 @@
 		/// </summary>
 		private int WrapIndex(int index)
 		{
-			return WrapIndex(index, _buffer.Capacity);
+			return WrapIndex(index, m_ByteBuffer.Capacity);
 		}
 
 		/// <summary>

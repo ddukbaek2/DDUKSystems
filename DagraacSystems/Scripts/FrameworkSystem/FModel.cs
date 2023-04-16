@@ -3,21 +3,21 @@
 	/// <summary>
 	/// 다수의 데이터로 존재할 수 있는 특정 개체의 기본 틀.
 	/// </summary>
-	public class Model : FObject, IPooledObject
+	public class FModel : FObject, IPooledObject
 	{
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public Model() : base()
+		public FModel() : base()
 		{
 		}
 
-		void IPooledObject.OnPush(Pool pool)
+		void IPooledObject.OnPush(FPool pool)
 		{
 			OnPush();
 		}
 
-		void IPooledObject.OnPop(Pool pool)
+		void IPooledObject.OnPop(FPool pool)
 		{
 			OnPop();
 		}
@@ -54,7 +54,7 @@
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static TModel CreateModel<TModel>(Pool pool = null) where TModel : Model, new()
+		public static TModel CreateModel<TModel>(FPool pool = null) where TModel : FModel, new()
 		{
 			var model = FObject.Create<TModel>(pool.FrameworkSystem);
 			if (pool != null)

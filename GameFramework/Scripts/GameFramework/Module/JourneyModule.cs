@@ -6,7 +6,7 @@ namespace GameFramework
 	/// <summary>
 	/// 여정 모듈.
 	/// </summary>
-	public class JourneyModule : Module
+	public class JourneyModule : FModule
 	{
 		/// <summary>
 		/// 로드됨.

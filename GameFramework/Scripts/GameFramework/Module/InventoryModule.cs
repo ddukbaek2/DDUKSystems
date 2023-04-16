@@ -7,7 +7,7 @@ namespace GameFramework
 	/// <summary>
 	/// 인벤토리 모듈.
 	/// </summary>
-	public class InventoryModule : Module
+	public class InventoryModule : FModule
 	{
 		public Dictionary<long, long> _items;
 
