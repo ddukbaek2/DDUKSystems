@@ -6,26 +6,40 @@ namespace DagraacSystems
 	/// <summary>
 	/// 코루틴.
 	/// </summary>
-	public class Coroutine : DisposableObject
+	public class Coroutine : ManagedObject
 	{
+		/// <summary>
+		/// 내부 상태.
+		/// </summary>
 		private enum Condition { Continue, Wait, Finished, }
 
-		private IEnumerator _enumerator;
-		private YieldInstruction _yield;
-		private Condition _condition;
-		private bool _isRunning;
+		private IEnumerator m_Enumerator;
+		private YieldInstruction m_Yield;
+		private Condition m_Condition;
+		private bool m_IsRunning;
 
-		public bool IsRunning => _isRunning;
+		/// <summary>
+		/// 작동 중 여부.
+		/// </summary>
+		public bool IsRunning => m_IsRunning;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
 		public Coroutine() : base()
 		{
-			_enumerator = null;
-			_yield = null;
-			_condition = Condition.Finished;
-			_isRunning = false;
+			m_Enumerator = null;
+			m_Yield = null;
+			m_Condition = Condition.Finished;
+			m_IsRunning = false;
+		}
+
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		protected override void OnCreate(params object[] _args)
+		{
+			base.OnCreate(_args);
 		}
 
 		/// <summary>
@@ -39,25 +53,14 @@ namespace DagraacSystems
 		}
 
 		/// <summary>
-		/// 해제.
-		/// </summary>
-		public void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			DisposableObject.Dispose(this);
-		}
-
-		/// <summary>
 		/// 시작.
 		/// </summary>
 		public void Start(IEnumerator enumerator)
 		{
-			_enumerator = enumerator;
-			_yield = null;
-			_condition = Condition.Continue;
-			_isRunning = true;
+			m_Enumerator = enumerator;
+			m_Yield = null;
+			m_Condition = Condition.Continue;
+			m_IsRunning = true;
 		}
 
 		/// <summary>
@@ -65,29 +68,29 @@ namespace DagraacSystems
 		/// </summary>
 		public void Stop()
 		{
-			_enumerator = null;
-			_yield = null;
-			_condition = Condition.Finished;
-			_isRunning = false;
+			m_Enumerator = null;
+			m_Yield = null;
+			m_Condition = Condition.Finished;
+			m_IsRunning = false;
 		}
 
 		/// <summary>
 		/// 매 프레임마다 갱신.
 		/// </summary>
-		public void Update(float tick)
+		public void Update(float _tick)
 		{
-			if (!_isRunning)
+			if (!m_IsRunning)
 				return;
 
-			switch (_condition)
+			switch (m_Condition)
 			{
 				case Condition.Continue:
 					{
-						_condition = Continue();
-						if (_condition == Condition.Wait)
+						m_Condition = Coroutine.ContinueInternal(this);
+						if (m_Condition == Condition.Wait)
 						{
-							if (_yield != null)
-								_yield.Start();
+							if (m_Yield != null)
+								m_Yield.Start();
 						}
 
 						break;
@@ -95,18 +98,18 @@ namespace DagraacSystems
 
 				case Condition.Wait:
 					{
-						if (_yield != null)
+						if (m_Yield != null)
 						{
-							if (_yield.Update(tick))
+							if (m_Yield.Update(_tick))
 							{
-								_yield.Finish();
-								_yield = null;
-								_condition = Condition.Continue;
+								m_Yield.Finish();
+								m_Yield = null;
+								m_Condition = Condition.Continue;
 							}
 						}
 						else
 						{
-							_condition = Condition.Continue;
+							m_Condition = Condition.Continue;
 						}
 
 						break;
@@ -121,13 +124,16 @@ namespace DagraacSystems
 		}
 
 		/// <summary>
-		/// 다음 코드블록을 수행한다.
+		/// 다음 코드블록을 처리한다.
 		/// </summary>
-		private Condition Continue()
+		private static Condition ContinueInternal(Coroutine _coroutine)
 		{
-			if (_enumerator != null && _enumerator.MoveNext())
+			if (_coroutine == null || _coroutine.m_Enumerator == null)
+				return Condition.Finished;
+
+			if (_coroutine.m_Enumerator.MoveNext())
 			{
-				_yield = (YieldInstruction)_enumerator.Current;
+				_coroutine.m_Yield = _coroutine.m_Enumerator.Current as YieldInstruction;
 				return Condition.Wait;
 			}
 

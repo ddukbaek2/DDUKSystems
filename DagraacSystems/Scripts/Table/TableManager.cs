@@ -12,43 +12,58 @@ namespace DagraacSystems
 		where TTableManager : TableManager<TTableManager, TTableID>, new()
 		where TTableID : Enum, new()
 	{
-		private Dictionary<TTableID, TableContainer> _tables;
+		private Dictionary<TTableID, TableContainer> m_Tables;
 
 		public TableManager() : base()
 		{
-			_tables = new Dictionary<TTableID, TableContainer>();
+			m_Tables = new Dictionary<TTableID, TableContainer>();
 		}
 
-		protected override void OnCreate()
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
+		protected override void OnCreate(params object[] _args)
 		{
 			base.OnCreate();
 		}
 
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
-			_tables.Clear();
+			m_Tables.Clear();
 
-			base.OnDispose(explicitedDispose);
+			base.OnDispose(_explicitedDispose);
 		}
 
-		protected virtual void OnLoaded(TTableID tableID, TableContainer tableContainer)
+		/// <summary>
+		/// 로드됨.
+		/// </summary>
+		protected virtual void OnLoaded(TTableID _tableID, TableContainer _tableContainer)
 		{
 		}
 
 		/// <summary>
 		/// 정합성 체크.
 		/// </summary>
-		protected virtual bool OnCheckIntegrity(TTableID tableID, TableContainer tableContainer)
+		protected virtual bool OnCheckIntegrity(TTableID _tableID, TableContainer _tableContainer)
 		{
 			return true;
 		}
 
+		/// <summary>
+		/// 전체 로드됨.
+		/// </summary>
 		protected virtual void OnLoadAll()
 		{
 		}
 
+		/// <summary>
+		/// 파일에서 로드됨.
+		/// </summary>
 		protected abstract TTableData[] LoadFromFile<TTableData>(string path) where TTableData : ITableData;
 
+		/// <summary>
+		/// 파일에서 비동기 로드됨.
+		/// </summary>
 		protected abstract void LoadFromFileAsync<TTableData>(string path, Action<TTableData[]> onLoadComplete) where TTableData : ITableData;
 
 		/// <summary>
@@ -115,15 +130,15 @@ namespace DagraacSystems
 		private void Load<TTableData>(TTableID tableID, TTableData[] tableDataArray, Func<int, ITableData, string> generateKeyCallback, bool isMerge = false) where TTableData : ITableData
 		{
 			var tableContainer = default(TableContainer);
-			if (_tables.ContainsKey(tableID))
+			if (m_Tables.ContainsKey(tableID))
 			{
-				tableContainer = _tables[tableID];
+				tableContainer = m_Tables[tableID];
 			}
 			else
 			{
 				isMerge = false;
 				tableContainer = new TableContainer();
-				_tables.Add(tableID, tableContainer);
+				m_Tables.Add(tableID, tableContainer);
 			}
 
 			var tableDataList = new ITableData[tableDataArray.Length];
@@ -154,27 +169,27 @@ namespace DagraacSystems
 
 		public bool Unload(TTableID tableID)
 		{
-			return _tables.Remove(tableID);
+			return m_Tables.Remove(tableID);
 		}
 
 		public void UnloadAll()
 		{
-			_tables.Clear();
+			m_Tables.Clear();
 		}
 
 		public TableContainer GetTable(TTableID tableID)
 		{
-			return _tables[tableID];
+			return m_Tables[tableID];
 		}
 
 		public TTableContainer GetTable<TTableContainer>(TTableID tableID) where TTableContainer : TableContainer
 		{
-			return (TTableContainer)_tables[tableID];
+			return (TTableContainer)m_Tables[tableID];
 		}
 
 		public bool Cotains(TTableID tableID)
 		{
-			return _tables.ContainsKey(tableID);
+			return m_Tables.ContainsKey(tableID);
 		}
 	}
 }

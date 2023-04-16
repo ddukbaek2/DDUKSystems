@@ -5,12 +5,15 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 코루틴 처리기.
+	/// 코루틴 실행기.
 	/// </summary>
-	internal class CoroutineManager : SharedClass<CoroutineManager>
+	internal class CoroutineExecutor : ManagedObject
 	{
 		private List<Coroutine> _coroutines;
 
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
 		protected override void OnCreate(params object[] args)
 		{
 			base.OnCreate(args);
@@ -31,8 +34,10 @@ namespace DagraacSystems
 		{
 			foreach (var coroutine in _coroutines)
 			{
-				if (coroutine.IsRunning)
-					coroutine.Update(deltaTime);
+				if (coroutine == null || !coroutine.IsRunning)
+					continue;
+
+				coroutine.Update(deltaTime);
 			}
 
 			for (var i = 0; i < _coroutines.Count; ++i)
@@ -48,7 +53,7 @@ namespace DagraacSystems
 
 		public Coroutine CreateCoroutine()
 		{
-			var coroutine = DisposableObject.Create<Coroutine>();
+			var coroutine = ManagedObject.Create<Coroutine>();
 			_coroutines.Add(coroutine);
 			return coroutine;
 		}
@@ -59,14 +64,14 @@ namespace DagraacSystems
 			coroutine.Dispose();
 		}
 
-		public void Start(IEnumerator process)
+		public void Start(IEnumerator _process)
 		{
-			IEnumerator Process(Coroutine self)
+			IEnumerator Process(Coroutine _coroutine)
 			{
-				while (process.MoveNext())
-					yield return process;
+				while (_process.MoveNext())
+					yield return _process;
 
-				self.Dispose();
+				_coroutine.Dispose();
 			}
 
 			var coroutine = CreateCoroutine();

@@ -1,5 +1,8 @@
 ﻿namespace DagraacSystems
 {
+	/// <summary>
+	/// 상태 처리기.
+	/// </summary>
 	public interface IProcess
 	{
 		void Execute(ProcessExecutor processExecutor, ulong processID, params object[] args);

@@ -5,23 +5,23 @@
 	/// </summary>
 	public class WaitForSeconds : YieldInstruction
 	{
-		private float _time;
-		private float _duration;
+		private float m_Time;
+		private float m_Duration;
 
-		public WaitForSeconds(float duration) : base()
+		public WaitForSeconds(float _duration) : base()
 		{
-			_duration = duration;
+			m_Duration = _duration;
 		}
 
 		protected override void OnStarted()
 		{
-			_time = 0f;
+			m_Time = 0f;
 		}
 
-		protected override bool OnUpdated(float tick)
+		protected override bool OnUpdated(float _tick)
 		{
-			_time += tick;
-			if (_time < _duration)
+			m_Time += _tick;
+			if (m_Time < m_Duration)
 				return false; // 무한 대기.
 
 			return true;

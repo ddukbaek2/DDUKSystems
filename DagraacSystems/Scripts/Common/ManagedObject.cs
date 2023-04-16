@@ -26,6 +26,17 @@ namespace DagraacSystems
 		}
 
 		/// <summary>
+		/// 해제.
+		/// </summary>
+		public void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
+		}
+
+		/// <summary>
 		/// 타입을 기준으로 생성.
 		/// </summary>
 		public static T Create<T>(params object[] _args) where T : ManagedObject, new()
@@ -46,6 +57,5 @@ namespace DagraacSystems
 			managedObject.OnCreate(_args);
 			return managedObject;
 		}
-
 	}
 }
