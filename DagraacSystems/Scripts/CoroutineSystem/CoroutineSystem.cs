@@ -64,10 +64,10 @@ namespace DagraacSystems
 			return coroutine;
 		}
 
-		public void DisposeCoroutine(Coroutine coroutine)
+		public void DisposeCoroutine(Coroutine _coroutine)
  		{
-			m_Coroutines.Remove(coroutine);
-			coroutine.Dispose();
+			m_Coroutines.Remove(_coroutine);
+			_coroutine.Dispose();
 		}
 
 		public void Start(IEnumerator _process)

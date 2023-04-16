@@ -8,12 +8,12 @@ namespace DagraacSystems
 	/// <summary>
 	/// 메시지 송신 처리기.
 	/// </summary>
-	public class MessageSystem : DisposableObject, ISubscriber
+	public class MessageSystem : DisposableObject, IMessageTarget
 	{
 		/// <summary>
 		/// 구독자 별 모든 구독 정보.
 		/// </summary>
-		private Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>> _subscriberInfos;
+		private Dictionary<IMessageTarget, Dictionary<Type, List<MethodInfo>>> messageTargets;
 
 		/// <summary>
 		/// 송신자.
@@ -30,7 +30,7 @@ namespace DagraacSystems
 		/// </summary>
 		public MessageSystem() : base()
 		{
-			_subscriberInfos = new Dictionary<ISubscriber, Dictionary<Type, List<MethodInfo>>>();
+			messageTargets = new Dictionary<IMessageTarget, Dictionary<Type, List<MethodInfo>>>();
 			CurrentMessage = null;
 		}
 
@@ -52,7 +52,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 수신자 등록.
 		/// </summary>
-		public void Add(ISubscriber subscriber)
+		public void Add(IMessageTarget subscriber)
 		{
 			if (subscriber == null)
 			{
@@ -60,7 +60,7 @@ namespace DagraacSystems
 				return;
 			}
 
-			if (_subscriberInfos.ContainsKey(subscriber))
+			if (messageTargets.ContainsKey(subscriber))
 			{
 				//Debug.LogError($"[Messenger] listener is exist.");
 				return;
@@ -72,12 +72,12 @@ namespace DagraacSystems
 
 			foreach (var method in methods)
 			{
-				if (!method.IsDefined(typeof(SubscribeAttribute)))
+				if (!method.IsDefined(typeof(MessageAttribute)))
 					continue;
 
-				foreach (var attribute in method.GetCustomAttributes(typeof(SubscribeAttribute)))
+				foreach (var attribute in method.GetCustomAttributes(typeof(MessageAttribute)))
 				{
-					var subscribe = attribute as SubscribeAttribute;
+					var subscribe = attribute as MessageAttribute;
 
 					if (subscribe.Type == null)
 					{
@@ -101,15 +101,15 @@ namespace DagraacSystems
 				}
 			}
 
-			_subscriberInfos.Add(subscriber, subscriberInfo);
+			messageTargets.Add(subscriber, subscriberInfo);
 		}
 
 		/// <summary>
 		/// 제거.
 		/// </summary>
-		public void Remove(ISubscriber subscriber)
+		public void Remove(IMessageTarget subscriber)
 		{
-			_subscriberInfos.Remove(subscriber);
+			messageTargets.Remove(subscriber);
 		}
 
 		/// <summary>
@@ -117,13 +117,13 @@ namespace DagraacSystems
 		/// </summary>
 		public void Clear()
 		{
-			_subscriberInfos.Clear();
+			messageTargets.Clear();
 		}
 
 		/// <summary>
 		/// 특정 리스너에게 통지.
 		/// </summary>
-		public void Send(ISubscriber subscriber, IMessage message)
+		public void Send(IMessageTarget subscriber, IMessage message)
 		{
 			Send(null, subscriber, message);
 		}
@@ -131,7 +131,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 특정 리스너에게 통지.
 		/// </summary>
-		public void Send(object sender, ISubscriber subscriber, IMessage message)
+		public void Send(object sender, IMessageTarget subscriber, IMessage message)
 		{
 			if (subscriber == null)
 			{
@@ -147,7 +147,7 @@ namespace DagraacSystems
 
 			var messageType = message.GetType();
 
-			if (!_subscriberInfos.TryGetValue(subscriber, out var subscriberInfo))
+			if (!messageTargets.TryGetValue(subscriber, out var subscriberInfo))
 			{
 				//Debug.LogError($"[Messenger] not found listenerInfo.");
 				return;
@@ -212,7 +212,7 @@ namespace DagraacSystems
 
 			Sender = sender;
 
-			foreach (var subscriber in _subscriberInfos.Keys)
+			foreach (var subscriber in messageTargets.Keys)
 			{
 				// 수신부 중 하나에서 죽을 경우를 대비한 방어 처리.
 				try

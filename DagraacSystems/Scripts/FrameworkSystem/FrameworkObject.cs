@@ -3,11 +3,9 @@
 	/// <summary>
 	/// 프레임워크 내에 속한 모든 관리되는 인스턴스의 최상위 객체.
 	/// </summary>
-	public abstract class FrameworkObject : DisposableObject, ISubscriber
+	public abstract class FrameworkObject : DisposableObject, IMessageTarget
 	{
 		private bool m_IsActive;
-		private FrameworkSystem m_FrameworkSystem;
-		private ulong m_InstanceID;
 
 		/// <summary>
 		/// 활성화 여부 (기본값: 꺼짐).
@@ -17,40 +15,30 @@
 		/// <summary>
 		/// 참조된 프레임워크.
 		/// </summary>
-		public FrameworkSystem FrameworkSystem => m_FrameworkSystem;
+		public FrameworkSystem FrameworkSystem { internal set; get; }
 
 		/// <summary>
 		/// 고유식별자.
 		/// </summary>
-		public ulong InstanceID => m_InstanceID;
+		public ulong InstanceID { internal set; get; }
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected FrameworkObject() : base()
+		protected FrameworkObject(FrameworkSystem _franeworkSystem = null, ulong instanceID = 0ul) : base()
 		{
 			m_IsActive = false;
-			m_FrameworkSystem = null;
-			m_InstanceID = 0ul;
+			FrameworkSystem = _franeworkSystem;
+			InstanceID = instanceID;
 		}
 
-		/// <summary>
-		/// 생성됨.
-		/// </summary>
-		protected FrameworkObject(ulong instanceID) : base()
-		{
-			m_IsActive = false;
-			m_FrameworkSystem = null;
-			m_InstanceID = instanceID;
-		}
-
-		[Subscribe(typeof(OnObjectCreate))]
+		[Message(typeof(OnObjectCreate))]
 		protected virtual void OnCreate()
 		{
 			//Logger.Log("[RPGObject] OnCreate()");
 
-			if (m_InstanceID == 0)
-				m_InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
+			if (InstanceID == 0)
+				InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
 
 			IsActive = true;
 		}
@@ -63,9 +51,9 @@
 			//Logger.Log("[RPGObject] OnDispose()");
 
 			FrameworkSystem.Messenger.Remove(this);
-			FrameworkSystem.UniqueIdentifier.Free(m_InstanceID);
-			m_FrameworkSystem = null;
-			m_InstanceID = 0;
+			FrameworkSystem.UniqueIdentifier.Free(InstanceID);
+			FrameworkSystem = null;
+			InstanceID = 0;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -130,9 +118,9 @@
 
 			framework.UniqueIdentifier.Synchronize(instanceID);
 
-			var target = DisposableObject.Create<TObject>();
-			target._framework = framework;
-			target._instanceID = instanceID;
+			var target = ManagedObject.Create<TObject>();
+			target.FrameworkSystem = framework;
+			target.InstanceID = instanceID;
 
 			framework.Messenger.Add(target);
 			framework.Messenger.Send(target, new OnObjectCreate { });

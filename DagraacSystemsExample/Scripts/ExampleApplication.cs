@@ -10,9 +10,9 @@ namespace DagraacSystemsExample
 	/// </summary>
 	public class ExampleApplication : ConsoleApplication<ExampleApplication>
 	{
-		private ProcessSystem _processExecutor;
-		private MyObject _exampleObject;
-		private Coroutine _coroutine;
+		private ProcessSystem m_ProcessExecutor;
+		private MyObject m_ExampleObject;
+		private Coroutine m_Coroutine;
 
 		protected override void OnStart()
 		{
@@ -34,8 +34,8 @@ namespace DagraacSystemsExample
 
 			//m_ExampleObject = new MyObject();
 
-			_coroutine = new Coroutine();
-			_coroutine.Start(Process());
+			m_Coroutine = new Coroutine();
+			m_Coroutine.Start(Process());
 		}
 
 		IEnumerator Process()
@@ -56,7 +56,7 @@ namespace DagraacSystemsExample
 			//m_ProcessExecutor.Update(deltaTime);
 			//DagraacSystems.FSMManager.Instance.Update(deltaTime);
 
-			_coroutine.Update(deltaTime);
+			m_Coroutine.Update(deltaTime);
 		}
 
 		protected override void OnFinish()
@@ -68,7 +68,7 @@ namespace DagraacSystemsExample
 			//m_ExampleObject = null;
 
 			//MessageBroker.Instance.Publish<NotificationType.OnTest>();
-			_coroutine.Stop();
+			m_Coroutine.Stop();
 		}
 	}
 }

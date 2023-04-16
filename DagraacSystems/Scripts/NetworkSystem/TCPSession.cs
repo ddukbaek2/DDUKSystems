@@ -19,20 +19,20 @@ namespace DagraacSystems
 		}
 
 
-		private Socket _socket;
-		private SocketAsyncEventArgs _connectEvent;
-		private SocketAsyncEventArgs _disconnectEvent;
-		private SocketAsyncEventArgs _sendEvent;
-		private SocketAsyncEventArgs _receiveEvent;
+		private Socket m_Socket;
+		private SocketAsyncEventArgs m_ConnectEvent;
+		private SocketAsyncEventArgs m_DisconnectEvent;
+		private SocketAsyncEventArgs m_SendEvent;
+		private SocketAsyncEventArgs m_ReceiveEvent;
 		private TCPConnectionState _connectionState;
-		private ReceiveBuffer _receiveBuffer;
-		public bool IsConnected => _socket.Connected;
+		private ReceiveBuffer m_ReceiveBuffer;
+		public bool IsConnected => m_Socket.Connected;
 
 		public TCPSession() : base()
 		{
-			_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			_connectEvent = new SocketAsyncEventArgs();
-			_connectEvent.Completed += (sender, e) =>
+			m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+			m_ConnectEvent = new SocketAsyncEventArgs();
+			m_ConnectEvent.Completed += (sender, e) =>
 			{
 				if (e.SocketError == SocketError.Success)
 				{
@@ -45,15 +45,15 @@ namespace DagraacSystems
 				}
 			};
 
-			_disconnectEvent = new SocketAsyncEventArgs();
-			_disconnectEvent.Completed += (sender, e) =>
+			m_DisconnectEvent = new SocketAsyncEventArgs();
+			m_DisconnectEvent.Completed += (sender, e) =>
 			{
 				SetConnectionState(TCPConnectionState.Disconnected);
 			};
 
-			_sendEvent = new SocketAsyncEventArgs();
-			_sendEvent.SetBuffer(new byte[4096], 0, 4096);
-			_sendEvent.Completed += (sender, e) =>
+			m_SendEvent = new SocketAsyncEventArgs();
+			m_SendEvent.SetBuffer(new byte[4096], 0, 4096);
+			m_SendEvent.Completed += (sender, e) =>
 			{
 				if (e.SocketError == SocketError.Success && e.LastOperation == SocketAsyncOperation.Send)
 				{
@@ -65,22 +65,22 @@ namespace DagraacSystems
 				}
 			};
 
-			_receiveEvent = new SocketAsyncEventArgs();
-			_receiveEvent.SetBuffer(new byte[4096], 0, 4096);
-			_receiveEvent.Completed += (sender, e) =>
+			m_ReceiveEvent = new SocketAsyncEventArgs();
+			m_ReceiveEvent.SetBuffer(new byte[4096], 0, 4096);
+			m_ReceiveEvent.Completed += (sender, e) =>
 			{
 				if (e.SocketError == SocketError.Success && e.LastOperation == SocketAsyncOperation.Receive)
 				{
 					if (e.BytesTransferred > 0)
 					{
 						// 무지성 수신.
-						_receiveBuffer.Enqueue(e.Buffer, e.BytesTransferred);
+						m_ReceiveBuffer.Enqueue(e.Buffer, e.BytesTransferred);
 
 						// 완성된 수신데이터가 있다면.
-						if (_receiveBuffer.Count > 0)
+						if (m_ReceiveBuffer.Count > 0)
 						{
 							// 수신완료 처리.
-							OnReceived(_receiveBuffer.Dequeue());
+							OnReceived(m_ReceiveBuffer.Dequeue());
 						}
 
 						// 다음 수신을 다시 요청.
@@ -97,37 +97,37 @@ namespace DagraacSystems
 				}
 			};
 
-			_receiveBuffer = DisposableObject.Create<ReceiveBuffer>();
+			m_ReceiveBuffer = ManagedObject.Create<ReceiveBuffer>();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
 		{
-			if (_socket != null)
+			if (m_Socket != null)
 			{
-				_socket.Disconnect(false);
-				_socket.Dispose();
-				_socket = null;
+				m_Socket.Disconnect(false);
+				m_Socket.Dispose();
+				m_Socket = null;
 			}
 
-			if (_connectEvent != null)
+			if (m_ConnectEvent != null)
 			{
-				_connectEvent.Dispose();
-				_connectEvent = null;
+				m_ConnectEvent.Dispose();
+				m_ConnectEvent = null;
 			}
 
-			if (_disconnectEvent != null)
+			if (m_DisconnectEvent != null)
 			{
-				_disconnectEvent.Dispose();
-				_disconnectEvent = null;
+				m_DisconnectEvent.Dispose();
+				m_DisconnectEvent = null;
 			}
 
-			_sendEvent.Dispose();
-			_receiveEvent.Dispose();
+			m_SendEvent.Dispose();
+			m_ReceiveEvent.Dispose();
 
-			if (_receiveBuffer != null)
+			if (m_ReceiveBuffer != null)
 			{
-				_receiveBuffer.Dispose();
-				_receiveBuffer = null;
+				m_ReceiveBuffer.Dispose();
+				m_ReceiveBuffer = null;
 			}
 
 			if (_connectionState != TCPConnectionState.Disconnected)
@@ -149,12 +149,12 @@ namespace DagraacSystems
 
 		protected virtual void OnConnected(bool isSuccssed)
 		{
-			_receiveBuffer.Clear();
+			m_ReceiveBuffer.Clear();
 		}
 
 		protected virtual void OnDisconnected(bool explicitDisconnected)
 		{
-			_receiveBuffer.Clear();
+			m_ReceiveBuffer.Clear();
 		}
 
 		protected virtual void OnSended(byte[] data)
@@ -170,7 +170,7 @@ namespace DagraacSystems
 			if (IsDisposed)
 				return;
 
-			_connectEvent.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
+			m_ConnectEvent.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(ip), port);
 
 			Reconnect();
 		}
@@ -187,7 +187,7 @@ namespace DagraacSystems
 				return;
 
 			SetConnectionState(TCPConnectionState.Connecting);		
-			_socket.ConnectAsync(_connectEvent);
+			m_Socket.ConnectAsync(m_ConnectEvent);
 		}
 
 		public void Disconnect()
@@ -203,7 +203,7 @@ namespace DagraacSystems
 
 			SetConnectionState(TCPConnectionState.Disconnecting);
 			SetConnectionState(TCPConnectionState.Disconnected);
-			_socket.DisconnectAsync(_disconnectEvent);
+			m_Socket.DisconnectAsync(m_DisconnectEvent);
 		}
 
 		public void Send(byte[] data)
@@ -217,8 +217,8 @@ namespace DagraacSystems
 			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
 				return;
 
-			_sendEvent.SetBuffer(data, 0, data.Length);
-			_socket.SendAsync(_sendEvent);
+			m_SendEvent.SetBuffer(data, 0, data.Length);
+			m_Socket.SendAsync(m_SendEvent);
 		}
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace DagraacSystems
 			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
 				return;
 
-			_socket.ReceiveAsync(_receiveEvent);
+			m_Socket.ReceiveAsync(m_ReceiveEvent);
 		}
 
 		/// <summary>

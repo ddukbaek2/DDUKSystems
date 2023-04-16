@@ -104,7 +104,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태 아이디.
 		/// </summary>
-		public TStateID StateID { get; }
+		TStateID StateID { get; }
 
 		/// <summary>
 		/// 상태 실행됨.

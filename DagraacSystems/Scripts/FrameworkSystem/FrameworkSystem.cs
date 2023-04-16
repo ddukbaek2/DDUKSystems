@@ -32,29 +32,29 @@ namespace DagraacSystems
 	/// </summary>
 	public class FrameworkSystem : DisposableObject
 	{
-		protected MessageSystem _messenger;
-		protected UniqueIdentifier _uniqueIdentifier;
-		protected Dictionary<Type, Module> _modules;
+		protected MessageSystem m_MessageSystem;
+		protected UniqueIdentifier m_UniqueIdentifier;
+		protected List<Module> m_Modules;
 
-		public UniqueIdentifier UniqueIdentifier => _uniqueIdentifier;
-		public MessageSystem Messenger => _messenger;
+		public UniqueIdentifier UniqueIdentifier => m_UniqueIdentifier;
+		public MessageSystem Messenger => m_MessageSystem;
 
 		public FrameworkSystem() : base()
 		{
-			_messenger = new MessageSystem();
-			_uniqueIdentifier = new UniqueIdentifier();
-			_modules = new Dictionary<Type, Module>();
+			m_MessageSystem = new MessageSystem();
+			m_UniqueIdentifier = new UniqueIdentifier();
+			m_Modules = new List<Module>();
 		}
 
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			DisposeModuleAll();
 
-			_messenger.Dispose();
-			_messenger = null;
+			m_MessageSystem.Dispose();
+			m_MessageSystem = null;
 
-			_uniqueIdentifier.Dispose();
-			_uniqueIdentifier = null;
+			m_UniqueIdentifier.Dispose();
+			m_UniqueIdentifier = null;
 
 			base.OnDispose(explicitedDispose);
 		}
@@ -71,19 +71,24 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
+		/// <summary>
+		/// 새로운 모듈을 생성.
+		/// </summary>
 		public virtual TModule CreateModule<TModule>() where TModule : Module, new()
 		{
-			var module = Module.Create<TModule>(this);
+			var module = new TModule();
+
 			LoadModule(module);
 			return module as TModule;
 		}
 
+		/// <summary>
+		/// 기존 모듈의 해제.
+		/// </summary>
 		public virtual void DisposeModule(Module module)
 		{
 			if (module == null)
-			{
 				return;
-			}
 
 			UnloadModule(module);
 			module.Dispose();
@@ -91,48 +96,47 @@ namespace DagraacSystems
 
 		public void DisposeModuleAll()
 		{
-			var copiedModules = new List<Module>(_modules.Values);
+			var copiedModules = new List<Module>(m_Modules);
 			foreach (var copiedModule in copiedModules)
 				DisposeModule(copiedModule);
-
-			//foreach (var module in _modules)
-			//	module.Value.Dispose();
-			_modules.Clear();
+			m_Modules.Clear();
 		}
 
-
+		/// <summary>
+		/// 로드 모듈.
+		/// </summary>
 		public virtual void LoadModule(Module module)
 		{
-			var moduleType = module.GetType();
-			if (_modules.ContainsKey(moduleType))
-			{
+			if (module == null)
 				return;
-			}
 
-			_modules.Add(moduleType, module);
-			_messenger.Send(module, new OnModuleLoad { });
+			if (m_Modules.Contains(module))
+				return;
+
+			m_Modules.Add(module);
+			m_MessageSystem.Send(module, new OnModuleLoad { });
 		}
 
+		/// <summary>
+		/// 언로드 모듈.
+		/// </summary>
 		public virtual void UnloadModule(Module module)
 		{
-			var moduleType = module.GetType();
-			if (!_modules.ContainsKey(moduleType))
-			{
+			if (!m_Modules.Contains(module))
 				return;
-			}
 
-			_modules.Remove(moduleType);
-			_messenger.Send(module, new OnModuleUnload { });
+			m_Modules.Remove(module);
+			m_MessageSystem.Send(module, new OnModuleUnload { });
 		}
 
-		public T GetModule<T>() where T : Module
+		public TModule GetModule<TModule>() where TModule : Module
 		{
-			return _modules[typeof(T)] as T;
+			return m_Modules.Find(_module => _module is TModule) as TModule;
 		}
 
 		public virtual void FrameMove(float deltaTime)
 		{
-			_messenger.Notify(new OnModuleUpdate { DeltaTime = deltaTime });
+			m_MessageSystem.Notify(new OnModuleUpdate { DeltaTime = deltaTime });
 		}
 	}
 }
