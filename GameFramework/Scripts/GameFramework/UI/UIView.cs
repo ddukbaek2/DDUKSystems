@@ -1,9 +1,8 @@
-﻿using GameFramework.UI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DagraacSystems.UI
+namespace GameFramework.UI
 {
 	public class UIView : UIObject
 	{

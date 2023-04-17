@@ -3,7 +3,7 @@
 
 namespace GameFramework.UI
 {
-	public class UIScreen : UIObject
+	public class UIPopup : UIContent
 	{
 	}
 }
