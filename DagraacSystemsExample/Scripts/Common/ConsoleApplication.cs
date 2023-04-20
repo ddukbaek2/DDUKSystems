@@ -8,10 +8,10 @@ namespace DagraacSystemsExample
 	/// <summary>
 	/// 콘솔 어플리케이션.
 	/// </summary>
-	public class ConsoleApplication<T> : DisposableObject where T : ConsoleApplication<T>, new()
+	public class ConsoleApplication<TApplication> : DisposableObject where TApplication : ConsoleApplication<TApplication>, new()
 	{
-		private static readonly Lazy<T> m_Instance = new Lazy<T>(() => new T(), true); // thread-safe.
-		public static T Instance => m_Instance.Value;
+		//private static readonly Lazy<TApplication> s_Instance = new Lazy<TApplication>(() => new TApplication(), true); // thread-safe.
+		//public static TApplication Instance => s_Instance.Value;
 
 		private bool m_IsQuitApplication = false;
 		private long m_PrevTick = 0;
@@ -73,6 +73,12 @@ namespace DagraacSystemsExample
 		public void LoadModule()
 		{
 
+		}
+
+		public static void Run(params string[] _args)
+		{
+			var application = new TApplication();
+			application.Start(_args);
 		}
 	}
 }

@@ -49,9 +49,9 @@
 			OnExecute(args);
 		}
 
-		public void Update(float deltaTime)
+		public void Tick(float deltaTime)
 		{
-			OnUpdate(deltaTime);
+			OnTick(deltaTime);
 		}
 
 		public void Finish()
@@ -91,7 +91,7 @@
 		{
 		}
 
-		protected virtual void OnUpdate(float _tick)
+		protected virtual void OnTick(float _tick)
 		{
 		}
 

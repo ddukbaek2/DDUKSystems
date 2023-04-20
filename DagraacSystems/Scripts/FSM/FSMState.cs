@@ -63,9 +63,9 @@ namespace DagraacSystems
 			}
 		}
 
-		protected override void OnUpdate(float deltaTime)
+		protected override void OnTick(float deltaTime)
 		{
-			base.OnUpdate(deltaTime);
+			base.OnTick(deltaTime);
 
 			// 조건에 맞으면.
 			if (CheckTransition())

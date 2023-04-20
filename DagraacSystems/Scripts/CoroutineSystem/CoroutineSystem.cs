@@ -14,9 +14,9 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected override void OnCreate(params object[] args)
+		protected override void OnCreate(params object[] _args)
 		{
-			base.OnCreate(args);
+			base.OnCreate(_args);
 
 			m_Coroutines = new List<Coroutine>();
 		}
@@ -24,26 +24,26 @@ namespace DagraacSystems
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected override void OnDispose(bool explicitedDispose)
+		protected override void OnDispose(bool _explicitedDispose)
 		{
 			foreach (var coroutine in m_Coroutines)
 				coroutine.Dispose();
 			m_Coroutines.Clear();
 
-			base.OnDispose(explicitedDispose);
+			base.OnDispose(_explicitedDispose);
 		}
 
 		/// <summary>
 		/// 갱신됨.
 		/// </summary>
-		public void Update(float deltaTime)
+		public void Tick(float _tick)
 		{
 			foreach (var coroutine in m_Coroutines)
 			{
 				if (coroutine == null || !coroutine.IsRunning)
 					continue;
 
-				coroutine.Update(deltaTime);
+				coroutine.Tick(_tick);
 			}
 
 			for (var i = 0; i < m_Coroutines.Count; ++i)
@@ -57,6 +57,9 @@ namespace DagraacSystems
 			}
 		}
 
+		/// <summary>
+		/// 코루틴 생성.
+		/// </summary>
 		public Coroutine CreateCoroutine()
 		{
 			var coroutine = ManagedObject.Create<Coroutine>();
@@ -64,6 +67,9 @@ namespace DagraacSystems
 			return coroutine;
 		}
 
+		/// <summary>
+		/// 코루틴 해제.
+		/// </summary>
 		public void DisposeCoroutine(Coroutine _coroutine)
  		{
 			m_Coroutines.Remove(_coroutine);

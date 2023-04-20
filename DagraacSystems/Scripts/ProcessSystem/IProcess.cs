@@ -6,7 +6,7 @@
 	public interface IProcess
 	{
 		void Execute(ProcessSystem processExecutor, ulong processID, params object[] args);
-		void Update(float tick);
+		void Tick(float tick);
 		void Reset();
 		void Pause();
 		void Resume();

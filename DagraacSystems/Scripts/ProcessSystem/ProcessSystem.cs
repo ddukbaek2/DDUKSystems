@@ -42,7 +42,7 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
-		public virtual void Tick(float deltaTime)
+		public virtual void Tick(float _tick)
 		{
 			foreach (var process in m_RunningProcesses)
 			{
@@ -53,7 +53,7 @@ namespace DagraacSystems
 				if (process.Value.IsFinished())
 					continue;
 
-				process.Value.Update(deltaTime);
+				process.Value.Tick(_tick);
 			}
 
 			ApplyAllDeleteReservedProcesses();

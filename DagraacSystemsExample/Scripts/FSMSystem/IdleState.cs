@@ -10,9 +10,9 @@ namespace DagraacSystemsExample
 			base.OnExecute(args);
 		}
 
-		protected override void OnUpdate(float deltaTime)
+		protected override void OnTick(float deltaTime)
 		{
-			base.OnUpdate(deltaTime);
+			base.OnTick(deltaTime);
 		}
 	}
 }

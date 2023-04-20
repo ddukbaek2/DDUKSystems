@@ -26,9 +26,9 @@ namespace DagraacSystemsExample
 			DagraacSystems.Debug.Log("OnExecute()");
 		}
 
-		protected override void OnUpdate(float deltaTime)
+		protected override void OnTick(float deltaTime)
 		{
-			base.OnUpdate(deltaTime);
+			base.OnTick(deltaTime);
 
 			_accTime += deltaTime;
 			if (_accTime >= 1.0f)

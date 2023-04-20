@@ -3,7 +3,7 @@
 
 namespace DagraacSystems.Node
 {
-	public interface ILinkedNode
+	public interface ILinkedNodeTarget
 	{
 
 	}
@@ -11,16 +11,16 @@ namespace DagraacSystems.Node
 	/// <summary>
 	/// 연결 노드.
 	/// </summary>
-	public class LinkedNode<T>
+	public class LinkedNode<TLinkedNodeTarget> where TLinkedNodeTarget : ILinkedNodeTarget
 	{
-		public LinkedNode<T> Previous { private set; get; } = null;
-		public LinkedNode<T> Next { private set; get; } = null;
-		public T Value { private set; get; } = default;
+		public LinkedNode<TLinkedNodeTarget> Previous { private set; get; } = null;
+		public LinkedNode<TLinkedNodeTarget> Next { private set; get; } = null;
+		public TLinkedNodeTarget Value { private set; get; } = default;
 
 		public bool IsFirst => Previous == null;
 		public bool IsLast => Next == null;
 
-		public LinkedNode<T> First
+		public LinkedNode<TLinkedNodeTarget> First
 		{
 			get
 			{
@@ -31,7 +31,7 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		public LinkedNode<T> Last
+		public LinkedNode<TLinkedNodeTarget> Last
 		{
 			get
 			{
@@ -43,7 +43,7 @@ namespace DagraacSystems.Node
 		}
 
 
-		public void SetPrevious(LinkedNode<T> node)
+		public void SetPrevious(LinkedNode<TLinkedNodeTarget> node)
 		{
 			if (node != null)
 			{
@@ -59,7 +59,7 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		public void SetNext(LinkedNode<T> node)
+		public void SetNext(LinkedNode<TLinkedNodeTarget> node)
 		{
 			if (node != null)
 			{
@@ -75,15 +75,15 @@ namespace DagraacSystems.Node
 			}
 		}
 
-		public static LinkedNode<T> Create(IEnumerator<T> enumerator)
+		public static LinkedNode<TLinkedNodeTarget> Create(IEnumerator<TLinkedNodeTarget> enumerator)
 		{
-			var current = new LinkedNode<T>();
+			var current = new LinkedNode<TLinkedNodeTarget>();
 			if (enumerator != null)
 			{
 				while (enumerator.MoveNext())
 				{
 					current.Value = enumerator.Current;
-					current.SetNext(new LinkedNode<T>());
+					current.SetNext(new LinkedNode<TLinkedNodeTarget>());
 					current = current.Next;
 				}
 

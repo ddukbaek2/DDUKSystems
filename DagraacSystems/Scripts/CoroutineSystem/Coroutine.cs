@@ -11,7 +11,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 내부 상태.
 		/// </summary>
-		private enum Condition { Continue, Wait, Finished, }
+		private enum Condition { Continue, Wait, Finished }
 
 		private IEnumerator m_Enumerator;
 		private YieldInstruction m_Yield;
@@ -77,7 +77,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 매 프레임마다 갱신.
 		/// </summary>
-		public void Update(float _tick)
+		public void Tick(float _tick)
 		{
 			if (!m_IsRunning)
 				return;
@@ -86,7 +86,7 @@ namespace DagraacSystems
 			{
 				case Condition.Continue:
 					{
-						m_Condition = Coroutine.ContinueInternal(this);
+						m_Condition = Coroutine.Continue(this);
 						if (m_Condition == Condition.Wait)
 						{
 							if (m_Yield != null)
@@ -126,7 +126,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 다음 코드블록을 처리한다.
 		/// </summary>
-		private static Condition ContinueInternal(Coroutine _coroutine)
+		private static Condition Continue(Coroutine _coroutine)
 		{
 			if (_coroutine == null || _coroutine.m_Enumerator == null)
 				return Condition.Finished;
