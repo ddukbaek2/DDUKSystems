@@ -1,4 +1,4 @@
-﻿using System; // Enum
+﻿using System; // Enum, Action
 using System.Collections.Generic; // Dictionary
 
 
@@ -18,12 +18,12 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태를 실행했을 때의 콜백.
 		/// </summary>
-		public event Action<TState> OnState;
+		public event Action<TState> OnStateEvent;
 
 		/// <summary>
 		/// 전이를 실행했을 때의 콜백. 
 		/// </summary>
-		public event Action<TState, TState> OnTransition;
+		public event Action<TState, TState> OnTransitionEvent;
 
 		/// <summary>
 		/// 생성.
@@ -40,8 +40,8 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool _explicitedDispose)
 		{
-			OnState = null;
-			OnTransition = null;
+			OnStateEvent = null;
+			OnTransitionEvent = null;
 
 			base.OnDispose(_explicitedDispose);
 		}
@@ -62,7 +62,7 @@ namespace DagraacSystems
 		/// </summary>
 		public virtual void DoState()
 		{
-			OnState?.Invoke(State);
+			OnStateEvent?.Invoke(State);
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace DagraacSystems
 		{
 			var prevState = State;
 			State = _nextState;
-			OnTransition?.Invoke(prevState, _nextState);
+			OnTransitionEvent?.Invoke(prevState, _nextState);
 
 			if (_executeState)
 				DoState();

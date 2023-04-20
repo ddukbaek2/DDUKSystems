@@ -1,5 +1,5 @@
-﻿using System;
-using System.Reflection; 
+﻿using System; // Type, Exception
+using System.Reflection; // BindingFlags
 
 
 namespace DagraacSystems
@@ -22,9 +22,9 @@ namespace DagraacSystems
 
 			try
 			{
-				return targetType.InvokeMember(_methodname, bindingFlags, System.Type.DefaultBinder, _target, _parameters);
+				return targetType.InvokeMember(_methodname, bindingFlags, Type.DefaultBinder, _target, _parameters);
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
 				//Debug.LogError(e.ToString());
 				//Debug.LogException(e);
@@ -69,13 +69,13 @@ namespace DagraacSystems
 
 			try
 			{
-				var returnValue = targetType.InvokeMember(_methodname, bindingFlags, System.Type.DefaultBinder, _target, _parameters);
+				var returnValue = targetType.InvokeMember(_methodname, bindingFlags, Type.DefaultBinder, _target, _parameters);
 				if (returnValue == null)
 					return default;
 
 				return (TReturnType)returnValue;
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
 				//Debug.LogError(e.ToString());
 				//Debug.LogException(e);
@@ -94,9 +94,9 @@ namespace DagraacSystems
 
 			try
 			{
-				targetType.InvokeMember(_methodname, bindingFlags, System.Type.DefaultBinder, _target, _parameters);
+				targetType.InvokeMember(_methodname, bindingFlags, Type.DefaultBinder, _target, _parameters);
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
 				//Debug.LogError(e.ToString());
 				//Debug.LogException(e);
@@ -112,9 +112,9 @@ namespace DagraacSystems
 
 			try
 			{
-				return _targettype.InvokeMember(_methodname, bindingFlags, System.Type.DefaultBinder, null, _parameters);
+				return _targettype.InvokeMember(_methodname, bindingFlags, Type.DefaultBinder, null, _parameters);
 			}
-			catch (System.Exception e)
+			catch (Exception e)
 			{
 				//Debug.LogError(e.ToString());
 				//Debug.LogException(e);
