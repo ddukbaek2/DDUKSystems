@@ -1,4 +1,4 @@
-﻿using System; // GC, IDisposable
+﻿using System; // GC, Activator, IDisposable
 
 
 namespace DagraacSystems
@@ -39,7 +39,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected virtual void OnDispose(bool _explicitedDispose)
+		protected virtual void OnDispose(bool explicitedDispose)
 		{
 		}
 
@@ -48,11 +48,11 @@ namespace DagraacSystems
 		/// </summary>
 		void IDisposable.Dispose()
 		{
-			if (!IsDisposed)
-			{
-				IsDisposed = true;
-				OnDispose(true);
-			}
+			if (IsDisposed)
+				return;
+
+			IsDisposed = true;
+			OnDispose(true);
 
 			// 소멸자 호출 금지.
 			GC.SuppressFinalize(this);
@@ -61,24 +61,21 @@ namespace DagraacSystems
 		/// <summary>
 		/// 박싱 회피용 비교 함수.
 		/// </summary>
-		public bool Equals(DisposableObject _target)
+		public bool Equals(DisposableObject target)
 		{
-			return this == _target;
+			return this == target;
 		}
 
 		/// <summary>
 		/// 해제.
 		/// 해당 오브젝트의 모든 상속자는 명시적 해제 기능을 직접 구현해야함 (자세한건 상속된 오브젝트 참고).
 		/// </summary>
-		protected static void Dispose(DisposableObject _target)
+		protected static void Dispose(DisposableObject target)
 		{
-			if (_target == null)
+			if (!DisposableObject.IsValid(target))
 				return;
 
-			if (_target.IsDisposed)
-				return;
-
-			var disposable = _target as IDisposable;
+			var disposable = target as IDisposable;
 			if (disposable != null)
 				disposable.Dispose();
 		}
@@ -86,9 +83,39 @@ namespace DagraacSystems
 		/// <summary>
 		/// 객체가 유효한지 여부.
 		/// </summary>
-		public static implicit operator bool(DisposableObject _target)
+		public static bool IsValid<TDisposableObject>(TDisposableObject target) where TDisposableObject : DisposableObject
 		{
-			return _target != null && !_target.IsDisposed;
+			return target != null && !target.IsDisposed;
+		}
+
+		/// <summary>
+		/// 안전한 해제.
+		/// </summary>
+		public static bool SafeDispose<TDisposableObject>(ref TDisposableObject target) where TDisposableObject : DisposableObject
+		{
+			if (target == null)
+			{
+				return false;
+			}
+			else if (target.IsDisposed)
+			{
+				target = null;
+				return false;
+			}
+			else
+			{
+				DisposableObject.Dispose(target);
+				target = null;
+				return true;
+			}
+		}
+
+		/// <summary>
+		/// 객체가 유효한지 여부.
+		/// </summary>
+		public static implicit operator bool(DisposableObject target)
+		{
+			return DisposableObject.IsValid(target);
 		}
 	}
 }

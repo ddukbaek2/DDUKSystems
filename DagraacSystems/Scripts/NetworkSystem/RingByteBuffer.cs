@@ -1,10 +1,12 @@
-﻿namespace DagraacSystems
+﻿using DagraacSystems.Scripts.Collections;
+
+namespace DagraacSystems
 {
-	/// <summary>
-	/// 계속 위치 값을 증가시켜가며 쓰는 바이트 버퍼.
-	/// 읽어올때는 마지막 위치로부터 긁어온다.
-	/// </summary>
-	public class RingByteBuffer : DisposableObject
+    /// <summary>
+    /// 계속 위치 값을 증가시켜가며 쓰는 바이트 버퍼.
+    /// 읽어올때는 마지막 위치로부터 긁어온다.
+    /// </summary>
+    public class RingByteBuffer : DisposableObject
 	{
 		protected ByteBuffer m_ByteBuffer;
 		protected int m_Offset;

@@ -1,4 +1,4 @@
-﻿using System; // Activator
+﻿using System; // GC, Activator, IDisposable
 
 
 namespace DagraacSystems
@@ -13,48 +13,37 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected virtual void OnCreate(params object[] _args)
+		protected virtual void OnCreate(params object[] args)
 		{
 		}
 
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected override void OnDispose(bool _explicitedDispose)
+		protected override void OnDispose(bool explicitedDispose)
 		{
-			base.OnDispose(_explicitedDispose);
-		}
-
-		/// <summary>
-		/// 해제.
-		/// </summary>
-		public void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			DisposableObject.Dispose(this);
+			base.OnDispose(explicitedDispose);
 		}
 
 		/// <summary>
 		/// 타입을 기준으로 생성.
 		/// </summary>
-		public static T Create<T>(params object[] _args) where T : ManagedObject, new()
+		public static T Create<T>(params object[] args) where T : ManagedObject, new()
 		{
-			return Create(typeof(T), _args) as T;// new T();
+			return Create(typeof(T), args) as T;// new TValue();
 		}
 
 		/// <summary>
 		/// 타입 인스턴스를 기준으로 생성.
 		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
 		/// </summary>
-		public static ManagedObject Create(Type _disposableObjectType, params object[] _args)
+		public static ManagedObject Create(Type disposableObjectType, params object[] args)
 		{
-			var managedObject = Activator.CreateInstance(_disposableObjectType) as ManagedObject;
+			var managedObject = Activator.CreateInstance(disposableObjectType) as ManagedObject;
 			if (managedObject == null)
 				return null;
 
-			managedObject.OnCreate(_args);
+			managedObject.OnCreate(args);
 			return managedObject;
 		}
 	}

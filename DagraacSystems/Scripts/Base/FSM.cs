@@ -28,11 +28,11 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public FSM(TState _initializeState = default) : base()
+		public FSM(TState initializeState = default) : base()
 		{
-			State = _initializeState;
+			State = initializeState;
 			// DoState()는 생성 직후 외부에서 호출.
-			// 그러면 셋팅된 _initializeState 에 대해 클래스의 OnState 이벤트가 발생한다.
+			// 그러면 셋팅된 initializeState 에 대해 클래스의 OnState 이벤트가 발생한다.
 		}
 
 		/// <summary>
@@ -68,13 +68,13 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태 전이.
 		/// </summary>
-		public virtual void DoTransition(TState _nextState, bool _executeState = true)
+		public virtual void DoTransition(TState nextState, bool executeState = true)
 		{
 			var prevState = State;
-			State = _nextState;
-			OnTransitionEvent?.Invoke(prevState, _nextState);
+			State = nextState;
+			OnTransitionEvent?.Invoke(prevState, nextState);
 
-			if (_executeState)
+			if (executeState)
 				DoState();
 		}
 	}
@@ -91,7 +91,7 @@ namespace DagraacSystems
 		public EnumFSM(TState _initializeState = default) : base(_initializeState)
 		{
 			// DoState()는 생성 직후 외부에서 호출.
-			// 그러면 셋팅된 _initializeState 에 대해 클래스의 OnState 이벤트가 발생한다.
+			// 그러면 셋팅된 initializeState 에 대해 클래스의 OnState 이벤트가 발생한다.
 		}
 	}
 
@@ -109,17 +109,17 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태 실행됨.
 		/// </summary>
-		void OnState(ClassFSM<TStateID> _machine);
+		void OnState(ClassFSM<TStateID> machine);
 
 		/// <summary>
 		/// 상태 진입함.
 		/// </summary>
-		void OnEnter(ClassFSM<TStateID> _machine, IState<TStateID> _prevState);
+		void OnEnter(ClassFSM<TStateID> machine, IState<TStateID> prevState);
 
 		/// <summary>
 		/// 상태 탈출함.
 		/// </summary>
-		void OnExit(ClassFSM<TStateID> _machine, IState<TStateID> _nextState);
+		void OnExit(ClassFSM<TStateID> machine, IState<TStateID> nextState);
 	}
 
 
@@ -133,51 +133,51 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태 목록.
 		/// </summary>
-		private Dictionary<TStateID, IState<TStateID>> states;
+		private Dictionary<TStateID, IState<TStateID>> m_States;
 
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public ClassFSM(TStateID _initializeStateID, IState<TStateID> _initializeState) : base(_initializeStateID)
+		public ClassFSM(TStateID initializeStateID, IState<TStateID> initializeState) : base(initializeStateID)
 		{
-			states = new Dictionary<TStateID, IState<TStateID>>();
-			AddState(_initializeStateID, _initializeState);
+			m_States = new Dictionary<TStateID, IState<TStateID>>();
+			AddState(initializeStateID, initializeState);
 
 			// DoState()는 생성 직후 외부에서 호출.
-			// 그러면 셋팅된 _initializeState 에 대해 클래스의 OnState 이벤트 + 상태 인스턴스의 OnState 이벤트가 발생한다.
+			// 그러면 셋팅된 initializeState 에 대해 클래스의 OnState 이벤트 + 상태 인스턴스의 OnState 이벤트가 발생한다.
 		}
 
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected override void OnDispose(bool _explicitedDispose)
+		protected override void OnDispose(bool explicitedDispose)
 		{
 			RemoveAllStates();
 
-			base.OnDispose(_explicitedDispose);
+			base.OnDispose(explicitedDispose);
 		}
 
 		/// <summary>
 		/// 상태 추가 및 수정.
 		/// </summary>
-		public void AddState(TStateID _stateID, IState<TStateID> _state)
+		public void AddState(TStateID stateID, IState<TStateID> state)
 		{
-			if (states.ContainsKey(_stateID))
+			if (m_States.ContainsKey(stateID))
 			{
-				states[_stateID] = _state;
+				m_States[stateID] = state;
 			}
 			else
 			{
-				states.Add(_stateID, _state);
+				m_States.Add(stateID, state);
 			}
 		}
 
 		/// <summary>
 		/// 상태 제거.
 		/// </summary>
-		public void RemoveState(TStateID _stateID)
+		public void RemoveState(TStateID stateID)
 		{
-			states.Remove(_stateID);
+			m_States.Remove(stateID);
 		}
 
 		/// <summary>
@@ -185,7 +185,7 @@ namespace DagraacSystems
 		/// </summary>
 		public void RemoveAllStates()
 		{
-			states.Clear();
+			m_States.Clear();
 		}
 
 		/// <summary>
@@ -203,24 +203,24 @@ namespace DagraacSystems
 		/// <summary>
 		/// 상태 전이.
 		/// </summary>
-		public override void DoTransition(TStateID _nextStateID, bool _executeState = true)
+		public override void DoTransition(TStateID nextStateID, bool executeState = true)
 		{
 			var prevStateID = State;
 
 			var prevState = GetState<IState<TStateID>>(prevStateID);
-			var nextState = GetState<IState<TStateID>>(_nextStateID);
+			var nextState = GetState<IState<TStateID>>(nextStateID);
 			prevState?.OnExit(this, nextState);
 			nextState?.OnEnter(this, prevState);
 
-			base.DoTransition(_nextStateID, _executeState);
+			base.DoTransition(nextStateID, executeState);
 		}
 
 		/// <summary>
 		/// 상태 반환.
 		/// </summary>
-		public TState GetState<TState>(TStateID _stateID) where TState : IState<TStateID>
+		public TState GetState<TState>(TStateID stateID) where TState : IState<TStateID>
 		{
-			if (!states.TryGetValue(_stateID, out var state))
+			if (!m_States.TryGetValue(stateID, out var state))
 				return default;
 
 			return (TState)state;

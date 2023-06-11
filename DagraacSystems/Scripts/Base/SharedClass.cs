@@ -27,48 +27,54 @@
 		/// <summary>
 		/// 인스턴스 존재 유무.
 		/// </summary>
-		public static bool HasInstance()
+		public static bool HasInstance
 		{
-			return s_Instance != null;
+			get
+			{
+				return s_Instance != null;
+			}
 		}
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		protected override void OnCreate(params object[] _args)
+		protected override void OnCreate(params object[] args)
 		{
 			if (s_Instance == null)
-			{
 				s_Instance = (T)this;
-			}
-			else
-			{
-				s_Instance.Dispose();
-			}
 		}
 
 		/// <summary>
 		/// 해제됨.
 		/// </summary>
-		protected override void OnDispose(bool _explicitedDispose)
+		protected override void OnDispose(bool explicitedDispose)
 		{
 			if (s_Instance != null && s_Instance == this)
-			{
 				s_Instance = null;
-			}
 
-			base.OnDispose(_explicitedDispose);
+			base.OnDispose(explicitedDispose);
 		}
 
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public static T Create(params object[] _args)
+		public static T Create(params object[] args)
 		{
 			if (s_Instance != null)
 				return s_Instance;
 
-			return ManagedObject.Create<T>(_args);
+			return ManagedObject.Create<T>(args);
+		}
+
+		/// <summary>
+		/// 해제.
+		/// </summary>
+		public virtual void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
 		}
 	}
 }

@@ -18,12 +18,12 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public UniqueIdentifier(int _randomSeed = 0, ulong _minValue = ulong.MinValue, ulong _maxValue = ulong.MaxValue) : base()
+		public UniqueIdentifier(int randomSeed = 0, ulong minValue = ulong.MinValue, ulong maxValue = ulong.MaxValue) : base()
 		{
-			m_Random = new Random(_randomSeed);
+			m_Random = new Random(randomSeed);
 			m_UsingList = new List<ulong>();
-			m_MinValue = Math.Min(_minValue, ulong.MinValue);
-			m_MaxValue = Math.Max(_maxValue, ulong.MaxValue);
+			m_MinValue = Math.Min(minValue, ulong.MinValue);
+			m_MaxValue = Math.Max(maxValue, ulong.MaxValue);
 			m_Buffer = new byte[sizeof(ulong)]; // ulong == 8byte.
 		}
 
