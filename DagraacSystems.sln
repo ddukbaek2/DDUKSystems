@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31410.357
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems", "DagraacSystems\DagraacSystems.csproj", "{7DBED8AA-D099-4063-B315-E12AEF69C5C7}"
 EndProject
@@ -9,7 +9,9 @@ Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TableExporter", "TableExpor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystemsExample", "DagraacSystemsExample\DagraacSystemsExample.csproj", "{EFD15F49-CA59-40A2-A55D-58D149EC883D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameFramework", "GameFramework\GameFramework.csproj", "{7083455F-FE62-4BD3-A90C-61DF592B25F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameFramework", "GameFramework\GameFramework.csproj", "{7083455F-FE62-4BD3-A90C-61DF592B25F3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystems.Core", "DagraacSystems.Core\DagraacSystems.Core.csproj", "{97C353EE-439D-4416-A6F1-F4248A2A45CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

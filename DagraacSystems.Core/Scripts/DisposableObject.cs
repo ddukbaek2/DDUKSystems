@@ -1,4 +1,4 @@
-﻿using System; // GC, Activator, IDisposable
+﻿using System; // GC, IDisposable
 
 
 namespace DagraacSystems

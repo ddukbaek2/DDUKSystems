@@ -1,4 +1,4 @@
-﻿using System; // GC, Activator, IDisposable
+﻿using System; // Activator
 
 
 namespace DagraacSystems
@@ -37,14 +37,25 @@ namespace DagraacSystems
 		/// 타입 인스턴스를 기준으로 생성.
 		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
 		/// </summary>
-		public static ManagedObject Create(Type disposableObjectType, params object[] args)
+		public static ManagedObject Create(Type managedObjecType, params object[] args)
 		{
-			var managedObject = Activator.CreateInstance(disposableObjectType) as ManagedObject;
+			var managedObject = Activator.CreateInstance(managedObjecType) as ManagedObject;
 			if (managedObject == null)
 				return null;
 
 			managedObject.OnCreate(args);
 			return managedObject;
+		}
+
+		/// <summary>
+		/// 해제.
+		/// </summary>
+		public virtual void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
 		}
 	}
 }
