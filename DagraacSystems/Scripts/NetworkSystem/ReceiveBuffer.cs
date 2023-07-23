@@ -86,17 +86,6 @@ namespace DagraacSystems
 		}
 
 		/// <summary>
-		/// 해제.
-		/// </summary>
-		public void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			DisposableObject.Dispose(this);
-		}
-
-		/// <summary>
 		/// 바이트를 수신한다.
 		/// 바이트를 쪼개져서 올수도 있고 더 붙어서 올 수도 있다는 것을 전제한다.
 		/// 수신된 바이트를 조립한 수신데이터를 완성하면 큐에 담는다.

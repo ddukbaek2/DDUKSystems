@@ -36,8 +36,9 @@
   <ItemGroup>
     <Compile Include="Scripts\DisposableObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Scripts\GenericExtension.cs" />
     <Compile Include="Scripts\ManagedObject.cs" />
-    <Compile Include="Scripts\Reflection.cs" />
+    <Compile Include="Scripts\ReflectionUtility.cs" />
     <Compile Include="Scripts\SharedClass.cs" />
     <Compile Include="Scripts\UniqueIdentifier.cs" />
   </ItemGroup>

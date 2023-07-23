@@ -1,5 +1,5 @@
 ﻿using System; // Type, Exception
-using System.Collections.Generic;
+using System.Collections.Generic; // List
 using System.Reflection; // BindingFlags
 
 
@@ -8,7 +8,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 리플렉션 기능.
 	/// </summary>
-	public static class Reflection
+	public static class ReflectionUtility
 	{
 		/// <summary>
 		/// 클래스의 지정타입에 대한 변수명 목록을 얻어옴.
@@ -125,7 +125,7 @@ namespace DagraacSystems
 			{
 				return targettype.InvokeMember(methodname, bindingFlags, Type.DefaultBinder, target, parameters);
 			}
-			catch (Exception e)
+			catch// (Exception e)
 			{
 				return null;
 			}
@@ -173,10 +173,8 @@ namespace DagraacSystems
 
 				return (TReturnType)returnValue;
 			}
-			catch (Exception e)
+			catch// (Exception e)
 			{
-				//Debug.LogError(e.ToString());
-				//Debug.LogException(e);
 			}
 
 			return default;
@@ -194,10 +192,8 @@ namespace DagraacSystems
 			{
 				return targetType.InvokeMember(methodname, bindingFlags, Type.DefaultBinder, target, parameters);
 			}
-			catch (Exception e)
+			catch// (Exception e)
 			{
-				//Debug.LogError(e.ToString());
-				//Debug.LogException(e);
 				return null;
 			}
 		}
@@ -213,10 +209,8 @@ namespace DagraacSystems
 			{
 				return targettype.InvokeMember(methodname, bindingFlags, Type.DefaultBinder, null, parameters);
 			}
-			catch (Exception e)
+			catch// (Exception e)
 			{
-				//Debug.LogError(e.ToString());
-				//Debug.LogException(e);
 				return null;
 			}
 		}

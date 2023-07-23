@@ -58,11 +58,6 @@ namespace DagraacSystems.Node
 				m_Index = 0;
 			}
 
-			public void Dispose()
-			{
-				DisposableObject.Dispose(this);
-			}
-
 			public bool MoveNext()
 			{
 				return ++m_Index < (m_Target != null ? m_Target.Children.Count : 0);
@@ -98,14 +93,6 @@ namespace DagraacSystems.Node
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			base.OnDispose(explicitedDispose);
-		}
-
-		public void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			DisposableObject.Dispose(this);
 		}
 
 		protected virtual void OnChangeParent(ISiblingNode parent)

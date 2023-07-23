@@ -1,13 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System; // Predicate
+using System.Collections.Generic; // List, Dictionary
 
 
 namespace DagraacSystems
 {
-    public static class GenericExtensions
+    /// <summary>
+    /// 제너릭 확장.
+    /// </summary>
+    public static class GenericExtension
     {
         private static List<int> s_Indices = new List<int>();
 
+        /// <summary>
+        /// 값으로 키를 반환.
+        /// </summary>
         public static bool TryGetKey<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, TValue value, out TKey key)
         {
             key = default;
@@ -23,6 +29,9 @@ namespace DagraacSystems
             return false;
         }
 
+        /// <summary>
+        /// 조건에 맞는 대상 제거.
+        /// </summary>
         public static bool RemoveIf<TValue>(this List<TValue> list, Predicate<TValue> match)
         {
             if (match == null)
@@ -36,7 +45,10 @@ namespace DagraacSystems
             return true;
         }
 
-        public static bool RemoveIfAll<TValue>(this List<TValue> list, Predicate<TValue> match)
+		/// <summary>
+		/// 조건에 맞는 모든 대상 제거.
+		/// </summary>
+		public static bool RemoveIfAll<TValue>(this List<TValue> list, Predicate<TValue> match)
         {
             if (match == null)
                 return false;
