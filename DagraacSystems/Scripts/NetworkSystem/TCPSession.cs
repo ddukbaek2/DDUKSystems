@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Net;
 using System.Net.Sockets;
-
+using DagraacSystems.Core.Scripts.Common;
 
 namespace DagraacSystems
 {
-	/// <summary>
-	/// 세션.
-	/// </summary>
-	public class TCPSession : DisposableObject, ISession
+    /// <summary>
+    /// 세션.
+    /// </summary>
+    public class TCPSession : DisposableObject, ISession
 	{
 		public enum TCPConnectionState
 		{

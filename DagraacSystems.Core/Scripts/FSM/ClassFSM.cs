@@ -4,10 +4,10 @@ using System.Collections.Generic; // Dictionary
 
 namespace DagraacSystems
 {
-	/// <summary>
-	/// 상태 인터페이스.
-	/// </summary>
-	public interface IFSMState<TStateID> where TStateID : Enum
+    /// <summary>
+    /// 상태 인터페이스.
+    /// </summary>
+    public interface IFSMState<TStateID> where TStateID : Enum
 	{
 		/// <summary>
 		/// 상태 아이디.

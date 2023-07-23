@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-
+using DagraacSystems.Core.Scripts.Common;
 
 namespace DagraacSystems
 {
-	/// <summary>
-	/// 메시지 송신 처리기.
-	/// </summary>
-	public class MessageSystem : DisposableObject, IMessageTarget
+    /// <summary>
+    /// 메시지 송신 처리기.
+    /// </summary>
+    public class MessageSystem : DisposableObject, IMessageTarget
 	{
 		/// <summary>
 		/// 구독자 별 모든 구독 정보.

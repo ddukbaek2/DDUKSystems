@@ -100,7 +100,7 @@ namespace DagraacSystems
 					{
 						if (m_Yield != null)
 						{
-							if (m_Yield.Update(_tick))
+							if (m_Yield.Tick(_tick))
 							{
 								m_Yield.Finish();
 								m_Yield = null;

@@ -45,10 +45,10 @@ namespace DagraacSystems
             return true;
         }
 
-		/// <summary>
-		/// 조건에 맞는 모든 대상 제거.
-		/// </summary>
-		public static bool RemoveIfAll<TValue>(this List<TValue> list, Predicate<TValue> match)
+        /// <summary>
+        /// 조건에 맞는 모든 대상 제거.
+        /// </summary>
+        public static bool RemoveIfAll<TValue>(this List<TValue> list, Predicate<TValue> match)
         {
             if (match == null)
                 return false;

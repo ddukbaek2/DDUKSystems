@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System; // Func
 
 
 namespace DagraacSystems
@@ -11,14 +11,23 @@ namespace DagraacSystems
 	{
 		private Func<bool> m_Condition;
 
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
 		public WaitUntil(Func<bool> _condition = null) : base()
 		{
 			m_Condition = _condition;
 		}
 
-		protected override bool OnUpdated(float _tick)
+		/// <summary>
+		/// 틱 처리.
+		/// </summary>
+		protected override bool OnTick(float _tick)
 		{
-			return m_Condition?.Invoke() ?? true;
+			if (m_Condition == null)
+				return true;
+
+			return m_Condition.Invoke();
 		}
 	}
 }

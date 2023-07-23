@@ -4,14 +4,14 @@ using System.Collections.Generic; // Queue
 
 namespace DagraacSystems
 {
-	/// <summary>
-	/// 비동기 풀.
-	/// 미리 사용량만큼 할당하여 확보된채로 하나씩 가져다가 사용하고, 사용이 끝나면 다시 풀에 반환시켜 메모리 할당을 최소화 한다.
-	/// 다형성 구조를 가진 객체는 사용하면 문제가 발생할 수 있으니 사용불가 (최하위클래스를 기준으로 여러개의 풀을 사용하길 권장).
-	/// IPooledObject 를 상속받으면 풀에서 빼내거나 다시 풀에 넣을떄 이벤트를 받을 수 있다.
-	/// 사용 후 반환하지 않으면 현재 잔여량이 남지 않으므로 Dequeue(true) 를 통해 할당량을 증가시키면서 신규생성.
-	/// </summary>
-	public class PoolAsync<T> : DisposableObject, IPoolAsync<T> where T : class, new()
+    /// <summary>
+    /// 비동기 풀.
+    /// 미리 사용량만큼 할당하여 확보된채로 하나씩 가져다가 사용하고, 사용이 끝나면 다시 풀에 반환시켜 메모리 할당을 최소화 한다.
+    /// 다형성 구조를 가진 객체는 사용하면 문제가 발생할 수 있으니 사용불가 (최하위클래스를 기준으로 여러개의 풀을 사용하길 권장).
+    /// IPooledObject 를 상속받으면 풀에서 빼내거나 다시 풀에 넣을떄 이벤트를 받을 수 있다.
+    /// 사용 후 반환하지 않으면 현재 잔여량이 남지 않으므로 Dequeue(true) 를 통해 할당량을 증가시키면서 신규생성.
+    /// </summary>
+    public class PoolAsync<T> : DisposableObject, IPoolAsync<T> where T : class, new()
 	{
 		/// <summary>
 		/// 기본 생성자.

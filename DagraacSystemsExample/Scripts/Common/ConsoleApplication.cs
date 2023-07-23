@@ -1,14 +1,14 @@
-﻿using DagraacSystems;
+﻿using DagraacSystems.Core.Scripts.Common;
 using System;
 using System.Threading;
 
 
 namespace DagraacSystemsExample
 {
-	/// <summary>
-	/// 콘솔 어플리케이션.
-	/// </summary>
-	public class ConsoleApplication<TApplication> : DisposableObject where TApplication : ConsoleApplication<TApplication>, new()
+    /// <summary>
+    /// 콘솔 어플리케이션.
+    /// </summary>
+    public class ConsoleApplication<TApplication> : DisposableObject where TApplication : ConsoleApplication<TApplication>, new()
 	{
 		//private static readonly Lazy<TApplication> s_Instance = new Lazy<TApplication>(() => new TApplication(), true); // thread-safe.
 		//public static TApplication Instance => s_Instance.Variable;

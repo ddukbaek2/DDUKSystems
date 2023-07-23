@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using DagraacSystems.Core.Scripts.Common;
 
 namespace DagraacSystems
 {
-	/// <summary>
-	/// 테이블 시스템.
-	/// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
-	/// </summary>
-	public abstract class TableSystem<TTableID> : ManagedObject where TTableID : Enum, new()
+    /// <summary>
+    /// 테이블 시스템.
+    /// 실제 파일에서 구조체까지 뽑아오는 코드는 제외되어있다.
+    /// </summary>
+    public abstract class TableSystem<TTableID> : ManagedObject where TTableID : Enum, new()
 	{
 		private Dictionary<TTableID, TableContainer> m_Tables;
 

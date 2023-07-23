@@ -53,8 +53,8 @@ namespace DagraacSystemsExample
 		{
 			base.OnTick(_tick);
 
-			//m_ProcessExecutor.Update(deltaTime);
-			//DagraacSystems.FSMManager.Instance.Update(deltaTime);
+			//m_ProcessExecutor.Tick(deltaTime);
+			//DagraacSystems.FSMManager.Instance.Tick(deltaTime);
 
 			m_Coroutine.Tick(_tick);
 		}

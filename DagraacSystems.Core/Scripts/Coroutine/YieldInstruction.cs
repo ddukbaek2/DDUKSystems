@@ -1,9 +1,9 @@
 ﻿namespace DagraacSystems
 {
-	/// <summary>
-	/// 코루틴 지연 객체.
-	/// </summary>
-	public class YieldInstruction : DisposableObject
+    /// <summary>
+    /// 코루틴 지연 객체.
+    /// </summary>
+    public abstract class YieldInstruction : DisposableObject
 	{
 		/// <summary>
 		/// 생성.
@@ -36,15 +36,15 @@
 		/// </summary>
 		public void Start()
 		{
-			OnStarted();
+			OnStart();
 		}
 
 		/// <summary>
 		/// 지연객체 갱신.
 		/// </summary>
-		public bool Update(float tick)
+		public bool Tick(float tick)
 		{
-			return OnUpdated(tick);
+			return OnTick(tick);
 		}
 
 		/// <summary>
@@ -52,7 +52,7 @@
 		/// </summary>
 		public void Finish()
 		{
-			OnFinished();
+			OnFinish();
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@
 		/// <summary>
 		/// 시작됨.
 		/// </summary>
-		protected virtual void OnStarted()
+		protected virtual void OnStart()
 		{
 		}
 
@@ -81,7 +81,7 @@
 		/// 갱신됨.
 		/// 참을 반환하면 현재 객체는 다음프레임에 파괴되고, 코루틴은 재개된다.
 		/// </summary>
-		protected virtual bool OnUpdated(float _tick)
+		protected virtual bool OnTick(float _tick)
 		{
 			return true;
 		}
@@ -89,7 +89,7 @@
 		/// <summary>
 		/// 종료됨.
 		/// </summary>
-		protected virtual void OnFinished()
+		protected virtual void OnFinish()
 		{
 		}
 	}
