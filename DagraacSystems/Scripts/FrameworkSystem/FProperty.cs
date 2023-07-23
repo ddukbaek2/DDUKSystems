@@ -21,17 +21,28 @@ namespace DagraacSystems
 		ValueType GetType();
 	}
 
-	public struct Value : IValue
+	public class Variable : IValue
 	{
 		public ValueType Type;
 		public int Number;
 		public double Real;
 		public bool Boolean;
 		public string Text;
-		public Nullable<Value> Object;
-		public List<Value> Array;
+		public Variable Object;
+		public List<Variable> Array;
 
-		public Value(int value)
+		public Variable()
+		{
+			Type = ValueType.None;
+			Number = 0;
+			Real = 0.0;
+			Boolean = false;
+			Text = string.Empty;
+			Object = null;
+			Array = new List<Variable>();
+		}
+
+		public Variable(int value)
 		{
 			Type = ValueType.Number;
 			Number = value;
@@ -39,10 +50,10 @@ namespace DagraacSystems
 			Boolean = false;
 			Text = string.Empty;
 			Object = null;
-			Array = new List<Value>();
+			Array = new List<Variable>();
 		}
 
-		public Value(double value)
+		public Variable(double value)
 		{
 			Type = ValueType.Real;
 			Number = 0;
@@ -50,10 +61,10 @@ namespace DagraacSystems
 			Boolean = false;
 			Text = string.Empty;
 			Object = null;
-			Array = new List<Value>();
+			Array = new List<Variable>();
 		}
 
-		public Value(bool value)
+		public Variable(bool value)
 		{
 			Type = ValueType.Boolean;
 			Number = 0;
@@ -61,10 +72,10 @@ namespace DagraacSystems
 			Boolean = value;
 			Text = string.Empty;
 			Object = null;
-			Array = new List<Value>();
+			Array = new List<Variable>();
 		}
 
-		public Value(string value)
+		public Variable(string value)
 		{
 			Type = ValueType.Text;
 			Number = 0;
@@ -72,21 +83,21 @@ namespace DagraacSystems
 			Boolean = false;
 			Text = value;
 			Object = null;
-			Array = new List<Value>();
+			Array = new List<Variable>();
 		}
 
-		public Value(Value value)
+		public Variable(Variable value)
 		{
 			Type = value.Type;
 			Number = value.Number;
 			Real = value.Real;
 			Boolean = value.Boolean;
 			Text = value.Text;
-			Object = new Nullable<Value>(value.Object.Value);
-			Array = new List<Value>(value.Array);
+			Object = value.Object;
+			Array = new List<Variable>(value.Array);
 		}
 
-		public Value(List<Value> value)
+		public Variable(List<Variable> value)
 		{
 			Type = ValueType.Array;
 			Number = 0;
@@ -94,7 +105,7 @@ namespace DagraacSystems
 			Boolean = false;
 			Text = string.Empty;
 			Object = null;
-			Array = new List<Value>(value);
+			Array = new List<Variable>(value);
 		}
 
 		object IValue.GetValue()
@@ -111,9 +122,9 @@ namespace DagraacSystems
 					return Array;
 				case ValueType.Object:
 					return Object;
+				default:
+					return null;
 			}
-
-			return null;
 		}
 
 		ValueType IValue.GetType()
@@ -121,17 +132,17 @@ namespace DagraacSystems
 			return Type;
 		}
 
-		public static implicit operator Value(int value) => new Value(value);
-		public static implicit operator Value(double value) => new Value(value);
-		public static implicit operator Value(bool value) => new Value(value);
-		public static implicit operator Value(string value) => new Value(value);
-		public static implicit operator Value(List<Value> value) => new Value(value);
+		public static implicit operator Variable(int value) => new Variable(value);
+		public static implicit operator Variable(double value) => new Variable(value);
+		public static implicit operator Variable(bool value) => new Variable(value);
+		public static implicit operator Variable(string value) => new Variable(value);
+		public static implicit operator Variable(List<Variable> value) => new Variable(value);
 
-		public static implicit operator int(Value value) => value.Number;
-		public static implicit operator double(Value value) => value.Real;
-		public static implicit operator bool(Value value) => value.Boolean;
-		public static implicit operator string(Value value) => value.Text;
-		public static implicit operator List<Value>(Value value) => value.Array;
+		public static implicit operator int(Variable value) => value.Number;
+		public static implicit operator double(Variable value) => value.Real;
+		public static implicit operator bool(Variable value) => value.Boolean;
+		public static implicit operator string(Variable value) => value.Text;
+		public static implicit operator List<Variable>(Variable value) => value.Array;
 
 		public static ValueType GetValueType(object value)
 		{
@@ -156,7 +167,7 @@ namespace DagraacSystems
 		public string Name;
 		public FProperty Parent;
 		public List<FProperty> Children;
-		public Value Value;
+		public Variable Value;
 
 		/// <summary>
 		/// 생성됨.
@@ -166,15 +177,15 @@ namespace DagraacSystems
 			Name = string.Empty;
 			Parent = null;
 			Children = new List<FProperty>();
-			Value = new Value();
+			Value = new Variable();
 		}
 
-		public void SetValue(Value value)
+		public void SetValue(Variable value)
 		{
 			Value = value;
 		}
 
-		public Value GetValue()
+		public Variable GetValue()
 		{
 			return Value;
 		}

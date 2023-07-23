@@ -11,7 +11,7 @@ namespace DagraacSystemsExample
 	public class ConsoleApplication<TApplication> : DisposableObject where TApplication : ConsoleApplication<TApplication>, new()
 	{
 		//private static readonly Lazy<TApplication> s_Instance = new Lazy<TApplication>(() => new TApplication(), true); // thread-safe.
-		//public static TApplication Instance => s_Instance.Value;
+		//public static TApplication Instance => s_Instance.Variable;
 
 		private bool m_IsQuitApplication = false;
 		private long m_PrevTick = 0;

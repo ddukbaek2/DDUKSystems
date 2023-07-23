@@ -6,6 +6,8 @@
     <ApplicationIcon />
     <Win32Resource />
     <StartupObject>DagraacSystemsExample.Program</StartupObject>
+    <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
