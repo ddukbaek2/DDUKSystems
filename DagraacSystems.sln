@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystemsExample", "Da
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameFramework", "GameFramework\GameFramework.csproj", "{7083455F-FE62-4BD3-A90C-61DF592B25F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystems.Core", "DagraacSystems.Core\DagraacSystems.Core.csproj", "{97C353EE-439D-4416-A6F1-F4248A2A45CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DagraacSystems.Core", "DagraacSystems.Core\DagraacSystems.Core.csproj", "{306F85F2-605C-4833-9E44-9CBA910C553F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,10 +33,10 @@ Global
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7083455F-FE62-4BD3-A90C-61DF592B25F3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{97C353EE-439D-4416-A6F1-F4248A2A45CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{306F85F2-605C-4833-9E44-9CBA910C553F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{306F85F2-605C-4833-9E44-9CBA910C553F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{306F85F2-605C-4833-9E44-9CBA910C553F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{306F85F2-605C-4833-9E44-9CBA910C553F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
