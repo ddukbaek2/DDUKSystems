@@ -72,18 +72,20 @@ namespace DagraacSystems
 		/// </summary>
 		protected static void Dispose(DisposableObject target)
 		{
-			if (!DisposableObject.IsValid(target))
+			if (!DisposableObject.IsValidate(target))
 				return;
 
-			var disposable = target as IDisposable;
-			if (disposable != null)
+			if (target != null && target is IDisposable)
+			{
+				var disposable = target as IDisposable;
 				disposable.Dispose();
+			}
 		}
 
 		/// <summary>
 		/// 객체가 유효한지 여부.
 		/// </summary>
-		public static bool IsValid<TDisposableObject>(TDisposableObject target) where TDisposableObject : DisposableObject
+		public static bool IsValidate<TDisposableObject>(TDisposableObject target) where TDisposableObject : DisposableObject
 		{
 			return target != null && !target.IsDisposed;
 		}
@@ -115,7 +117,7 @@ namespace DagraacSystems
 		/// </summary>
 		public static implicit operator bool(DisposableObject target)
 		{
-			return DisposableObject.IsValid(target);
+			return DisposableObject.IsValidate(target);
 		}
 	}
 }
