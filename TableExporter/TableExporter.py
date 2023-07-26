@@ -49,6 +49,9 @@ csharp_strong_keyword_list_ = [ "abstract", "as", "base", "bool", "break", "byte
 csharp_weak_keyword_list_ = [ "abstract", "as", "base", "break", "byte", "case", "catch", "checked", "class", "const", "delegate", "do", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "for", "foreach", "goto", "if", "implicit", "in", "interface", "internal", "lock", "namespace", "new", "null", "object", "function", "declare", "define", "out", "override", "params", "private", "protected", "public", "readonly", "ref", "return", "sealed", "sizeof", "stackalloc", "static", "struct", "switch", "this", "throw", "true", "try", "typeof", "unchecked", "unsafe", "using", "virtual", "void", "volatile", "while" ]
 
 
+#------------------------------------------------------------------------
+# JSON 데이터 타입.
+#------------------------------------------------------------------------
 class DataKind(enum.Enum):
 	UNKNOWN = enum.auto()
 	BOOLEAN = enum.auto()
@@ -57,6 +60,9 @@ class DataKind(enum.Enum):
 	TEXT = enum.auto()
 
 
+#------------------------------------------------------------------------
+# 절대 경로 반환.
+#------------------------------------------------------------------------
 def GetAbsPath(path : str = "") -> str:
 	if os.path.isfile(path) or os.path.isdir(path):
 		return os.path.abspath(path)
@@ -67,6 +73,9 @@ def GetAbsPath(path : str = "") -> str:
 		return os.path.abspath(os.path.dirname(__file__) + path)
 
 
+#------------------------------------------------------------------------
+# 이름규칙에 알맞는지 확인.
+#------------------------------------------------------------------------
 def IsCorrectName(value : str):
 	if not value:
 		return False
@@ -86,7 +95,9 @@ def IsCorrectName(value : str):
 	return True
 
 
-
+#------------------------------------------------------------------------
+# 필드 값을 JSON 값으로 변환.
+#------------------------------------------------------------------------
 def DataValueToJsonValue(value : str, kind : DataKind, is_array : bool):
 	if kind == DataKind.TEXT:
 		return f"\"{value}\""
@@ -103,6 +114,10 @@ def DataValueToJsonValue(value : str, kind : DataKind, is_array : bool):
 	else:
 		return f"{value}"
 
+
+#------------------------------------------------------------------------
+# 2차원 스트링배열 형태의 기본 테이블 정보.
+#------------------------------------------------------------------------
 class NativeTable:
 	name_ : str
 	row_list_ : list # row[col[]]
@@ -111,6 +126,9 @@ class NativeTable:
 		self.row_list_ = list()
 
 
+#------------------------------------------------------------------------
+# 필드 정보 (1개의 열에 해당).
+#------------------------------------------------------------------------
 class Field:
 	name_  : str
 	type_ : str
@@ -126,6 +144,10 @@ class Field:
 		self.comment_ = str()
 		self.data_ = list()
 
+
+#------------------------------------------------------------------------
+# 테이블 정보.
+#------------------------------------------------------------------------
 class Table:
 	name_ : str
 	field_dict_ : dict # key:index, value:Field
@@ -136,6 +158,9 @@ class Table:
 		data_count_ = int()
 
 
+#------------------------------------------------------------------------
+# 규격화된 XLSX 파일에서 네이티브테이블을 만들어냄.
+#------------------------------------------------------------------------
 def CreateNativeTableListFromXlsxFile(file_name : str, startswith = "#") -> list:
 	nativetable_list = list()
 	#xlrd은 더이상 사용하지 않음.
@@ -173,6 +198,10 @@ def CreateNativeTableListFromXlsxFile(file_name : str, startswith = "#") -> list
 		nativetable_list.append(nativetable)
 	return nativetable_list
 
+
+#------------------------------------------------------------------------
+# 네이티브테이블을 가지고 테이블을 만들어냄.
+#------------------------------------------------------------------------
 def CreateTable(native_table : NativeTable):
 	table = Table()
 	table.name_ = native_table.name_
@@ -275,6 +304,9 @@ def CreateTable(native_table : NativeTable):
 	return table
 
 
+#------------------------------------------------------------------------
+# TABLE을 JSON 파일로 변환.
+#------------------------------------------------------------------------
 def CreateJsonFileFromTable(file_name : str, table : Table):
 	result = str()
 	result += "[\n"
@@ -302,6 +334,9 @@ def CreateJsonFileFromTable(file_name : str, table : Table):
 		file.write(result)
 
 
+#------------------------------------------------------------------------
+# 테이블을 CS 파일로 변환.
+#------------------------------------------------------------------------
 def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : list):
 	table_name = table.name_
 	result = str()
@@ -428,6 +463,10 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	with open(file_name, "w+", encoding = "utf8") as file:
 		file.write(result)
 
+
+#------------------------------------------------------------------------
+# 처리 시작.
+#------------------------------------------------------------------------
 def OnMain(args):
 	print("TableExporter 0.0.4")
 	print("made by dagraac")
@@ -465,6 +504,9 @@ def OnMain(args):
 	PrintTimer(EndTimer())
 
 
+#------------------------------------------------------------------------
+# 진입점.
+#------------------------------------------------------------------------
 if __name__ == "__main__":
 	OnMain(sys.argv)
 

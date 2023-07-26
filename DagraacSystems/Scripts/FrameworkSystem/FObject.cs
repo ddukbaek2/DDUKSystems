@@ -37,7 +37,7 @@
 			base.OnCreate(_args);
 
 			if (InstanceID == 0)
-				InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
+				InstanceID = FrameworkSystem.UniqueIdentifier.New();
 
 			IsActive = true;
 		}
@@ -48,7 +48,7 @@
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			FrameworkSystem.MessageSystem.Remove(this);
-			FrameworkSystem.UniqueIdentifier.Free(InstanceID);
+			FrameworkSystem.UniqueIdentifier.Delete(InstanceID);
 			FrameworkSystem = null;
 			InstanceID = 0;
 

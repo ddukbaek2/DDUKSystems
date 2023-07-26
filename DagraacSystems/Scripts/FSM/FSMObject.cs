@@ -26,12 +26,12 @@ namespace DagraacSystems
 		{
 			base.OnCreate(args);
 
-			m_InstanceID = m_FSMSystem.m_UniqueIdentifier.Generate();
+			m_InstanceID = m_FSMSystem.m_UniqueIdentifier.New();
 		}
 
 		protected virtual void OnDestroy()
 		{
-			m_FSMSystem.m_UniqueIdentifier.Free(m_InstanceID);
+			m_FSMSystem.m_UniqueIdentifier.Delete(m_InstanceID);
 			m_InstanceID = 0;
 		}
 

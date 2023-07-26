@@ -3,13 +3,14 @@
     /// <summary>
     /// 코루틴 지연 객체.
     /// </summary>
-    public abstract class YieldInstruction : DisposableObject
+    public abstract class YieldInstruction : ManagedObject
 	{
 		/// <summary>
-		/// 생성.
+		/// 생성됨.
 		/// </summary>
-		public YieldInstruction() : base()
+		protected override void OnCreate(params object[] args)
 		{
+			base.OnCreate(args);
 		}
 
 		/// <summary>
@@ -18,17 +19,6 @@
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			base.OnDispose(explicitedDispose);
-		}
-
-		/// <summary>
-		/// 해제.
-		/// </summary>
-		public void Dispose()
-		{
-			if (IsDisposed)
-				return;
-
-			DisposableObject.Dispose(this);
 		}
 
 		/// <summary>

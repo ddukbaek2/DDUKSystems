@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32811.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems", "DagraacSystems\DagraacSystems.csproj", "{7DBED8AA-D099-4063-B315-E12AEF69C5C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems.Experimental", "DagraacSystems\DagraacSystems.Experimental.csproj", "{7DBED8AA-D099-4063-B315-E12AEF69C5C7}"
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TableExporter", "TableExporter\TableExporter.pyproj", "{61DC53FB-9443-409F-96CE-12E0281FDF3A}"
 EndProject

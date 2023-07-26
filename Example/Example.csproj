@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DagraacSystems\DagraacSystems.csproj" />
+    <ProjectReference Include="..\DagraacSystems\DagraacSystems.Experimental.csproj" />
   </ItemGroup>
 
 </Project>

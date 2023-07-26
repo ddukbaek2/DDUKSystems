@@ -89,7 +89,7 @@ namespace DagraacSystems
         /// <summary>
         /// 생성.
         /// </summary>
-        public ulong Generate()
+        public ulong New()
         {
             var unique = m_MinValue;
             while (true)
@@ -106,7 +106,7 @@ namespace DagraacSystems
         /// <summary>
         /// 제거.
         /// </summary>
-        public bool Free(ulong unique)
+        public bool Delete(ulong unique)
         {
             return m_UsingList.Remove(unique);
         }

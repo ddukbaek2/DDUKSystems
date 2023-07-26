@@ -87,7 +87,7 @@ namespace DagraacSystems
 					process.Finish();
 
 				m_RunningProcesses.Remove(processID);
-				m_UniqueIdentifier.Free(processID);
+				m_UniqueIdentifier.Delete(processID);
 			}
 
 			m_DeleteReservedProcessIdentifiers.Clear();
@@ -114,7 +114,7 @@ namespace DagraacSystems
 				return null;
 
 			// 실행.
-			var processID = m_UniqueIdentifier.Generate();
+			var processID = m_UniqueIdentifier.New();
 			m_RunningProcesses.Add(processID, _process);
 			_process.Reset();
 			_process.Execute(this, processID, args);
