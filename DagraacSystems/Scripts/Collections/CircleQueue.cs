@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace DagraacSystems.Scripts.Common
+namespace DagraacSystems
 {
     /// <summary>
     /// 원형 큐.

@@ -4,10 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>disable</ImplicitUsings>
     <Nullable>disable</Nullable>
+    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\" />
+    <ProjectReference Include="..\DagraacSystems.Core\DagraacSystems.Core.csproj" />
   </ItemGroup>
 
 </Project>

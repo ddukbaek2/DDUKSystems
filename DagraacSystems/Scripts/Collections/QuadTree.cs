@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Text;
-using DagraacSystems.Core.Scripts.Common;
 
-namespace DagraacSystems.Tree
+
+namespace DagraacSystems
 {
 	public enum QuadDirection
 	{

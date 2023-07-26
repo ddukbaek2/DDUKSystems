@@ -1,7 +1,7 @@
 ﻿using System; // Block
-using DagraacSystems.Core.Scripts.Common;
 
-namespace DagraacSystems.Scripts.Collections
+
+namespace DagraacSystems
 {
     /// <summary>
     /// 바이트 버퍼.

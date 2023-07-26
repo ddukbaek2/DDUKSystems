@@ -1,11 +1,9 @@
-﻿using DagraacSystems.Core.Scripts.Common;
-
-namespace DagraacSystems
+﻿namespace DagraacSystems
 {
-    /// <summary>
-    /// 처리 단위.
-    /// </summary>
-    public class Process : ManagedObject, IProcess
+	/// <summary>
+	/// 처리 단위.
+	/// </summary>
+	public class Process : ManagedObject, IProcess
 	{
 		private bool m_IsStarted;
 		private bool m_IsFinished;
