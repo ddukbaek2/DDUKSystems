@@ -6,7 +6,7 @@ using System.Net.Sockets;
 namespace DagraacSystems
 {
     /// <summary>
-    /// 세션.
+    /// TCP 세션.
     /// </summary>
     public class TCPSession : DisposableObject, ISession
 	{
@@ -28,6 +28,9 @@ namespace DagraacSystems
 		private ReceiveBuffer m_ReceiveBuffer;
 		public bool IsConnected => m_Socket.Connected;
 
+		/// <summary>
+		/// 생성됨.
+		/// </summary>
 		public TCPSession() : base()
 		{
 			m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -100,6 +103,9 @@ namespace DagraacSystems
 			m_ReceiveBuffer = ManagedObject.Create<ReceiveBuffer>();
 		}
 
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			if (m_Socket != null)
@@ -139,6 +145,9 @@ namespace DagraacSystems
 			base.OnDispose(explicitedDispose);
 		}
 
+		/// <summary>
+		/// 해제.
+		/// </summary>
 		public void Dispose()
 		{
 			if (IsDisposed)
@@ -147,24 +156,39 @@ namespace DagraacSystems
 			DisposableObject.Dispose(this);
 		}
 
+		/// <summary>
+		/// 연결됨.
+		/// </summary>
 		protected virtual void OnConnected(bool isSuccssed)
 		{
 			m_ReceiveBuffer.Clear();
 		}
 
+		/// <summary>
+		/// 연결 해제됨.
+		/// </summary>
 		protected virtual void OnDisconnected(bool explicitDisconnected)
 		{
 			m_ReceiveBuffer.Clear();
 		}
 
+		/// <summary>
+		/// 송신됨.
+		/// </summary>
 		protected virtual void OnSended(byte[] data)
 		{
 		}
 
+		/// <summary>
+		/// 수신됨.
+		/// </summary>
 		protected virtual void OnReceived(ReceiveBuffer.ReceiveData receiveData)
 		{
 		}
 
+		/// <summary>
+		/// 연결.
+		/// </summary>
 		public void Connect(string ip, int port)
 		{
 			if (IsDisposed)
@@ -175,6 +199,9 @@ namespace DagraacSystems
 			Reconnect();
 		}
 
+		/// <summary>
+		/// 재연결.
+		/// </summary>
 		public void Reconnect()
 		{
 			if (IsDisposed)
@@ -190,6 +217,9 @@ namespace DagraacSystems
 			m_Socket.ConnectAsync(m_ConnectEvent);
 		}
 
+		/// <summary>
+		/// 연결 해제.
+		/// </summary>
 		public void Disconnect()
 		{
 			if (IsDisposed)
@@ -206,6 +236,9 @@ namespace DagraacSystems
 			m_Socket.DisconnectAsync(m_DisconnectEvent);
 		}
 
+		/// <summary>
+		/// 송신.
+		/// </summary>
 		public void Send(byte[] data)
 		{
 			if (IsDisposed)

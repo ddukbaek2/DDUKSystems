@@ -7,14 +7,15 @@ namespace DagraacSystems
 {
 	/// <summary>
 	/// 변수 버퍼.
-	/// 호출 순서대로 바이트 쌓기.
+	/// Write : 객체를 바이트로 변환.
+	/// Read : 바이트를 객체로 변환.
 	/// </summary>
-	public class VariableBuffer
+	public class VariableBuffer : DisposableObject
 	{
-		public static StringBuilder s_Builder = new StringBuilder();
+		public static StringBuilder s_StringBuilder = new StringBuilder();
 
 		private List<byte> m_Bytes;
-		private byte[] m_ByteArray;
+		private byte[] m_CachedByteArray;
 		private int m_ReadOffset;
 
 		/// <summary>
@@ -24,10 +25,10 @@ namespace DagraacSystems
 		{
 			get
 			{
-				if (m_ByteArray == null || m_ByteArray.Length != m_Bytes.Count)
-					m_ByteArray = m_Bytes.ToArray();
+				if (m_CachedByteArray == null || m_CachedByteArray.Length != m_Bytes.Count)
+					m_CachedByteArray = m_Bytes.ToArray();
 
-				return m_ByteArray;
+				return m_CachedByteArray;
 			}
 		}
 
@@ -49,26 +50,51 @@ namespace DagraacSystems
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public VariableBuffer()
+		public VariableBuffer(int capacity = 4096) : base()
 		{
-			m_Bytes = new List<byte>();
+			m_Bytes = new List<byte>(capacity);
 			Clear();
 		}
 
 		/// <summary>
 		/// 생성.
 		/// </summary>
-		public VariableBuffer(byte[] bytes) : this()
+		public VariableBuffer(byte[] bytes) : base()
 		{
+			m_Bytes = new List<byte>();
+
+			Clear();
 			m_Bytes.AddRange(bytes);
-			m_ByteArray = bytes;
+			m_CachedByteArray = bytes;
 			m_ReadOffset = 0;
 		}
 
+		/// <summary>
+		/// 해제됨.
+		/// </summary>
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			base.OnDispose(explicitedDispose);
+		}
+
+		/// <summary>
+		/// 해제.
+		/// </summary>
+		public void Dispose()
+		{
+			if (IsDisposed)
+				return;
+
+			DisposableObject.Dispose(this);
+		}
+
+		/// <summary>
+		/// 초기화.
+		/// </summary>
 		public void Clear()
 		{
 			m_Bytes.Clear();
-			m_ByteArray = null;
+			m_CachedByteArray = null;
 			m_ReadOffset = 0;
 		}
 
@@ -158,7 +184,7 @@ namespace DagraacSystems
 
 		public bool Read(out string value)
 		{
-			s_Builder.Clear();
+			s_StringBuilder.Clear();
 			value = string.Empty;
 
 			if (!Read(out int count))
@@ -169,10 +195,10 @@ namespace DagraacSystems
 				if (!Read(out char ch))
 					return false;
 
-				s_Builder.Append(ch);
+				s_StringBuilder.Append(ch);
 			}
 
-			value = s_Builder.ToString();
+			value = s_StringBuilder.ToString();
 			return true;
 		}
 

@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Scripts\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\DagraacSystems.Core\DagraacSystems.Core.csproj" />
   </ItemGroup>
 
