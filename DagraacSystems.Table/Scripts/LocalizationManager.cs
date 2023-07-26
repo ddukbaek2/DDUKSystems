@@ -1,6 +1,4 @@
-﻿using DagraacSystems.Core.Scripts.Common;
-
-namespace DagraacSystems
+﻿namespace DagraacSystems
 {
 	/// <summary>
 	/// 스트링테이블에 기반한 국가별 문자열 매니저.
