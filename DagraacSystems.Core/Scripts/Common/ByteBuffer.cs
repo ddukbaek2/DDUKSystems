@@ -12,18 +12,21 @@ namespace DagraacSystems
 
         public int Capacity => m_Buffer.Length;
 
+        /// <summary>
+        /// 인덱서.
+        /// </summary>
         public byte this[int index]
         {
-            get => Get(index);
-            set => Set(index, value);
-        }
+            get => m_Buffer[index];
+			set => m_Buffer[index] = value;
+		}
 
         /// <summary>
         /// 생성됨.
         /// </summary>
-        public ByteBuffer(int _capacity = 4096)
+        public ByteBuffer(int capacity = 4096)
         {
-            m_Buffer = new byte[_capacity];
+            m_Buffer = new byte[capacity];
         }
 
         /// <summary>
@@ -66,10 +69,10 @@ namespace DagraacSystems
             return m_Buffer[index];
         }
 
-        public byte[] Copy(int offset, int size)
+        public byte[] Copy(int offset, int length)
         {
-            var copy = new byte[size];
-            Buffer.BlockCopy(m_Buffer, offset, copy, 0, size);
+            var copy = new byte[length];
+            Buffer.BlockCopy(m_Buffer, offset, copy, 0, length);
             return copy;
         }
     }

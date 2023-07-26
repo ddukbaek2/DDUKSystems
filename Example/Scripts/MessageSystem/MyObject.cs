@@ -22,7 +22,7 @@ namespace DagraacSystemsExample
 
 		public MyObject(FSMSystem _system)
 		{
-			//Messenger.Instance.Add<NotificationType.OnTest>(OnTest);
+			//Messenger.Instance.AddEventTarget<NotificationType.OnTest>(OnTest);
 
 			_fsm = _system.AddMachine<FSMMachine>("FSM_MACHINE", this);
 

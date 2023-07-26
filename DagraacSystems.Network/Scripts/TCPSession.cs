@@ -10,7 +10,10 @@ namespace DagraacSystems
     /// </summary>
     public class TCPSession : DisposableObject, ISession
 	{
-		public enum TCPConnectionState
+		/// <summary>
+		/// 상태.
+		/// </summary>
+		public enum State
 		{
 			Disconnected,
 			Disconnecting,
@@ -24,7 +27,7 @@ namespace DagraacSystems
 		private SocketAsyncEventArgs m_DisconnectEvent;
 		private SocketAsyncEventArgs m_SendEvent;
 		private SocketAsyncEventArgs m_ReceiveEvent;
-		private TCPConnectionState _connectionState;
+		private State _connectionState;
 		private ReceiveBuffer m_ReceiveBuffer;
 		public bool IsConnected => m_Socket.Connected;
 
@@ -39,19 +42,19 @@ namespace DagraacSystems
 			{
 				if (e.SocketError == SocketError.Success)
 				{
-					SetConnectionState(TCPConnectionState.Connected);
+					SetConnectionState(State.Connected);
 					Receive();
 				}
 				else
 				{
-					SetConnectionState(TCPConnectionState.Disconnected);
+					SetConnectionState(State.Disconnected);
 				}
 			};
 
 			m_DisconnectEvent = new SocketAsyncEventArgs();
 			m_DisconnectEvent.Completed += (sender, e) =>
 			{
-				SetConnectionState(TCPConnectionState.Disconnected);
+				SetConnectionState(State.Disconnected);
 			};
 
 			m_SendEvent = new SocketAsyncEventArgs();
@@ -64,7 +67,7 @@ namespace DagraacSystems
 				}
 				else
 				{
-					SetConnectionState(TCPConnectionState.Disconnected);
+					SetConnectionState(State.Disconnected);
 				}
 			};
 
@@ -91,12 +94,12 @@ namespace DagraacSystems
 					}
 					else
 					{
-						SetConnectionState(TCPConnectionState.Disconnected);
+						SetConnectionState(State.Disconnected);
 					}
 				}
 				else
 				{
-					SetConnectionState(TCPConnectionState.Disconnected);
+					SetConnectionState(State.Disconnected);
 				}
 			};
 
@@ -136,10 +139,10 @@ namespace DagraacSystems
 				m_ReceiveBuffer = null;
 			}
 
-			if (_connectionState != TCPConnectionState.Disconnected)
+			if (_connectionState != State.Disconnected)
 			{
-				SetConnectionState(TCPConnectionState.Disconnecting);
-				SetConnectionState(TCPConnectionState.Disconnected);
+				SetConnectionState(State.Disconnecting);
+				SetConnectionState(State.Disconnected);
 			}
 
 			base.OnDispose(explicitedDispose);
@@ -210,10 +213,10 @@ namespace DagraacSystems
 			if (IsConnected)
 				return;
 
-			if (_connectionState == TCPConnectionState.Connecting || _connectionState == TCPConnectionState.Connected)
+			if (_connectionState == State.Connecting || _connectionState == State.Connected)
 				return;
 
-			SetConnectionState(TCPConnectionState.Connecting);		
+			SetConnectionState(State.Connecting);		
 			m_Socket.ConnectAsync(m_ConnectEvent);
 		}
 
@@ -228,11 +231,11 @@ namespace DagraacSystems
 			if (!IsConnected)
 				return;
 
-			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
+			if (_connectionState == State.Disconnecting || _connectionState == State.Disconnected)
 				return;
 
-			SetConnectionState(TCPConnectionState.Disconnecting);
-			SetConnectionState(TCPConnectionState.Disconnected);
+			SetConnectionState(State.Disconnecting);
+			SetConnectionState(State.Disconnected);
 			m_Socket.DisconnectAsync(m_DisconnectEvent);
 		}
 
@@ -247,7 +250,7 @@ namespace DagraacSystems
 			if (!IsConnected)
 				return;
 
-			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
+			if (_connectionState == State.Disconnecting || _connectionState == State.Disconnected)
 				return;
 
 			m_SendEvent.SetBuffer(data, 0, data.Length);
@@ -265,7 +268,7 @@ namespace DagraacSystems
 			if (!IsConnected)
 				return;
 
-			if (_connectionState == TCPConnectionState.Disconnecting || _connectionState == TCPConnectionState.Disconnected)
+			if (_connectionState == State.Disconnecting || _connectionState == State.Disconnected)
 				return;
 
 			m_Socket.ReceiveAsync(m_ReceiveEvent);
@@ -274,35 +277,35 @@ namespace DagraacSystems
 		/// <summary>
 		/// 접속상태 변경.
 		/// </summary>
-		private void SetConnectionState(TCPConnectionState connectionState)
+		private void SetConnectionState(State connectionState)
 		{
 			if (_connectionState != connectionState)
 			{
-				TCPConnectionState prevState = _connectionState;
-				TCPConnectionState curruntState = connectionState;
+				State prevState = _connectionState;
+				State curruntState = connectionState;
 
 				_connectionState = connectionState;
 
 				// 접속시도에 대해 성공.
-				if (prevState == TCPConnectionState.Connecting && curruntState == TCPConnectionState.Connected)
+				if (prevState == State.Connecting && curruntState == State.Connected)
 				{
 					OnConnected(true);
 				}
 
 				// 접속시도에 대해 실패.
-				if (prevState == TCPConnectionState.Connecting && curruntState == TCPConnectionState.Disconnected)
+				if (prevState == State.Connecting && curruntState == State.Disconnected)
 				{
 					OnConnected(false);
 				}
 
 				// 접속 중에 강제 해제됨.
-				if (prevState == TCPConnectionState.Connected && curruntState == TCPConnectionState.Disconnected)
+				if (prevState == State.Connected && curruntState == State.Disconnected)
 				{
 					OnDisconnected(false);
 				}
 
 				// 접속해제시도에 대한 성공.
-				if (prevState == TCPConnectionState.Disconnecting && curruntState == TCPConnectionState.Disconnected)
+				if (prevState == State.Disconnecting && curruntState == State.Disconnected)
 				{
 					OnDisconnected(true);
 				}

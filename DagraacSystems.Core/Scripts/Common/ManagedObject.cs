@@ -38,7 +38,7 @@ namespace DagraacSystems
         protected virtual void OnCreate(params object[] args)
         {
             UniqueID = s_UniqueIdentifier.New();
-            //s_ManagedObjects.Add(UniqueID, this);
+            //s_ManagedObjects.AddEventTarget(UniqueID, this);
 		}
 
         /// <summary>
