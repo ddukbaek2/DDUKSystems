@@ -5,6 +5,9 @@
     /// </summary>
     public class Component : ManagedObject, IComponent
     {
+        /// <summary>
+        /// 활성화 여부.
+        /// </summary>
         private bool isEnable;
 
         /// <summary>

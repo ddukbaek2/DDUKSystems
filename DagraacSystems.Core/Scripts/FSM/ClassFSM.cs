@@ -33,12 +33,14 @@ namespace DagraacSystems
 	{
 	}
 
+
 	/// <summary>
 	/// 상태 전이시 출력값 인터페이스.
 	/// </summary>
 	public interface IFSMStateResult
 	{
 	}
+
 
 	/// <summary>
 	/// 클래스 기반 상태 처리기.
