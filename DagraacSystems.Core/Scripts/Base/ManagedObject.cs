@@ -64,29 +64,6 @@ namespace DagraacSystems
 		/// 타입 인스턴스를 기준으로 생성.
 		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
 		/// </summary>
-		public static ManagedObject Create<TParameter>(Type managedObjecType, params TParameter[] args)
-		{
-			if (managedObjecType == null)
-				return null;
-
-			if (managedObjecType.IsAbstract)
-				return null;
-
-			if (!managedObjecType.IsSubclassOf(typeof(ManagedObject)))
-				return null;
-
-			var managedObject = Activator.CreateInstance(managedObjecType) as ManagedObject;
-			if (managedObject == null)
-				return null;
-
-			managedObject.OnCreate(args);
-			return managedObject;
-		}
-
-		/// <summary>
-		/// 타입 인스턴스를 기준으로 생성.
-		/// 별도로 타입 인스턴스를 체크 하지 않고 단순 생성 후 형변환하여 반환 하므로 사용상 주의.
-		/// </summary>
 		public static ManagedObject Create(Type managedObjecType, params object[] args)
         {
             if (managedObjecType == null)

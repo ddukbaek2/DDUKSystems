@@ -1,7 +1,7 @@
 ﻿using DagraacSystems;
-using GameFramework.Scripts.GameFramework.UI.Base;
+using DagraacSystems.Game.Scripts.GameFramework.UI.Base;
 
-namespace GameFramework.UI
+namespace DagraacSystems.Game.UI
 {
 	public class UIScreen : UIContent
 	{

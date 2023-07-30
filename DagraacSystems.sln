@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems.Experimental
 EndProject
 Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "TableExporter", "TableExporter\TableExporter.pyproj", "{61DC53FB-9443-409F-96CE-12E0281FDF3A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameFramework", "GameFramework\GameFramework.csproj", "{7083455F-FE62-4BD3-A90C-61DF592B25F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems.Game", "GameFramework\DagraacSystems.Game.csproj", "{7083455F-FE62-4BD3-A90C-61DF592B25F3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DagraacSystems.Core", "DagraacSystems.Core\DagraacSystems.Core.csproj", "{306F85F2-605C-4833-9E44-9CBA910C553F}"
 EndProject

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 
-namespace GameFramework
+namespace DagraacSystems.Game
 {
 	/// <summary>
 	/// 맵 모듈.

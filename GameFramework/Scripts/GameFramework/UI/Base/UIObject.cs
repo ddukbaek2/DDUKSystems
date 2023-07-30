@@ -1,7 +1,7 @@
 ﻿using DagraacSystems;
 
 
-namespace GameFramework.UI
+namespace DagraacSystems.Game.UI
 {
 	public class UIObject : FObject
 	{

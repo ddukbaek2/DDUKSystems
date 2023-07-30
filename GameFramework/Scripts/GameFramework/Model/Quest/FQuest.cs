@@ -1,7 +1,7 @@
 ﻿using DagraacSystems;
 
 
-namespace GameFramework
+namespace DagraacSystems.Game
 {
 	/// <summary>
 	/// 퀘스트 모델.

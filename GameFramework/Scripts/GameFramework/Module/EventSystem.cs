@@ -1,7 +1,7 @@
 using DagraacSystems;
 
 
-namespace GameFramework
+namespace DagraacSystems.Game
 {
 	public enum EventTrigger
 	{

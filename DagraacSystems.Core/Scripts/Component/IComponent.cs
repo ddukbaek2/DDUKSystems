@@ -5,6 +5,10 @@
 	/// </summary>
 	public interface IComponent
 	{
-		void FrameMove(float deltaTime);
+		void Awake();
+		void Start();
+		void Dispose();
+		void Tick(float deltaTime);
+		void AddComponent<T>() where T : IComponent
 	}
 }

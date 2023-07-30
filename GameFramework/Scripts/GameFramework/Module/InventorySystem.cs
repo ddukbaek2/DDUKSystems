@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace GameFramework
+namespace DagraacSystems.Game
 {
 	/// <summary>
 	/// 인벤토리 모듈.

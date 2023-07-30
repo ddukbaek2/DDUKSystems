@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace GameFramework
+namespace DagraacSystems.Game
 {
 	public class ActorPool : FPool
 	{
