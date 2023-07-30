@@ -5,20 +5,32 @@ using System.Collections.Generic;
 namespace DagraacSystems
 {
     /// <summary>
-    /// 프레임워크 오브젝트.
+    /// 계층적 오브젝트.
     /// </summary>
-    public class FObject : ManagedObject, IUpdateTarget
+    public class HierarchyObject : ManagedObject
 	{
 		/// <summary>
 		/// 코루틴 목록.
 		/// </summary>
 		private List<Coroutine> m_Coroutines;
 
-		private FObject m_Parent;
-		private List<FObject> m_Children;
+		/// <summary>
+		/// 컴포넌트 목록.
+		/// </summary>
+		private List<Component> m_Components;
 
-		public FObject Parent => m_Parent;
-		public List<FObject> Children => m_Children;
+		/// <summary>
+		/// 부모.
+		/// </summary>
+		private HierarchyObject m_Parent;
+
+		/// <summary>
+		/// 자식.
+		/// </summary>
+		private List<HierarchyObject> m_Children;
+
+		public HierarchyObject Parent => m_Parent;
+		public List<HierarchyObject> Children => m_Children;
 
 		/// <summary>
 		/// 생성됨.
@@ -28,8 +40,9 @@ namespace DagraacSystems
 			base.OnCreate(args);
 
 			m_Coroutines = new List<Coroutine>();
+			m_Components = new List<Component>();
 			m_Parent = null;
-			m_Children = new List<FObject>();
+			m_Children = new List<HierarchyObject>();
 		}
 
 		/// <summary>
@@ -37,6 +50,10 @@ namespace DagraacSystems
 		/// </summary>
 		protected override void OnDispose(bool explicitedDispose)
 		{
+			foreach (var component in m_Components)
+				component.Dispose();
+			m_Components.Clear();
+
 			StopAllCoroutines();
 
 			base.OnDispose(explicitedDispose);
@@ -45,7 +62,37 @@ namespace DagraacSystems
 		/// <summary>
 		/// 갱신됨.
 		/// </summary>
-		void IUpdateTarget.Update(float deltaTime)
+		public void Update(float deltaTime)
+		{
+			ComponentUpdate(deltaTime);
+			CoroutineUpdate(deltaTime);
+		}
+
+		/// <summary>
+		/// 갱신됨.
+		/// </summary>
+		private void ComponentUpdate(float deltaTime)
+		{
+			var count = m_Components.Count;
+			for (var i = 0; i < count; ++i)
+			{
+				var component = m_Components[i];
+				if (component == null || component.IsDisposed)
+				{
+					m_Components.RemoveAt(i);
+					--i;
+					--count;
+					continue;
+				}
+
+				component.Update(deltaTime);
+			}
+		}
+
+		/// <summary>
+		/// 갱신됨.
+		/// </summary>
+		private void CoroutineUpdate(float deltaTime)
 		{
 			var count = m_Coroutines.Count;
 			for (var i = 0; i < count; ++i)
@@ -59,8 +106,7 @@ namespace DagraacSystems
 					continue;
 				}
 
-				var updateTarget = coroutine as IUpdateTarget;
-				updateTarget.Update(deltaTime);
+				coroutine.Update(deltaTime);
 			}
 		}
 
@@ -116,7 +162,7 @@ namespace DagraacSystems
 		/// <summary>
 		/// 부모 설정.
 		/// </summary>
-		public void SetParent(FObject targetObject)
+		public void SetParent(HierarchyObject targetObject)
 		{
 			if (m_Parent == targetObject)
 				return;

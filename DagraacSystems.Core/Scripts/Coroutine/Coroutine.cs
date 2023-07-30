@@ -6,7 +6,7 @@ namespace DagraacSystems
 	/// <summary>
 	/// 코루틴.
 	/// </summary>
-	public class Coroutine : ManagedObject, IUpdateTarget
+	public class Coroutine : ManagedObject
 	{
 		/// <summary>
 		/// 내부 상태.
@@ -86,7 +86,7 @@ namespace DagraacSystems
 		/// 매 프레임마다 갱신.
 		/// 시스템쪽에서 콜해주는 것으로, Check 자체가 지정타이밍에 이루어진다.
 		/// </summary>
-		void IUpdateTarget.Update(float deltaTime)
+		public void Update(float deltaTime)
 		{
 			if (!m_IsRunning)
 				return;

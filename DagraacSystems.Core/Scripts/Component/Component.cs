@@ -3,7 +3,7 @@
     /// <summary>
     /// 컴포넌트.
     /// </summary>
-    public class Component : ManagedObject, IComponent
+    public class Component : ManagedObject
     {
         /// <summary>
         /// 활성화 여부.
@@ -69,19 +69,19 @@
         /// <summary>
         /// 매프레임호출됨.
         /// </summary>
-		protected virtual void OnFrameMove(float deltaTime)
+		protected virtual void OnUpdate(float deltaTime)
         {
         }
 
         /// <summary>
         /// 매프레임호출.
         /// </summary>
-		void IComponent.FrameMove(float deltaTime)
+		public void Update(float deltaTime)
 		{
 			if (!Enable)
 				return;
 
-			OnFrameMove(deltaTime);
+			OnUpdate(deltaTime);
 		}
 	}
 }
