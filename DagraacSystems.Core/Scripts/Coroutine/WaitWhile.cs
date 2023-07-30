@@ -4,17 +4,17 @@
 namespace DagraacSystems
 {
 	/// <summary>
-	/// 참이 될때까지 머무름.
-	/// 조건이 없으면 참으로 간주한다.
+	/// 거짓이 될때까지 머무름.
+	/// 조건이 없으면 거짓으로 간주한다.
 	/// </summary>
-	public class WaitUntil : YieldInstruction
+	public class WaitWhile : YieldInstruction
 	{
 		private Func<bool> m_Condition;
 
 		/// <summary>
 		/// 생성됨.
 		/// </summary>
-		public WaitUntil(Func<bool> _condition = null) : base()
+		public WaitWhile(Func<bool> _condition = null) : base()
 		{
 			m_Condition = _condition;
 		}
@@ -25,9 +25,9 @@ namespace DagraacSystems
 		protected override bool OnUpdate(float deltaTime)
 		{
 			if (m_Condition == null)
-				return true;
+				return false;
 
-			return m_Condition.Invoke();
+			return !m_Condition.Invoke();
 		}
 	}
 }

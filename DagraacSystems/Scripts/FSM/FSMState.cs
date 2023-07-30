@@ -176,7 +176,7 @@ namespace DagraacSystems
 				return;
 
 			//if (!transition.IsFinished())
-			//	transition.Finish();
+			//	transition.Complete();
 
 			FSMObject.DestroyInstance(transition);
 			_transitions.Remove(transition);

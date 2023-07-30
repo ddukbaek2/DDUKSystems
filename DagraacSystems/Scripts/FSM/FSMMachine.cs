@@ -103,7 +103,7 @@ namespace DagraacSystems
 				return;
 
 			//if (!state.IsFinished())
-			//	state.Finish();
+			//	state.Complete();
 
 			FSMObject.DestroyInstance(state);
 			_states.Remove(state);

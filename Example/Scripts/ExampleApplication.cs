@@ -30,7 +30,7 @@ namespace DagraacSystemsExample
 			//LogManager.Instance.Print($"{exampleTableData.Desc}");
 
 			//m_ProcessExecutor = new ProcessExecutor();
-			//m_ProcessExecutor.Start(new ExampleProcess());
+			//m_ProcessExecutor.StartCoroutine(new ExampleProcess());
 
 			//m_ExampleObject = new MyObject();
 
@@ -53,8 +53,8 @@ namespace DagraacSystemsExample
 		{
 			base.OnTick(_tick);
 
-			//m_ProcessExecutor.Tick(deltaTime);
-			//DagraacSystems.FSMManager.Instance.Tick(deltaTime);
+			//m_ProcessExecutor.FrameMove(deltaTime);
+			//DagraacSystems.FSMManager.Instance.FrameMove(deltaTime);
 
 			m_Coroutine.Tick(_tick);
 		}

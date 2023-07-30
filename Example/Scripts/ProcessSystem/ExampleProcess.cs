@@ -47,7 +47,7 @@ namespace DagraacSystemsExample
 		protected override void OnFinish()
 		{
 			base.OnFinish();
-			DagraacSystems.Debug.Log("OnFinish()");
+			DagraacSystems.Debug.Log("OnComplete()");
 		}
 	}
 }
