@@ -7,7 +7,7 @@ namespace DagraacSystems
     /// <summary>
     /// 계층적 오브젝트.
     /// </summary>
-    public class HierarchyObject : ManagedObject
+    public class Node : ManagedObject
 	{
 		/// <summary>
 		/// 코루틴 목록.
@@ -22,15 +22,22 @@ namespace DagraacSystems
 		/// <summary>
 		/// 부모.
 		/// </summary>
-		private HierarchyObject m_Parent;
+		private Node m_Parent;
 
 		/// <summary>
 		/// 자식.
 		/// </summary>
-		private List<HierarchyObject> m_Children;
+		private List<Node> m_Children;
 
-		public HierarchyObject Parent => m_Parent;
-		public List<HierarchyObject> Children => m_Children;
+		/// <summary>
+		/// 부모.
+		/// </summary>
+		public Node Parent => m_Parent;
+
+		/// <summary>
+		/// 자식.
+		/// </summary>
+		public List<Node> Children => m_Children;
 
 		/// <summary>
 		/// 생성됨.
@@ -42,7 +49,7 @@ namespace DagraacSystems
 			m_Coroutines = new List<Coroutine>();
 			m_Components = new List<Component>();
 			m_Parent = null;
-			m_Children = new List<HierarchyObject>();
+			m_Children = new List<Node>();
 		}
 
 		/// <summary>
@@ -162,22 +169,29 @@ namespace DagraacSystems
 		/// <summary>
 		/// 부모 설정.
 		/// </summary>
-		public void SetParent(HierarchyObject targetObject)
+		public void SetParent(Node newParent)
 		{
-			if (m_Parent == targetObject)
+			if (m_Parent == newParent)
 				return;
 
-			if (m_Parent != null)
+			var oldParent = m_Parent;
+			if (oldParent != null)
 			{
-				m_Parent.m_Children.Remove(this);
-				m_Parent = null;
+				oldParent.m_Children.Remove(this);
+				oldParent = null;
 			}
 
-			m_Parent = targetObject;
+			m_Parent = newParent;
 			if (m_Parent != null)
 			{
 				m_Parent.m_Children.Add(this);
 			}
+
+			OnChangedParent(oldParent, newParent);
+		}
+
+		protected virtual void OnChangedParent(Node oldParent, Node newParent)
+		{
 		}
 	}
 }
