@@ -9,7 +9,7 @@
 		public Vector2 Pivot { set; get; }
 		public Vector2 Position { set; get; }
 		public Vector2 Size { set; get; }
-		public float Angle { set; get; }
+		public float Angle { set; get; } 
 
 		public Rectangle() : base()
 		{
