@@ -8,7 +8,7 @@
         /// <summary>
         /// 활성화 여부.
         /// </summary>
-        private bool isEnable;
+        private bool m_IsEnable;
 
         /// <summary>
         /// 활성화 여부.
@@ -17,10 +17,10 @@
         {
             set
             {
-                if (isEnable != value)
+                if (m_IsEnable != value)
                 {
-                    isEnable = value;
-                    if (isEnable)
+                    m_IsEnable = value;
+                    if (m_IsEnable)
                         OnEnable();
                     else
                         OnDisable();
@@ -28,7 +28,7 @@
 			}
             get
             {
-                return isEnable;
+                return m_IsEnable;
 			}
         }
 
