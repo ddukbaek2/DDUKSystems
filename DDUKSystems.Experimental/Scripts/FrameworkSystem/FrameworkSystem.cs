@@ -29,14 +29,14 @@ namespace DDUKSystems
 	{
 		protected List<FModule> m_Modules;
 
-		public UniqueIdentifier UniqueIdentifier { private set; get; }
+		public UniqueIdentifier<ulong> UniqueIdentifier { private set; get; }
 
 		public MessageSystem MessageSystem { private set; get; }
 
 		public FrameworkSystem() : base()
 		{
 			m_Modules = new List<FModule>();
-			UniqueIdentifier = new UniqueIdentifier();
+			UniqueIdentifier = new UniqueIdentifier<ulong>();
 			MessageSystem = new MessageSystem();
 		}
 

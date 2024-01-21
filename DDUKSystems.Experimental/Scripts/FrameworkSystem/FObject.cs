@@ -37,7 +37,7 @@
 			base.OnCreate(_args);
 
 			if (InstanceID == 0)
-				InstanceID = FrameworkSystem.UniqueIdentifier.New();
+				InstanceID = FrameworkSystem.UniqueIdentifier.Generate();
 
 			IsActive = true;
 		}
@@ -48,7 +48,7 @@
 		protected override void OnDispose(bool explicitedDispose)
 		{
 			FrameworkSystem.MessageSystem.Remove(this);
-			FrameworkSystem.UniqueIdentifier.Delete(InstanceID);
+			FrameworkSystem.UniqueIdentifier.Remove(InstanceID);
 			FrameworkSystem = null;
 			InstanceID = 0;
 
@@ -102,7 +102,7 @@
 				return default;
 			}
 
-			framework.UniqueIdentifier.Synchronize(instanceID);
+			framework.UniqueIdentifier.Add(instanceID);
 
 			var target = ManagedObject.Create<TObject>();
 			target.FrameworkSystem = framework;
