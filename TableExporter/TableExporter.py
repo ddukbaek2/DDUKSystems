@@ -341,9 +341,9 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	table_name = table.name_
 	result = str()
 
-	#result += "using DagraacSystems;\n"
-	#result += "using DagraacSystems.Table;\n"
-	#result += "using DagraacSystems.TableExtension;\n"
+	#result += "using DDUKSystems;\n"
+	#result += "using DDUKSystems.Table;\n"
+	#result += "using DDUKSystems.TableExtension;\n"
 	#result += "using System.Collections.Generic;\n"
 	result += "\n"
 	result += "\n"
@@ -362,7 +362,7 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 			result += "\n"
 
 	# 클래스.
-	result += f"public class {table_name}Data : DagraacSystems.ITableData\n"
+	result += f"public class {table_name}Data : DDUKSystems.ITableData\n"
 	result += "{\n"
 	for field in table.field_dict_.values():
 		field_name = field.name_
@@ -374,14 +374,14 @@ def CreateCsFileFromTable(file_name : str, table : Table, make_enum_fields : lis
 	#result += "\n"
 
 	#int ToFields();
-	result += "\tpublic System.Collections.Generic.List<DagraacSystems.FieldInfo> ToFields()\n"
+	result += "\tpublic System.Collections.Generic.List<DDUKSystems.FieldInfo> ToFields()\n"
 	result += "\t{\n"
-	result += "\t\treturn new System.Collections.Generic.List<DagraacSystems.FieldInfo>()\n"
+	result += "\t\treturn new System.Collections.Generic.List<DDUKSystems.FieldInfo>()\n"
 	result += "\t\t{\n"
 	field_index = 0
 	for field in table.field_dict_.values():
 		field_name = field.name_
-		result += f"\t\t\tnew DagraacSystems.FieldInfo(\"{field_name}\", {field_name}.GetType(), {field_name}),\n"
+		result += f"\t\t\tnew DDUKSystems.FieldInfo(\"{field_name}\", {field_name}.GetType(), {field_name}),\n"
 		field_index += 1
 	result += "\t\t};\n"
 	result += "\t}\n"

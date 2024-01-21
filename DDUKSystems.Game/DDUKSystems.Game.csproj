@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\" />
+  </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y $(TargetPath) $(SolutionDir)..\..\Projects\Game\Assets\Plugins\" />
+  </Target>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DDUKSystems.Experimental\DDUKSystems.Experimental.csproj" />
+    <ProjectReference Include="..\DDUKSystems.Core\DDUKSystems.Core.csproj" />
+  </ItemGroup>
+
+</Project>
