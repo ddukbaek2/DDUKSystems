@@ -13,7 +13,7 @@ namespace DDUKSystems
         /// <summary>
         /// 고유식별자 생성기.
         /// </summary>
-        private static UniqueIdentifier s_UniqueIdentifier = new UniqueIdentifier();
+        private static UniqueIdentifier<ulong> s_UniqueIdentifier = new UniqueIdentifier<ulong>();
 
         /// <summary>
         /// 고유 객체.
@@ -37,7 +37,7 @@ namespace DDUKSystems
         /// </summary>
         protected virtual void OnCreate(params object[] args)
         {
-            UniqueID = s_UniqueIdentifier.New();
+            UniqueID = s_UniqueIdentifier.Generate();
             //s_ManagedObjects.AddEventTarget(UniqueID, this);
 		}
 
@@ -46,7 +46,7 @@ namespace DDUKSystems
         /// </summary>
         protected override void OnDispose(bool explicitedDispose)
         {
-            s_UniqueIdentifier.Delete(UniqueID);
+            s_UniqueIdentifier.Remove(UniqueID);
             //s_ManagedObjects.Remove(UniqueID);
 
 			base.OnDispose(explicitedDispose);

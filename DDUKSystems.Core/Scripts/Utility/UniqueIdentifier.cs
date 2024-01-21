@@ -1,122 +1,109 @@
-﻿using System; // Random, Math, BitConverter
-using System.Collections.Generic; // List
+﻿using DDUKSystems;
+using System; // Random, BitConverter
+using System.Collections.Generic;
+using System.Runtime.InteropServices; // HashSet
 
 
 namespace DDUKSystems
 {
-    /// <summary>
-    /// ulong 고유식별자 생성기.
-    /// </summary>
-    public class UniqueIdentifier : DisposableObject
-    {
-        private Random m_Random;
-        private List<ulong> m_UsingList;
-        private ulong m_MinValue;
-        private ulong m_MaxValue;
-        private byte[] m_Buffer;
+	/// <summary>
+	/// 유니크아이디 생성기.
+	/// TNumber에는 정수만 지정할 것.
+	/// </summary>
+	public class UniqueIdentifier<TNumber> : DisposableObject
+		where TNumber : struct, IComparable, IConvertible, IEquatable<TNumber>, IFormattable
+	{
+		private Random m_Random;
+		private HashSet<TNumber> m_Identifiers;
+		private byte[] m_TemporaryBuffer;
+		private Dictionary<Type, Func<object>> m_BitConverters;
+		private Type m_NumberType;
+		private Func<object> m_BitConverter;
 
-        /// <summary>
-        /// 생성됨.
-        /// </summary>
-        public UniqueIdentifier(int randomSeed = 0, ulong minValue = ulong.MinValue, ulong maxValue = ulong.MaxValue) : base()
-        {
-            m_Random = new Random(randomSeed);
-            m_UsingList = new List<ulong>();
-            m_MinValue = Math.Min(minValue, ulong.MinValue);
-            m_MaxValue = Math.Max(maxValue, ulong.MaxValue);
-            m_Buffer = new byte[sizeof(ulong)]; // ulong == 8byte.
-        }
+		public UniqueIdentifier(int randomSeed = 0) : base()
+		{
+			m_Random = new Random(randomSeed);
+			m_Identifiers = new HashSet<TNumber>
+			{
+				default,
+			};
 
-        /// <summary>
-        /// 파괴됨.
-        /// </summary>
-        protected override void OnDispose(bool explicitedDispose)
-        {
-            m_Random = null;
-            m_UsingList = null;
-            m_Buffer = null;
+			var temporaryBufferSize = Marshal.SizeOf<TNumber>();
+			m_TemporaryBuffer = new byte[temporaryBufferSize];
 
-            base.OnDispose(explicitedDispose);
-        }
+			m_BitConverters = new Dictionary<Type, Func<object>>
+			{
+				{ typeof(sbyte), () => (object)m_TemporaryBuffer[0] },
+				{ typeof(short), () => (object)BitConverter.ToInt16(m_TemporaryBuffer, 0) },
+				{ typeof(int), () => (object)BitConverter.ToInt32(m_TemporaryBuffer, 0) },
+				{ typeof(long), () => (object)BitConverter.ToInt64(m_TemporaryBuffer, 0) },
+				{ typeof(byte), () => (object)m_TemporaryBuffer[0] },
+				{ typeof(ushort), () => (object)BitConverter.ToUInt16(m_TemporaryBuffer, 0) },
+				{ typeof(uint), () => (object)BitConverter.ToUInt32(m_TemporaryBuffer, 0) },
+				{ typeof(ulong), () => (object)BitConverter.ToUInt64(m_TemporaryBuffer, 0) }
+			};
 
-        /// <summary>
-        /// 파괴.
-        /// </summary>
-        public virtual void Dispose()
-        {
-            if (IsDisposed)
-                return;
+			m_NumberType = typeof(TNumber);
+			m_BitConverter = m_BitConverters[m_NumberType];
+		}
 
-            Dispose(this);
-        }
+		protected override void OnDispose(bool explicitedDispose)
+		{
+			m_Random = null;
 
-        /// <summary>
-        /// 초기화.
-        /// </summary>
-        public void Clear()
-        {
-            m_UsingList.Clear();
-        }
+			m_Identifiers.Clear();
+			m_Identifiers = null;
 
-        /// <summary>
-        /// 다음 랜덤 정수.
-        /// </summary>
-        private ulong NextInternal()
-        {
-            while (true)
-            {
-                m_Random.NextBytes(m_Buffer);
-                var value = BitConverter.ToUInt64(m_Buffer, 0);
+			m_TemporaryBuffer = null;
 
-                if (value < m_MinValue || value > m_MaxValue)
-                    continue;
+			m_BitConverters.Clear();
+			m_BitConverters = null;
 
-                return value;
-            }
-        }
+			base.OnDispose(explicitedDispose);
+		}
 
-        /// <summary>
-        /// 동기화.
-        /// </summary>
-        public void Synchronize(ulong unique)
-        {
-            if (m_UsingList.Contains(unique))
-                return;
+		public TNumber Generate()
+		{
+			var identifier = default(TNumber);
+			do
+			{
+				m_Random.NextBytes(m_TemporaryBuffer);
+				identifier = (TNumber)m_BitConverter();
+			}
+			while (m_Identifiers.Contains(identifier));
+			m_Identifiers.Add(identifier);
 
-            m_UsingList.Add(unique);
-        }
+			return identifier;
+		}
 
-        /// <summary>
-        /// 생성.
-        /// </summary>
-        public ulong New()
-        {
-            var unique = m_MinValue;
-            while (true)
-            {
-                unique = NextInternal();
-                if (!m_UsingList.Contains(unique))
-                    break;
-            }
+		public void Clear()
+		{
+			m_Identifiers.Clear();
+		}
 
-            Synchronize(unique);
-            return unique;
-        }
+		public void Add(TNumber identifier)
+		{
+			m_Identifiers.Add(identifier);
+		}
 
-        /// <summary>
-        /// 제거.
-        /// </summary>
-        public bool Delete(ulong unique)
-        {
-            return m_UsingList.Remove(unique);
-        }
+		public void Remove(TNumber identifier)
+		{
+			m_Identifiers.Remove(identifier);
+		}
 
-        /// <summary>
-        /// 포함 여부.
-        /// </summary>
-        public bool Contains(ulong unique)
-        {
-            return m_UsingList.Contains(unique);
-        }
-    }
+		public void UnionWith(HashSet<TNumber> identifiers)
+		{
+			m_Identifiers.UnionWith(identifiers);
+		}
+
+		public void ExceptWith(HashSet<TNumber> identifiers)
+		{
+			m_Identifiers.ExceptWith(identifiers);
+		}
+
+		public bool Contains(TNumber identifier)
+		{
+			return m_Identifiers.Contains(identifier);
+		}
+	}
 }
