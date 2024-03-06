@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDUKSystems.UI", "DDUKSyste
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DDUKSystems.Game", "DDUKSystems.Game\DDUKSystems.Game.csproj", "{1E952944-8CEA-4267-8124-BFF3E4C809B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "uScript", "uScript\uScript.csproj", "{EE3B71E4-8C80-4E80-93CB-2B481A55C615}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +57,10 @@ Global
 		{1E952944-8CEA-4267-8124-BFF3E4C809B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E952944-8CEA-4267-8124-BFF3E4C809B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E952944-8CEA-4267-8124-BFF3E4C809B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE3B71E4-8C80-4E80-93CB-2B481A55C615}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE3B71E4-8C80-4E80-93CB-2B481A55C615}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE3B71E4-8C80-4E80-93CB-2B481A55C615}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE3B71E4-8C80-4E80-93CB-2B481A55C615}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

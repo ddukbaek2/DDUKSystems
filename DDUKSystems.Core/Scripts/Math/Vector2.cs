@@ -1,8 +1,12 @@
-﻿namespace DDUKSystems
+﻿using System;
+
+
+namespace DDUKSystems
 {
 	/// <summary>
 	/// 2차원 벡터.
 	/// </summary>
+	[Serializable]
 	public struct Vector2
 	{
 		public static Vector2 Zero { private set; get; } = new Vector2(0f, 0f);
