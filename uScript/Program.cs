@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace uScript
+namespace US
 {
 	/*
 	 * 8 + 2 - 3 + 0

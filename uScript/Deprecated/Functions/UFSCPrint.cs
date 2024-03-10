@@ -1,4 +1,4 @@
-﻿namespace uScript
+﻿namespace US
 {
 	/// <summary>
 	/// Print 함수.

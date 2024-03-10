@@ -1,4 +1,4 @@
-﻿namespace uScript
+﻿namespace US
 {
 	/// <summary>
 	/// 메모리 명령.

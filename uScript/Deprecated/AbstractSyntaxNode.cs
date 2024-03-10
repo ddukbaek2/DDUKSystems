@@ -1,4 +1,4 @@
-﻿namespace uScript
+﻿namespace US
 {
 	public class AbstractSyntaxNode
 	{

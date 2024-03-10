@@ -1,4 +1,4 @@
-﻿namespace uScript
+﻿namespace US
 {
 	/// <summary>
 	/// 노드.

@@ -8,4 +8,13 @@
     <StartupObject>uScript.Program</StartupObject>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Environment\Function\" />
+    <Folder Include="Package\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DDUKSystems.Core\DDUKSystems.Core.csproj" />
+  </ItemGroup>
+
 </Project>

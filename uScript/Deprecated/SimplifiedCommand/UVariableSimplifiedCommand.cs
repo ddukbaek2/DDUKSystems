@@ -1,4 +1,4 @@
-﻿namespace uScript
+﻿namespace US
 {
 	/// <summary>
 	/// 변수 타입.

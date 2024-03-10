@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 
 
-namespace uScript
+namespace US
 {
 	public class Tokenizer
     {

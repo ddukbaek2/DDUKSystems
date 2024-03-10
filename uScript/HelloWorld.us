@@ -1,0 +1,13 @@
+﻿// package(Project) <<(in) class(HelloWorld)
+
+// program = HelloWorld.new << 3, 5, 7
+// program.main << 1
+
+rt = loadpkg << uruntime
+
+main = function << {
+	arguments = main.input
+	argument = main.input << "paramName"
+	print (argument)	
+	>> argument
+}

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 
-namespace uScript
+namespace US
 {
 	/// <summary>
 	/// 간략한 명령.

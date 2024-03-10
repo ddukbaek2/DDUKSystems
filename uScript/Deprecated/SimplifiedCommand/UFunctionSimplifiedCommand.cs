@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 
-namespace uScript
+namespace US
 {
 	/// <summary>
 	/// 함수에 대한 간략한 명령.
